@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/android,intellij,eclipse
+# Created by https://www.gitignore.io/api/android,intellij,eclipse,gradle
 
 ### Android ###
 # Built application files
@@ -135,3 +135,18 @@ local.properties
 
 # STS (Spring Tool Suite)
 .springBeans
+
+### Gradle ###
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+
