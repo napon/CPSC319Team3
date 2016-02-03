@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "cpsc319.team3.com.plurilockitup"
         minSdkVersion 17
-        targetSdkVersion 19
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
