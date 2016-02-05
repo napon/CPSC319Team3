@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
 
     String savedCardNum;
     String savedPassword;
-    Boolean hasSavedLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
