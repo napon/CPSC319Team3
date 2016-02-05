@@ -6,5 +6,7 @@ package cpsc319.team3.com.plurilockitup.model;
 public class Utils {
 
     //Shared Pref strings
-    public static String logStatus = "LOGGED-IN";
+    public static String login = "LOG_IN";
+    public static String cardNum = "CARD_NUM";
+    public static String password = "PASSWORD";
 }
