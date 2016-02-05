@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#135363">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/acct_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chq acct"/>
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="Chq acct"
+        android:textSize="20sp"/>
 
     <TextView
+        android:id="@+id/balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="$6000"/>
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="$6000"
+        android:textSize="25sp"/>
+    </LinearLayout>
 
-</LinearLayout>
+</TableRow>

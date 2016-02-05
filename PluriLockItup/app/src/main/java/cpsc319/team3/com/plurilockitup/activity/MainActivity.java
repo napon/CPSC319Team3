@@ -2,13 +2,12 @@ package cpsc319.team3.com.plurilockitup.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ListView;
+import android.view.View;
+import android.widget.TableLayout;
 
 import cpsc319.team3.com.plurilockitup.R;
 
 public class MainActivity extends AppCompatActivity {
-
-    ListView listview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,8 +15,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listview = (ListView) findViewById(R.id.dayAcctTable);
-        listview.setAdapter(new yourAdapter(this, new String[]{"data1",
-                "data2"}));
+        TableLayout table = (TableLayout) findViewById(R.id.dayAcctTable);
+//        View row = getLayoutInflater().inflate(R.layout.acct_row, null);
+//        View row2 = getLayoutInflater().inflate(R.layout.acct_row, null);
+//        View row3 = getLayoutInflater().inflate(R.layout.acct_row, null);
+//        table.addView(row);
+//        table.addView(row2);
+//        table.addView(row3);
+
+        for(int i=0; i<15; i++){
+            View row = getLayoutInflater().inflate(R.layout.acct_row, null);
+            table.addView(row);
+        }
+
+
     }
 }
