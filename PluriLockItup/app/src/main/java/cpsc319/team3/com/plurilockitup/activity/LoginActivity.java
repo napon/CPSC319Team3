@@ -1,9 +1,11 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Utils;
 
 public class LoginActivity extends AppCompatActivity {
+    SharedPreferences mLoginPref;
 
     EditText cardNumEditText;
     EditText passwordEditText;
@@ -34,10 +37,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         registerButton = (Button) findViewById(R.id.registerButton);
 
-        //Try to get user registration, if failed, the first inputs are used as registration
-        SharedPreferences pref = this.getSharedPreferences(Utils.login, Context.MODE_PRIVATE);
-        savedCardNum = pref.getString(Utils.cardNum, null);
-        savedPassword = pref.getString(Utils.password, null);
+        //get shared pref for login
+        mLoginPref = this.getSharedPreferences(Utils.login, Context.MODE_PRIVATE);
+
+        //try to retrieve registered account
+        savedCardNum = mLoginPref.getString(Utils.cardNum, null);
+        savedPassword = mLoginPref.getString(Utils.password, null);
     }
 
     /*
@@ -46,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
     param: View:view
      */
     public void login(View view){
-        Toast.makeText(this, "Login", Toast.LENGTH_LONG).show();
         String cardNumText = cardNumEditText.getText().toString();
         String passwordText = passwordEditText.getText().toString();
 
@@ -56,7 +60,10 @@ public class LoginActivity extends AppCompatActivity {
         else {
             if(savedCardNum.equals(cardNumText)){ //correct card#
                 if(savedPassword.equals(passwordText)){ //correct LOGIN
-                    //TODO log user in
+                    //go to main activity
+                    startActivity(new Intent(this, MainActivity.class));
+                    //remove from activity stack, prevent going back to screen
+                    finish();
                 }
                 else{ //incorrect password
                     Toast.makeText(this, "Password Incorrect. Please try again", Toast.LENGTH_LONG).show();
@@ -77,6 +84,34 @@ public class LoginActivity extends AppCompatActivity {
     param: View:view
      */
     public void register(View view){
-        
+        String cardNumText = cardNumEditText.getText().toString();
+        String passwordText = passwordEditText.getText().toString();
+
+        // Card# is checked to allow only integers, it is saved as a string for convenience
+        Integer cardNum = null;
+        try {
+            cardNum = Integer.valueOf(cardNumText);
+        }
+        catch (NumberFormatException e){
+            Log.e("Register", e.getMessage());
+            Toast.makeText(this, "Invalid card#/password", Toast.LENGTH_LONG).show();
+        }
+
+
+        if(cardNum != null && passwordText!= null) {
+            //save register for future login
+            SharedPreferences.Editor editor = mLoginPref.edit();
+            editor.putString(Utils.cardNum, cardNumText);
+            editor.putString(Utils.password, passwordText);
+            editor.commit();
+
+            //go to main activity
+            startActivity(new Intent(this, MainActivity.class));
+            //remove from activity stack, prevent going back to screen
+            finish();
+        }
+        else{
+            Toast.makeText(this, "Invalid card#/password", Toast.LENGTH_LONG).show();
+        }
     }
 }
