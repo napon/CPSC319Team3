@@ -44,10 +44,10 @@ public class LoginActivity extends AppCompatActivity {
         savedPassword = mLoginPref.getString(Utils.password, null);
     }
 
-    /*
-    Handler for the login button.
-    Takes the card number and password inputs and checks them with the registered values saved on the device.
-    param: View:view
+    /**
+     * Handler for the login button.
+     * Takes the card number and password inputs and checks them with the registered values saved on the device.
+     * @param view
      */
     public void login(View view){
         String cardNumText = cardNumEditText.getText().toString();
@@ -76,11 +76,11 @@ public class LoginActivity extends AppCompatActivity {
        }
     }
 
-    /*
-    Handler for the Register button
-    Takes the card# and password inputs on screen and saves them as the dummy login
-    Old login will be overwritten with the new button
-    param: View:view
+    /**
+     * Handler for the Register button
+     * Takes the card# and password inputs on screen and saves them as the dummy login
+     * Old login will be overwritten with the new button
+     * @param view
      */
     public void register(View view){
         String cardNumText = cardNumEditText.getText().toString();

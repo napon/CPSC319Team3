@@ -15,8 +15,10 @@ import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 
 public class TransferActivity extends AppCompatActivity {
-    Customer customer;
+
     Spinner acctSpinner;
+
+    Customer customer;
     String currAcctName;
     DecimalFormat amtString;
 
@@ -33,15 +35,23 @@ public class TransferActivity extends AppCompatActivity {
         customer = (Customer) intent.getSerializableExtra("Customer");
         currAcctName = intent.getStringExtra("acctName");
 
+        //string format for currency TODO abstract method into customer
         amtString = new DecimalFormat("#.##");
         amtString.setMinimumFractionDigits(2);
 
+        //Set current account text
         ((TextView) findViewById(R.id.fromAcct)).setText(currAcctName);
         ((TextView) findViewById(R.id.fromAmt)).setText("$ " + amtString.format(customer.getBalance(currAcctName)));
 
+        //Put account names into drop down
         addAccountsToSpinner();
     }
 
+    /*
+    Handles button click for transfer
+    Parses the amount to transfer from edittext and determines the number amount to be transfered
+    Calls transfer amount and updates current account value on screen
+     */
     public void transferFunds(View view){
         EditText amtText = (EditText) findViewById(R.id.transferAmt);
         Double transferAmt = Double.valueOf(amtText.getText().toString());
@@ -50,8 +60,12 @@ public class TransferActivity extends AppCompatActivity {
 
         //update balance
         ((TextView) findViewById(R.id.fromAmt)).setText("$ " + amtString.format(customer.getBalance(currAcctName)));
+        //TODO update customer prior to return to main activity
     }
 
+    /*
+    Takes a customers account names and loads them all into the drop down spinner
+     */
     private void addAccountsToSpinner(){
         ArrayAdapter<String> dataAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, customer.getAccountNameList());

@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
 
     Customer customer;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,39 +41,49 @@ public class MainActivity extends AppCompatActivity {
 
         // add day account table rows
         for(int i = 0; i < dayAcctList.length; i++){
-            final int j = i;
+            final int j = i; //click handler needs static int
             View row = getLayoutInflater().inflate(R.layout.acct_row, null);
+
             //set account name
             ((TextView) row.findViewById(R.id.acct_name)).setText(dayAcctList[i]);
+
             //set account balance
             balanceString = "$ " + amtString.format(customer.getBalance(dayAcctList[i]));
             ((TextView) row.findViewById(R.id.balance)).setText(balanceString);
+
             //set click handler for account
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO go to transfer balance activity
                     Intent transferIntent = new Intent(MainActivity.this,TransferActivity.class);
                     transferIntent.putExtra("acctName", dayAcctList[j]);
                     transferIntent.putExtra("Customer", customer);
-                    startActivity(transferIntent);
+                    startActivity(transferIntent); //TODO change to start activity for results
                 }
             });
+
             dayAcctTable.addView(row);
         }
 
         // add credit account table rows
         for(int i = 0; i < creditAcctList.length; i++){
             View row = getLayoutInflater().inflate(R.layout.acct_row, null);
+
+            //set account name
             ((TextView) row.findViewById(R.id.acct_name)).setText(creditAcctList[i]);
+
+            //set account balance
             balanceString = "$ " + amtString.format(customer.getBalance(creditAcctList[i]));
             ((TextView) row.findViewById(R.id.balance)).setText(balanceString);
+
+            //set click handler
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO goto statements activity
                 }
             });
+
             investTable.addView(row);
         }
 
