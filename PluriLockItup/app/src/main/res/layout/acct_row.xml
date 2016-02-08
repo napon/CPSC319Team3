@@ -2,31 +2,31 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#135363">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
+    android:background="#135363"
+    android:clickable="true">
     <TextView
         android:id="@+id/acct_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:text="Chq acct"
-        android:textSize="20sp"/>
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="end"
         android:text="$6000"
-        android:textSize="25sp"/>
-    </LinearLayout>
+        android:textSize="15sp"/>
 
 </TableRow>
