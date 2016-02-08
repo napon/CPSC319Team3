@@ -68,7 +68,7 @@
             android:text="To: "
             android:textSize="20sp"/>
         <Spinner
-            android:id="@+id/acctType"
+            android:id="@+id/transferAcctType"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             />
