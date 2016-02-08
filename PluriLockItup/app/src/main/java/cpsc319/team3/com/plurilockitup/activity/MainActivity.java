@@ -14,8 +14,7 @@ import cpsc319.team3.com.plurilockitup.model.Customer;
 public class MainActivity extends AppCompatActivity {
 
     Customer customer;
-    private String[] dayAcctList;
-    private String[] creditAcctList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +27,27 @@ public class MainActivity extends AppCompatActivity {
 
         //populate dummy day account data
         customer = new Customer();
-        dayAcctList = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
+        String[] dayAcctList = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
         customer.addAcct(dayAcctList, 10000);
+
+        //populate dummy credit account data
+        String[] creditAcctList = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
+        customer.addAcct(creditAcctList, 2500);
 
         //currency String format
         String balanceString;
         DecimalFormat amtString = new DecimalFormat("#.##");
         amtString.setMinimumFractionDigits(2);
 
+        // add day account table rows
         for(int i = 0; i < dayAcctList.length; i++){
             View row = getLayoutInflater().inflate(R.layout.acct_row, null);
+            //set account name
             ((TextView) row.findViewById(R.id.acct_name)).setText(dayAcctList[i]);
+            //set account balance
             balanceString = "$ " + amtString.format(customer.getBalance(dayAcctList[i]));
             ((TextView) row.findViewById(R.id.balance)).setText(balanceString);
+            //set click handler for account
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -50,9 +57,7 @@ public class MainActivity extends AppCompatActivity {
             dayAcctTable.addView(row);
         }
 
-        //populate dummy credit account data
-        creditAcctList = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
-        customer.addAcct(creditAcctList, 2500);
+        // add credit account table rows
         for(int i = 0; i < creditAcctList.length; i++){
             View row = getLayoutInflater().inflate(R.layout.acct_row, null);
             ((TextView) row.findViewById(R.id.acct_name)).setText(creditAcctList[i]);
