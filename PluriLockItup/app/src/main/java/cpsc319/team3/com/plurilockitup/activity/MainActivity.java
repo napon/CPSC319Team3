@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
         //populate dummy day account data
         customer = new Customer();
-        String[] dayAcctList = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
+        final String[] dayAcctList = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
         customer.addAcct(dayAcctList, 10000);
 
         //populate dummy credit account data
-        String[] creditAcctList = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
+        final String[] creditAcctList = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
         customer.addAcct(creditAcctList, 2500);
 
         //currency String format
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         // add day account table rows
         for(int i = 0; i < dayAcctList.length; i++){
+            final int j = i;
             View row = getLayoutInflater().inflate(R.layout.acct_row, null);
             //set account name
             ((TextView) row.findViewById(R.id.acct_name)).setText(dayAcctList[i]);
@@ -53,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //TODO go to transfer balance activity
-                    startActivity(new Intent(MainActivity.this,TransferActivity.class));
+                    Intent transferIntent = new Intent(MainActivity.this,TransferActivity.class);
+                    transferIntent.putExtra("acctName", dayAcctList[j]);
+                    transferIntent.putExtra("Customer", customer);
+                    startActivity(transferIntent);
                 }
             });
             dayAcctTable.addView(row);

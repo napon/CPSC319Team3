@@ -1,12 +1,14 @@
 package cpsc319.team3.com.plurilockitup.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 /**
  * Created by kelvinchan on 16-02-05.
  */
-public class Customer {
+public class Customer implements Serializable{
 
     public HashMap<String, Double> accounts;
 
@@ -14,6 +16,11 @@ public class Customer {
 
     public Customer (){
         accounts = new HashMap<>();
+        this.balanceGenerate = new Random();
+    }
+
+    public Customer (HashMap <String, Double> accounts){
+        this.accounts = accounts;
         this.balanceGenerate = new Random();
     }
 
@@ -33,6 +40,14 @@ public class Customer {
 
     public Double getBalance(String acctName){
         return accounts.get(acctName);
+    }
+
+    public ArrayList<String> getAccountNameList(){
+        ArrayList<String> acctNames = new ArrayList<>();
+        for (String key : accounts.keySet()){
+            acctNames.add(key);
+        }
+        return acctNames;
     }
 
     public HashMap<String, Double> getAccounts(){
