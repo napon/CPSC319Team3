@@ -30,14 +30,11 @@ public class MainActivity extends AppCompatActivity {
         dayAcctTable = (TableLayout) findViewById(R.id.dayAcctTable);
         creditAcctTable = (TableLayout) findViewById(R.id.creditTable);
 
-        //populate dummy day account data
-        customer = new Customer();
-        dayAcctList = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
-        customer.addAcct(dayAcctList, 10000);
+        //will populate balance data as needed
+        customer = Customer.getInstance();
+        dayAcctList = customer.getDayAccountNames();
+        creditAcctList = customer.getCreditAcctNames();
 
-        //populate dummy credit account data
-        creditAcctList = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
-        customer.addAcct(creditAcctList, 2500);
 
         // add day account table rows
         for(int i = 0; i < dayAcctList.length; i++){

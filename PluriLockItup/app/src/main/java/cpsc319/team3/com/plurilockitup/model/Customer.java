@@ -10,14 +10,46 @@ import java.util.Random;
  * Created by kelvinchan on 16-02-05.
  */
 public class Customer implements Serializable{
+    private static final String DEFAULT_ID_TOKEN = "abcd1234";
+    private HashMap<String, Double> accounts;
+    private static Customer thisInstance;
+    private String[] dayAccountNames;
+    private String[] creditAcctNames;
 
-    public HashMap<String, Double> accounts;
+    public static Customer rebuild(){
+        thisInstance = new Customer();
+        return thisInstance;
+    }
 
+    public static Customer rebuild(String tokenID){
+        thisInstance = new Customer(tokenID);
+        return thisInstance;
+    }
+
+
+    public static Customer getInstance(){
+        if(thisInstance == null) {
+            thisInstance = new Customer();
+        }
+        return thisInstance;
+    }
     private Random balanceGenerate;
-
-    public Customer (){
+    public Customer(String idToken){
         accounts = new HashMap<>();
         this.balanceGenerate = new Random();
+        populateAccounts(accounts, balanceGenerate);
+    }
+    public Customer (){
+        this(DEFAULT_ID_TOKEN);
+    }
+
+    private void populateAccounts(HashMap<String, Double> accounts, Random balanceGenerate) {
+        String[] dayAcctList = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
+        this.dayAccountNames = dayAcctList;
+        this.addAcct(dayAcctList, 10000);
+        String[] creditAcctList = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
+        this.creditAcctNames = creditAcctList;
+        this.addAcct(creditAcctList, 2500);
     }
 
     /**
@@ -79,6 +111,24 @@ public class Customer implements Serializable{
         }
         return acctNames;
     }
+
+    public String[] getDayAccountNames(){
+        String[] toReturn = new String[this.dayAccountNames.length];
+        for(int i = 0; i<dayAccountNames.length; i++){
+            toReturn[i] = dayAccountNames[i];
+        }
+        return toReturn;
+    }
+
+    public String[] getCreditAcctNames(){
+        String[] toReturn = new String[this.creditAcctNames.length];
+        for(int i = 0; i<creditAcctNames.length; i++){
+            toReturn[i] = creditAcctNames[i];
+        }
+
+        return toReturn;
+    }
+
 
     public HashMap<String, Double> getAccounts(){
         return accounts;
