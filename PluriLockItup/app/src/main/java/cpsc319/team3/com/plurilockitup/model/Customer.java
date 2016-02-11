@@ -1,6 +1,7 @@
 package cpsc319.team3.com.plurilockitup.model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -52,6 +53,13 @@ public class Customer implements Serializable{
      */
     public Double getBalance(String acctName){
         return accounts.get(acctName);
+    }
+
+    public String getBalanceString(String acctName){
+        DecimalFormat amtString = new DecimalFormat("#.##");
+        amtString.setMinimumFractionDigits(2);
+
+        return "$ " + amtString.format(getBalance(acctName));
     }
 
     /**

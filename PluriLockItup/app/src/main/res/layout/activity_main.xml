@@ -38,10 +38,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Investment Accounts"
+                android:text="Credit Accounts"
                 android:textSize="25sp"/>
             <TableLayout
-                android:id="@+id/investmentTable"
+                android:id="@+id/creditTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </TableLayout>

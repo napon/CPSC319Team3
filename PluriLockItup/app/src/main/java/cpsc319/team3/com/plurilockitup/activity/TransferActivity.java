@@ -9,8 +9,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 
@@ -20,7 +18,6 @@ public class TransferActivity extends AppCompatActivity {
 
     Customer customer;
     String currAcctName;
-    DecimalFormat amtString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +32,20 @@ public class TransferActivity extends AppCompatActivity {
         customer = (Customer) intent.getSerializableExtra("Customer");
         currAcctName = intent.getStringExtra("acctName");
 
-        //string format for currency TODO abstract method into customer
-        amtString = new DecimalFormat("#.##");
-        amtString.setMinimumFractionDigits(2);
-
         //Set current account text
         ((TextView) findViewById(R.id.fromAcct)).setText(currAcctName);
-        ((TextView) findViewById(R.id.fromAmt)).setText("$ " + amtString.format(customer.getBalance(currAcctName)));
+        ((TextView) findViewById(R.id.fromAmt)).setText(customer.getBalanceString(currAcctName));
 
         //Put account names into drop down
         addAccountsToSpinner();
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent backToMain = new Intent();
+        backToMain.putExtra("Customer", customer);
+        setResult(RESULT_OK, backToMain);
+        super.onBackPressed();
     }
 
     /*
@@ -59,8 +60,7 @@ public class TransferActivity extends AppCompatActivity {
         customer.transferFund(currAcctName, toAcct, transferAmt);
 
         //update balance
-        ((TextView) findViewById(R.id.fromAmt)).setText("$ " + amtString.format(customer.getBalance(currAcctName)));
-        //TODO update customer prior to return to main activity
+        ((TextView) findViewById(R.id.fromAmt)).setText(customer.getBalanceString(currAcctName));
     }
 
     /*
