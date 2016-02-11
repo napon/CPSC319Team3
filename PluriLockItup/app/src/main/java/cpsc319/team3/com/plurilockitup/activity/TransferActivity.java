@@ -60,9 +60,12 @@ public class TransferActivity extends AppCompatActivity {
     Calls transfer amount and updates current account value on screen
      */
     public void transferFunds(View view){
-        final String amtText = ((EditText) findViewById(R.id.transferAmt)).getText().toString();
+        String tempText = ((EditText) findViewById(R.id.transferAmt)).getText().toString();
+        if(tempText == null || tempText == "" || tempText.length() <= 0) {
+            tempText = "0.0"; //will transfer nothing, just like they want
+        }
         final String toAcct =  String.valueOf(acctSpinner.getSelectedItem().toString());
-
+        final String amtText = tempText;
         //Create custom alert view
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.confirm_alert, null);
