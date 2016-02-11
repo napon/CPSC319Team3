@@ -28,7 +28,13 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Day-to-Day Accounts"
+                android:textStyle="bold"
                 android:textSize="25sp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
             <TableLayout
                 android:id="@+id/dayAcctTable"
                 android:layout_width="match_parent"
@@ -38,8 +44,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
                 android:text="Credit Accounts"
+                android:textStyle="bold"
                 android:textSize="25sp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"/>
             <TableLayout
                 android:id="@+id/creditTable"
                 android:layout_width="match_parent"
