@@ -1,8 +1,11 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -54,10 +57,42 @@ public class TransferActivity extends AppCompatActivity {
     Calls transfer amount and updates current account value on screen
      */
     public void transferFunds(View view){
-        EditText amtText = (EditText) findViewById(R.id.transferAmt);
-        Double transferAmt = Double.valueOf(amtText.getText().toString());
-        String toAcct =  String.valueOf(acctSpinner.getSelectedItem().toString());
-        customer.transferFund(currAcctName, toAcct, transferAmt);
+        final String amtText = ((EditText) findViewById(R.id.transferAmt)).getText().toString();
+        final String toAcct =  String.valueOf(acctSpinner.getSelectedItem().toString());
+
+        //Create custom alert view
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.confirm_alert, null);
+        ((TextView)dialogView.findViewById(R.id.fromAcctName)).setText(currAcctName);
+        ((TextView)dialogView.findViewById(R.id.fromBalance)).setText(customer.getBalanceString(currAcctName));
+        ((TextView)dialogView.findViewById(R.id.withdrawAmt)).setText("-$" + amtText);
+        ((TextView)dialogView.findViewById(R.id.toAcctName)).setText(toAcct);
+        ((TextView)dialogView.findViewById(R.id.toBalance)).setText(customer.getBalanceString(toAcct));
+        ((TextView)dialogView.findViewById(R.id.depositAmt)).setText("+$" + amtText);
+
+        //Create custom Alert with alert view
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                makeTransfer(amtText, toAcct);
+            }
+        });
+        builder.setCancelable(true);
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    private void makeTransfer(String withdrawAmt, String depositAcct){
+        //assume this will come as numbers only (Keyboard restricted to numbers)
+        Double transferAmt = Double.valueOf(withdrawAmt);
+
+        //make transfer
+        customer.transferFund(currAcctName, depositAcct, transferAmt);
+
+        //reset transfer value
+        ((EditText)findViewById(R.id.transferAmt)).setText("");
 
         //update balance
         ((TextView) findViewById(R.id.fromAmt)).setText(customer.getBalanceString(currAcctName));
