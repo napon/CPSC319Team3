@@ -43,6 +43,9 @@ public class TransferActivity extends AppCompatActivity {
         addAccountsToSpinner();
     }
 
+    /**
+     * Prior to activity finishing, returns the updated customer for Main Activity data
+     */
     @Override
     public void onBackPressed(){
         Intent backToMain = new Intent();
@@ -83,6 +86,14 @@ public class TransferActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
+
+    /**
+     * Makes the funds transfer from withdraw acct to deposit acct based on value the user inputs.
+     * Resets the transfer amt to ""
+     * Updates the current balance string
+     * @param withdrawAmt name of acct being drawn from
+     * @param depositAcct name of acct being deposited into
+     */
 
     private void makeTransfer(String withdrawAmt, String depositAcct){
         //assume this will come as numbers only (Keyboard restricted to numbers)

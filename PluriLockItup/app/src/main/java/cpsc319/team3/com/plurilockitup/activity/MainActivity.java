@@ -10,10 +10,11 @@ import android.widget.TextView;
 
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
+import cpsc319.team3.com.plurilockitup.model.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final int BANK_TRANSFER = 1;
+
     Customer customer;
     String[] dayAcctList;
     String[] creditAcctList;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent transferIntent = new Intent(MainActivity.this,TransferActivity.class);
                     transferIntent.putExtra("acctName", dayAcctList[j]);
                     transferIntent.putExtra("Customer", customer);
-                    startActivityForResult(transferIntent, BANK_TRANSFER); //TODO change to start activity for results
+                    startActivityForResult(transferIntent, Utils.BANK_TRANSFER); //TODO change to start activity for results
                 }
             });
 
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == BANK_TRANSFER){
+        if (requestCode == Utils.BANK_TRANSFER){
             if(resultCode == RESULT_OK){
                 this.customer = (Customer) data.getSerializableExtra("Customer");
                 populateBalances();

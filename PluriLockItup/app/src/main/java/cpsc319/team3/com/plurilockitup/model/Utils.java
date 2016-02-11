@@ -9,4 +9,7 @@ public class Utils {
     public static String login = "LOG_IN";
     public static String cardNum = "CARD_NUM";
     public static String password = "PASSWORD";
+
+    //Activity result codes
+    public static int BANK_TRANSFER = 1;
 }

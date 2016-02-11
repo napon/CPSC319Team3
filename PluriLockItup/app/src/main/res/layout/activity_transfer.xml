@@ -7,82 +7,89 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context="cpsc319.team3.com.plurilockitup.activity.TransferActivity">
-
-    <ImageView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@drawable/bank_logo"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="30dp">
-        <TextView
-            android:id="@+id/fromAcct"
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:text="fromAcct"
-            android:layout_weight="2"/>
-        <TextView
-            android:id="@+id/fromAmt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="10dp"
-            android:gravity="end"
-            android:textSize="25sp"
-            android:text="$4000"
-            />
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Transfer:"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/transferAmt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_gravity="center"
-        android:hint="$ Amount"
-        android:inputType="numberDecimal"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/bank_logo"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp">
+                <TextView
+                    android:id="@+id/fromAcct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:text="fromAcct"
+                    android:layout_weight="2"/>
+                <TextView
+                    android:id="@+id/fromAmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end"
+                    android:textSize="25sp"
+                    android:text="$4000"
+                    />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:text="To: "
-            android:textSize="20sp"/>
-        <Spinner
-            android:id="@+id/transferAcctType"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Transfer:"
+                android:textSize="20sp"/>
+            <EditText
+                android:id="@+id/transferAmt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_gravity="center"
+                android:hint="$ Amount"
+                android:inputType="numberDecimal"/>
 
-    <Button
-        android:id="@+id/transferBttn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:text="Transfer"
-        android:onClick="transferFunds"
-        />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="20dp"
+                    android:text="To: "
+                    android:textSize="20sp"/>
+                <Spinner
+                    android:id="@+id/transferAcctType"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
 
+            <Button
+                android:id="@+id/transferBttn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:text="Transfer"
+                android:onClick="transferFunds"
+                />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

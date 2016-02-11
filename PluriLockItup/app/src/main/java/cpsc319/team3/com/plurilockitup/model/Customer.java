@@ -55,6 +55,12 @@ public class Customer implements Serializable{
         return accounts.get(acctName);
     }
 
+    /**
+     * Turns the double value of account into a decimal currency format
+     * @param acctName of the balance query
+     * @return dollar amount of account
+     */
+
     public String getBalanceString(String acctName){
         DecimalFormat amtString = new DecimalFormat("#.##");
         amtString.setMinimumFractionDigits(2);
