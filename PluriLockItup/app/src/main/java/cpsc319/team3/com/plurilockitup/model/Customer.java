@@ -7,17 +7,82 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * Created by kelvinchan on 16-02-05.
+ * Created by kelvinchan on 16-02-05. Modified by Noah later than that.
+ * Singleton class; will only ever have one use logged in to the app at any time.
+ * This lets us grab customer information from other views and re-create views without
+ * changing the logged in customer information.
  */
+
 public class Customer implements Serializable{
+    private static final String DEFAULT_ID_TOKEN = "abcd1234";
+    private HashMap<String, Double> accounts;
+    private static Customer thisInstance;
+    //These need to be under customer instead of main activity because customers could
+    //name their accounts differently.
+    private static final String[] DEFAULT_DAY_ACCOUNT_NAMES = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
+    private static final String[] DEFAULT_CRDT_ACCOUNT_NAMES = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
+    private String[] dayAccountNames; //the names of the chequing accounts.
+    private String[] creditAcctNames; //the names of the credit accounts
+    private Random balanceGenerate; //RNG to generate account balances
 
-    public HashMap<String, Double> accounts;
+    /**
+     * Gets the active customer instance. If there isn't one, it will generate a
+     * default one.
+     * @return the active customer instance
+     */
+    public static Customer getInstance(){
+        if(thisInstance == null) {
+            thisInstance = new Customer();
+        }
+        return thisInstance;
+    }
 
-    private Random balanceGenerate;
+    /**
+     * Generates a new default customer
+     * @return the new active customer
+     */
+    public static Customer rebuild(){
+        thisInstance = new Customer();
+        return thisInstance;
+    }
 
-    public Customer (){
+    /**
+     * Generates a new customer with that particular tokenID
+     * Was thinking that this would be useful once we authenticate them with
+     * Plurilock and we can stash their token somewhere.
+     * @param tokenID - Plurilock (or the bank's) unique user token.
+     * @return the new customer
+     */
+    public static Customer rebuild(String tokenID){
+        thisInstance = new Customer(tokenID);
+        return thisInstance;
+    }
+
+    /**
+     * Constructor to build a default customer with a particular tokenID.
+     * @param idToken
+     */
+    public Customer(String idToken){
         accounts = new HashMap<>();
         this.balanceGenerate = new Random();
+        populateAccounts();
+    }
+
+    /**
+     * Default constrcutor, builds a customer with the default token ID.
+     */
+    public Customer (){
+        this(DEFAULT_ID_TOKEN);
+    }
+
+    /**
+     * This helper method generates the accounts with the default values.
+     */
+    private void populateAccounts() {
+        this.dayAccountNames = DEFAULT_DAY_ACCOUNT_NAMES;
+        this.addAcct(DEFAULT_DAY_ACCOUNT_NAMES, 10000);
+        this.creditAcctNames = DEFAULT_CRDT_ACCOUNT_NAMES;
+        this.addAcct(DEFAULT_CRDT_ACCOUNT_NAMES, 2500);
     }
 
     /**
@@ -79,6 +144,24 @@ public class Customer implements Serializable{
         }
         return acctNames;
     }
+
+    public String[] getDayAccountNames(){
+        String[] toReturn = new String[this.dayAccountNames.length];
+        for(int i = 0; i<dayAccountNames.length; i++){
+            toReturn[i] = dayAccountNames[i];
+        }
+        return toReturn;
+    }
+
+    public String[] getCreditAcctNames(){
+        String[] toReturn = new String[this.creditAcctNames.length];
+        for(int i = 0; i<creditAcctNames.length; i++){
+            toReturn[i] = creditAcctNames[i];
+        }
+
+        return toReturn;
+    }
+
 
     public HashMap<String, Double> getAccounts(){
         return accounts;

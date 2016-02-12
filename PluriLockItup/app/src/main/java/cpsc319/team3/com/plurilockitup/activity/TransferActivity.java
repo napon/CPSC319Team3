@@ -32,7 +32,7 @@ public class TransferActivity extends AppCompatActivity {
 
         //grab customer
         Intent intent = getIntent();
-        customer = (Customer) intent.getSerializableExtra("Customer");
+        customer = Customer.getInstance();
         currAcctName = intent.getStringExtra("acctName");
 
         //Set current account text
