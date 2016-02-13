@@ -14,13 +14,11 @@ import java.util.Random;
  */
 
 public class Customer implements Serializable{
-    private static final String DEFAULT_ID_TOKEN = "abcd1234";
     private HashMap<String, Double> accounts;
     private static Customer thisInstance;
+
     //These need to be under customer instead of main activity because customers could
     //name their accounts differently.
-    private static final String[] DEFAULT_DAY_ACCOUNT_NAMES = new String[]{"Sunny Day CHQ", "Rainy Day SAV", "Snowy Day SAV"};
-    private static final String[] DEFAULT_CRDT_ACCOUNT_NAMES = new String[]{"Loan2U", "Ca$hUPFront", "Y.U.Broke"};
     private String[] dayAccountNames; //the names of the chequing accounts.
     private String[] creditAcctNames; //the names of the credit accounts
     private Random balanceGenerate; //RNG to generate account balances
@@ -72,17 +70,17 @@ public class Customer implements Serializable{
      * Default constrcutor, builds a customer with the default token ID.
      */
     public Customer (){
-        this(DEFAULT_ID_TOKEN);
+        this(Utils.DEFAULT_ID_TOKEN);
     }
 
     /**
      * This helper method generates the accounts with the default values.
      */
     private void populateAccounts() {
-        this.dayAccountNames = DEFAULT_DAY_ACCOUNT_NAMES;
-        this.addAcct(DEFAULT_DAY_ACCOUNT_NAMES, 10000);
-        this.creditAcctNames = DEFAULT_CRDT_ACCOUNT_NAMES;
-        this.addAcct(DEFAULT_CRDT_ACCOUNT_NAMES, 2500);
+        this.dayAccountNames = Utils.DEFAULT_DAY_ACCOUNT_NAMES;
+        this.addAcct(Utils.DEFAULT_DAY_ACCOUNT_NAMES, 10000);
+        this.creditAcctNames = Utils.DEFAULT_CRDT_ACCOUNT_NAMES;
+        this.addAcct(Utils.DEFAULT_CRDT_ACCOUNT_NAMES, 2500);
     }
 
     /**
@@ -125,7 +123,6 @@ public class Customer implements Serializable{
      * @param acctName of the balance query
      * @return dollar amount of account
      */
-
     public String getBalanceString(String acctName){
         DecimalFormat amtString = new DecimalFormat("#.##");
         amtString.setMinimumFractionDigits(2);
@@ -145,6 +142,10 @@ public class Customer implements Serializable{
         return acctNames;
     }
 
+    /**
+     * Returns the customer's credit account names
+     * @return dayAccountNames[]
+     */
     public String[] getDayAccountNames(){
         String[] toReturn = new String[this.dayAccountNames.length];
         for(int i = 0; i<dayAccountNames.length; i++){
@@ -153,6 +154,10 @@ public class Customer implements Serializable{
         return toReturn;
     }
 
+    /**
+     * Returns the customer's credit account names
+     * @return creditAcctNames[]
+     */
     public String[] getCreditAcctNames(){
         String[] toReturn = new String[this.creditAcctNames.length];
         for(int i = 0; i<creditAcctNames.length; i++){
