@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import cpsc319.team3.com.plurilockitup.R;
+import cpsc319.team3.com.plurilockitup.model.Customer;
 import cpsc319.team3.com.plurilockitup.model.Utils;
 
 public class LoginActivity extends AppCompatActivity {
@@ -44,10 +45,10 @@ public class LoginActivity extends AppCompatActivity {
         savedPassword = mLoginPref.getString(Utils.password, null);
     }
 
-    /*
-    Handler for the login button.
-    Takes the card number and password inputs and checks them with the registered values saved on the device.
-    param: View:view
+    /**
+     * Handler for the login button.
+     * Takes the card number and password inputs and checks them with the registered values saved on the device.
+     * @param view
      */
     public void login(View view){
         String cardNumText = cardNumEditText.getText().toString();
@@ -59,6 +60,10 @@ public class LoginActivity extends AppCompatActivity {
         else {
             if(savedCardNum.equals(cardNumText)){ //correct card#
                 if(savedPassword.equals(passwordText)){ //correct LOGIN
+                    //get Token ID from Plurilock?? //TODO
+                    String purilockToken = "DEFAULTABC123";
+                    //initiate customer
+                    Customer.rebuild(purilockToken);
                     //go to main activity
                     startActivity(new Intent(this, MainActivity.class));
                     //remove from activity stack, prevent going back to screen
@@ -76,11 +81,11 @@ public class LoginActivity extends AppCompatActivity {
        }
     }
 
-    /*
-    Handler for the Register button
-    Takes the card# and password inputs on screen and saves them as the dummy login
-    Old login will be overwritten with the new button
-    param: View:view
+    /**
+     * Handler for the Register button
+     * Takes the card# and password inputs on screen and saves them as the dummy login
+     * Old login will be overwritten with the new button
+     * @param view
      */
     public void register(View view){
         String cardNumText = cardNumEditText.getText().toString();

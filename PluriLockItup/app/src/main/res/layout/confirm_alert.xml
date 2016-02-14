@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/confirmAlert">
+    <TextView
+        android:id="@+id/confTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Confirm Transfer:"
+        android:textSize="20sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/confTitle">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/fromAcctName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="fromAcct"
+                android:textSize="17sp"/>
+            <TextView
+                android:id="@+id/fromBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$1000"/>
+            <TextView
+                android:id="@+id/withdrawAmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-$500"
+                android:textColor="#B0171F"/>
+        </LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/toAcctName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="toAcct"
+                android:textSize="17sp"/>
+            <TextView
+                android:id="@+id/toBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$1000"/>
+            <TextView
+                android:id="@+id/depositAmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-$500"
+                android:textColor="#00e500"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
