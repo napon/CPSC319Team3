@@ -1,37 +1,36 @@
-import java.net.*;
-import java.io.*;
+//package cpsc319.team3.com.biosense.server;
 
+import java.io.IOException;
+
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+
+@ServerEndpoint("/websocket")
 public class TestServer {
-    public static void main(String[] args) throws IOException {
 
-        if (args.length != 1) {
-            System.err.println("Usage: java TestServer <port number>");
-            System.exit(1);
+    @OnMessage
+    public void onMessage(String message, Session session) throws IOException,
+            InterruptedException {
+        System.out.println("User input: " + message);
+        session.getBasicRemote().sendText("Hello world Mr. " + message);
+        // Sending message to client each 5 second
+        for (int i = 0; i <= 25; i++) {
+            session.getBasicRemote().sendText(i + " Message from server");
+            Thread.sleep(5000);
+
         }
+    }
 
-        int portNumber = Integer.parseInt(args[0]);
+    @OnOpen
+    public void onOpen() {
+        System.out.println("Client connected");
+    }
 
-        try (
-                ServerSocket serverSocket =
-                        new ServerSocket(Integer.parseInt(args[0]));
-                Socket clientSocket = serverSocket.accept();
-                PrintWriter out =
-                        new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(clientSocket.getInputStream()));
-        ) {
-            System.out.println("Client connected.");
-            String inputLine;
-            float conflvl;
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("Received from client: " + inputLine);
-                conflvl = (float)Math.random() * 100;
-                out.println(conflvl);
-            }
-        } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                    + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
-        }
+    @OnClose
+    public void onClose() {
+        System.out.println("Connection closed");
     }
 }
