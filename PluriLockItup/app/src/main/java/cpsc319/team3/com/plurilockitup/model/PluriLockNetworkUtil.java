@@ -1,6 +1,6 @@
 package cpsc319.team3.com.plurilockitup.model;
 
-import org.json.JSONException;
+//import org.json.JSONException;
 
 import java.net.URI;
 import javax.websocket.ClientEndpoint;
@@ -81,11 +81,11 @@ public class PluriLockNetworkUtil {
     @OnMessage
     public void onMessage(String message) {
         if (this.messageHandler != null) {
-            try {
+//            try {
                 this.messageHandler.handleMessage(message);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -113,6 +113,6 @@ public class PluriLockNetworkUtil {
      */
     public static interface MessageHandler {
 
-        public void handleMessage(String message) throws JSONException;
+        public void handleMessage(String message);
     }
 }
