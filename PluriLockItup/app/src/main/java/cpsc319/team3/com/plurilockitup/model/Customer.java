@@ -8,11 +8,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.json.Json;
-import javax.json.JsonObject;
 //import org.json.JSONObject;
 
 /**
