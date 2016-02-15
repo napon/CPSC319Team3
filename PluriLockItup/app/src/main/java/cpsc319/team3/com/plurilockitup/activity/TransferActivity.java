@@ -121,7 +121,7 @@ public class TransferActivity extends AppCompatActivity {
         Double transferAmt = Double.valueOf(withdrawAmt);
 
         //make transfer
-        customer.transferFund(currAcctName, depositAcct, transferAmt);
+        customer.transferFund(currAcctName, depositAcct, transferAmt, getApplicationContext());
 
         //reset transfer value
         ((EditText) findViewById(R.id.transferAmt)).setText("");

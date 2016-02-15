@@ -2,6 +2,10 @@ package cpsc319.team3.com.plurilockitup.model;
 
 //import org.json.JSONException;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import java.net.URI;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
@@ -40,11 +44,14 @@ public class PluriLockNetworkUtil {
 
     Session userSession = null;
     private MessageHandler messageHandler;
+    private Context context;
 
-    public PluriLockNetworkUtil(URI endpointURI) {
+    public PluriLockNetworkUtil(URI endpointURI, Context c) {
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+            //String uri = "ws://localhost:8080" + request.getContextPath() + "/websocket";
             container.connectToServer(this, endpointURI);
+            context = c;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -88,6 +95,27 @@ public class PluriLockNetworkUtil {
 //            }
         }
     }
+
+    public boolean preNetworkCheck(){
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //boolean flag = false;
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (!activeNetwork.isAvailable()) {
+            System.out.println("Network connectivity is not possible.");
+            return false;
+        } else {
+            if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
+                System.out.println("You're not connected to the Internet.");
+                return false;
+            } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
+                System.out.println("You're not connected to WIFI.");
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
      * register message handler

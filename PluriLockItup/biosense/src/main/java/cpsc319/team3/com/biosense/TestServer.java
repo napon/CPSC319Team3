@@ -1,4 +1,4 @@
-//package cpsc319.team3.com.biosense.server;
+package cpsc319.team3.com.biosense;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/websocket")
+@ServerEndpoint("/../../../../../../../../app/src/main/java/cpsc319.team3.com.plurilockitup/model")
 public class TestServer {
 
     @OnMessage
@@ -20,7 +20,6 @@ public class TestServer {
         for (int i = 0; i <= 25; i++) {
             session.getBasicRemote().sendText(i + " Message from server");
             Thread.sleep(5000);
-
         }
     }
 

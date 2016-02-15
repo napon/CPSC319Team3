@@ -1,6 +1,8 @@
 package cpsc319.team3.com.plurilockitup.model;
 
 //import org.json.JSONException;
+import android.content.Context;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -108,31 +110,30 @@ public class Customer implements Serializable{
      * @param toAcct acct name to deposit to
      * @param amt amount to transfer
      */
-    public void transferFund (String fromAcct, String toAcct, Double amt) throws Exception {
+    public void transferFund (String fromAcct, String toAcct, Double amt, Context c) throws Exception {
         //Withdraw
         accounts.put(fromAcct, accounts.get(fromAcct) - amt);
 
         //Send data package to PluriLock
         try {
             // open websocket
-            final PluriLockNetworkUtil plnu = new PluriLockNetworkUtil(new URI("wss://localhost:8080"));
+            final PluriLockNetworkUtil plnu = new PluriLockNetworkUtil(new URI("wss://localhost:8080"), c);
 
-            // add listener
-            plnu.addMessageHandler(new PluriLockNetworkUtil.MessageHandler() {
-                public void handleMessage(String message) {
-                    JsonObject jsonObject = Json.createReader(new StringReader(message)).readObject();
-                    String userName = jsonObject.getString("user");
+            if (plnu.preNetworkCheck()) {
+                // add listener
+                plnu.addMessageHandler(new PluriLockNetworkUtil.MessageHandler() {
+                    public void handleMessage(String message) {
+//                    JsonObject jsonObject = Json.createReader(new StringReader(message)).readObject();
+//                    String userName = jsonObject.getString("user");
+                        System.out.println(message);
+                    }
+                });
 
-                    // send message to websocket
-                    plnu.sendMessage(getMessage("Hello " + userName + ", How are you?"));
+                // send message to websocket every 5 seconds
+                for (int i = 0; i <= 25; i++) {
+                    plnu.sendMessage(getMessage(i + " Hi There!!"));
+                    Thread.sleep(5000);
                 }
-            });
-
-            // send message to websocket
-            while (true) {
-                plnu.sendMessage(getMessage("Hi There!!"));
-                // wait 5 seconds for messages from websocket
-                Thread.sleep(5000);
             }
         } catch (InterruptedException ex) {
             System.err.println("InterruptedException exception: " + ex.getMessage());
