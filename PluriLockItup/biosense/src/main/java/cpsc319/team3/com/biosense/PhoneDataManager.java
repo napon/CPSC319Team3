@@ -22,59 +22,84 @@ public class PhoneDataManager {
 
     private static Point deviceScreenSize;
 
-    // Returns country code of the device.
+    /**
+     * @return country code of the device.
+     */
     public static String getCountry() {
         return Locale.getDefault().getCountry();
     }
 
-    // Returns language code of the device.
+    /**
+     * @return language code of the device.
+     */
     public static String getDisplayLanguage() {
         return Locale.getDefault().getDisplayLanguage();
     }
 
-    // Returns consumer model name of the device.
+    /**
+     * @return consumer model name of the device.
+     */
     public static String getHardwareModel() {
         return Build.MODEL;
     }
 
-    // Returns the current date time as UTC milliseconds from the epoch.
+    /**
+     * @return current date time as UTC milliseconds from the epoch.
+     */
     public static long getLocalDateTime() {
         return Calendar.getInstance().getTimeInMillis();
     }
 
-    // Returns device's manufacturer.
+    /**
+     * @return device's manufacturer.
+     */
     public static String getManufacturer() {
         return Build.MANUFACTURER;
     }
 
-    // Returns number of CPU cores.
+    /**
+     * @return number of CPU cores.
+     */
     public static int getNumberOfCPUCores() {
         return Runtime.getRuntime().availableProcessors();
     }
 
-    // Returns screen width in pixels.
+    /**
+     * @param context
+     * @return screen width in pixels.
+     */
     public static int getScreenWidth(Context context) {
         if (deviceScreenSize == null) initScreenSize(context);
         return deviceScreenSize.x;
     }
 
-    // Returns screen height in pixels.
+    /**
+     * @param context
+     * @return screen height in pixels.
+     */
     public static int getScreenHeight(Context context) {
         if (deviceScreenSize == null) initScreenSize(context);
         return deviceScreenSize.y;
     }
 
-    // Returns the Android SDK Version of the device.
+    /**
+     * @return Android SDK version of the device.
+     */
     public static int getSDKVersion() {
         return Build.VERSION.SDK_INT;
     }
 
-    // Returns the device's timezone.
+    /**
+     * @return device's time zone.
+     */
     public static String getTimeZone() {
         return TimeZone.getDefault().getID();
     }
 
-    // --------- HELPERS ---------
+    /**
+     * Initializes and remembers the coordinate size of the screen.
+     * @param context
+     */
     private static void initScreenSize(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
