@@ -57,6 +57,11 @@ public class PluriLockNetworkUtil {
         }
     }
 
+    public static void main(String[] args) throws Exception {
+        PluriLockNetworkUtil test = new PluriLockNetworkUtil(new URI("wss://129.121.9.44:8001/"), null);
+        test.sendMessage("hi");
+    }
+
     /**
      * Callback hook for Connection open events.
      *
