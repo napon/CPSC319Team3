@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense;
 
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -8,18 +10,41 @@ import android.view.View;
 public class PluriLockEventListenerManager {
 
     public View.OnClickListener createClickListener() {
-        throw new RuntimeException("Not yet implemented");
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                throw new RuntimeException("Not yet implemented");
+            }
+        };
     }
 
     public View.OnLongClickListener createLongClickListener() {
-        throw new RuntimeException("Not yet implemented");
+        return new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                throw new RuntimeException("Not yet implemented");
+//                return false;
+            }
+        };
     }
 
     public View.OnKeyListener createKeyListener() {
-        throw new RuntimeException("Not yet implemented");
+        return new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                throw new RuntimeException("Not yet implemented");
+//                return false;
+            }
+        };
     }
 
     public View.OnTouchListener createTouchListener() {
-        throw new RuntimeException("Not yet implemented");
+        return new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                throw new RuntimeException("Not yet implemented");
+//                return false;
+            }
+        };
     }
 }
