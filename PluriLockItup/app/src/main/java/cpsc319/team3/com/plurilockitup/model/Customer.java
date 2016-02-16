@@ -24,6 +24,7 @@ import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
 public class Customer implements Serializable{
     private HashMap<String, Double> accounts;
+    private String uId;
     private static Customer thisInstance;
 
     //These need to be under customer instead of main activity because customers could
@@ -69,8 +70,9 @@ public class Customer implements Serializable{
      * Constructor to build a default customer with a particular tokenID.
      * @param idToken
      */
-    public Customer(String idToken){
+    private Customer(String idToken){
         accounts = new HashMap<>();
+        this.uId = idToken;
         this.balanceGenerate = new Random();
         populateAccounts();
     }
@@ -78,7 +80,7 @@ public class Customer implements Serializable{
     /**
      * Default constrcutor, builds a customer with the default token ID.
      */
-    public Customer (){
+    private Customer (){
         this(Utils.DEFAULT_ID_TOKEN);
     }
 
@@ -224,5 +226,11 @@ public class Customer implements Serializable{
 
     public void setAccounts(HashMap<String, Double> accounts){
         this.accounts = accounts;
+    }
+
+    public String getuId() { return uId; }
+
+    public void setuId(String tokenID){
+        this.uId = tokenID;
     }
 }

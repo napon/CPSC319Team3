@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent transferIntent = new Intent(MainActivity.this,TransferActivity.class);
                     transferIntent.putExtra("acctName", dayAcctList[j]);
                     transferIntent.putExtra("Customer", customer);
-                    startActivityForResult(transferIntent, Utils.BANK_TRANSFER); //TODO change to start activity for results
+                    startActivityForResult(transferIntent, Utils.BANK_TRANSFER);
                 }
             });
 

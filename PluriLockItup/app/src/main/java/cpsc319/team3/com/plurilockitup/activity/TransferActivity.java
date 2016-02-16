@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -72,22 +73,25 @@ public class TransferActivity extends AppCompatActivity {
     Parses the amount to transfer from edittext and determines the number amount to be transfered
     Calls transfer amount and updates current account value on screen
      */
-    public void transferFunds(View view) {
-        String tempText = ((EditText) findViewById(R.id.transferAmt)).getText().toString();
-        if (tempText == null || tempText == "" || tempText.length() <= 0) {
-            tempText = "0.0"; //will transfer nothing, just like they want
+    public void transferFunds(View view){
+        String transfAmtTxt = ((EditText) findViewById(R.id.transferAmt)).getText().toString();
+        if (transfAmtTxt.equals("") || transfAmtTxt.isEmpty()) {
+            Toast.makeText(this, "Please input amount to transfer.", Toast.LENGTH_LONG).show();
+            return;
         }
         final String toAcct = String.valueOf(acctSpinner.getSelectedItem().toString());
-        final String amtText = tempText;
+        final String amtText = transfAmtTxt;
         //Create custom alert view
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.confirm_alert, null);
         ((TextView) dialogView.findViewById(R.id.fromAcctName)).setText(currAcctName);
         ((TextView) dialogView.findViewById(R.id.fromBalance)).setText(customer.getBalanceString(currAcctName));
-        ((TextView) dialogView.findViewById(R.id.withdrawAmt)).setText("-$" + amtText);
+        String transfAmt = "-$" + amtText;
+        ((TextView) dialogView.findViewById(R.id.withdrawAmt)).setText(transfAmt);
         ((TextView) dialogView.findViewById(R.id.toAcctName)).setText(toAcct);
         ((TextView) dialogView.findViewById(R.id.toBalance)).setText(customer.getBalanceString(toAcct));
-        ((TextView) dialogView.findViewById(R.id.depositAmt)).setText("+$" + amtText);
+        transfAmt = "+$" + amtText;
+        ((TextView) dialogView.findViewById(R.id.depositAmt)).setText(transfAmt);
 
         //Create custom Alert with alert view
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
