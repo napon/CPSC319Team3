@@ -1,3 +1,4 @@
+package cpsc319.team3.com.biosense.server;
 import java.net.*;
 import java.io.*;
 
@@ -11,7 +12,7 @@ public class EchoServer {
         
         int portNumber = Integer.parseInt(args[0]);
         
-        try (
+        try {
             ServerSocket serverSocket =
                 new ServerSocket(Integer.parseInt(args[0]));
             Socket clientSocket = serverSocket.accept();     
@@ -19,7 +20,7 @@ public class EchoServer {
                 new PrintWriter(clientSocket.getOutputStream(), true);                   
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
-        ) {
+
             System.out.println("Client connected.");
             String inputLine;
             float conflvl;
