@@ -118,4 +118,12 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid card#/password", Toast.LENGTH_LONG).show();
         }
     }
+
+    public void leaveFeedback(View view){
+        startActivity(new Intent(this, FeedbackActivity.class));
+    }
+
+    public void seeMap(View view){
+        //TODO....later
+    }
 }
