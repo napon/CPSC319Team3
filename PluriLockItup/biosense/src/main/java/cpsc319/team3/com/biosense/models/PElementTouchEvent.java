@@ -5,6 +5,6 @@ package cpsc319.team3.com.biosense.models;
  *
  * See the UML Diagram for more implementation details.
  */
-public class PElementTouchEvent {
+public class PElementTouchEvent extends PluriLockEvent {
 
 }

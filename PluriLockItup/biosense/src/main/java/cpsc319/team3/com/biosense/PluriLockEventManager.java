@@ -30,7 +30,7 @@ public class PluriLockEventManager {
     private List<PluriLockEvent> pluriLockEvents;
     private String userID;
 
-    PluriLockEventManager eventManager;
+    private static PluriLockEventManager eventManager;
 
     private PluriLockEventManager(Context c, PluriLockServerResponseListener l, String id)
             throws LocationServiceUnavailableException {
@@ -49,12 +49,12 @@ public class PluriLockEventManager {
      * @param id User ID
      * @return
      */
-    public synchronized PluriLockEventManager getInstance(
+    public static synchronized PluriLockEventManager getInstance(
             Context c, PluriLockServerResponseListener l, String id)
             throws LocationServiceUnavailableException {
 
         if (eventManager == null) {
-            eventManager = new PluriLockEventManager(context, l, id);
+            eventManager = new PluriLockEventManager(c, l, id);
         }
 
         return eventManager;
@@ -83,7 +83,7 @@ public class PluriLockEventManager {
                     .longitude(this.locationUtil.getLongitude())
                     .screenWidth(PhoneDataManager.getScreenWidth(context))
                     .screenHeight(PhoneDataManager.getScreenHeight(context))
-                    .setEvents((PluriLockEvent[]) pluriLockEvents.toArray());
+                    .setEvents(pluriLockEvents.toArray(new PluriLockEvent[pluriLockEvents.size()]));
             networkUtil.sendEvent(eventPackage.buildPackage());
             pluriLockEvents = new ArrayList<>();
         }
@@ -96,5 +96,12 @@ public class PluriLockEventManager {
      */
     public void notifyClient(String message) {
         clientListener.notify(message);
+    }
+
+    /**
+     * Delete the PluriLockEventManager Instance. Used for debugging purposes.
+     */
+    public static synchronized void deleteInstance() {
+        if (eventManager != null) { eventManager = null; }
     }
 }
