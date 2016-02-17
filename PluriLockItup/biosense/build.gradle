@@ -24,10 +24,16 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile "org.robolectric:robolectric:2.4"
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile files('../libs/javax.websocket-client-api-1.1.jar')
-    compile files('../libs/javax.json-api-1.0.jar')
-    compile files('../libs/javax.json-1.0.4.jar')
-    //compile files('../libs/javaee-api-7.0.jar')
-    compile files('../libs/tyrus-client-1.12.jar')
-    compile files('../libs/tyrus-container-grizzly-1.2.1.jar')
+    compile ('javax.websocket:javax.websocket-api:1.1') {
+        exclude module: 'Json';
+    }
+    compile 'javax.json:javax.json-api:1.0'
+//    compile 'javax.json:javax.json:1.0.4'
+
+//    compile files('../libs/javax.websocket-client-api-1.1.jar')
+//    compile files('../libs/javax.json-api-1.0.jar')
+//    compile files('../libs/javax.json-1.0.4.jar')
+//    //compile files('../libs/javaee-api-7.0.jar')
+//    compile files('../libs/tyrus-client-1.12.jar')
+//    compile files('../libs/tyrus-container-grizzly-1.2.1.jar')
 }
