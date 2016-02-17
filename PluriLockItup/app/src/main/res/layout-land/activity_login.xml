@@ -11,6 +11,29 @@
     tools:context="cpsc319.team3.com.plurilockitup.activity.LoginActivity">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/loginCardLayer"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:orientation="horizontal" >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Feedback"
+            android:onClick="leaveFeedback"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginLeft="10dp"
+            android:text="Find Location"
+            android:onClick="seeMap"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/loginCardLayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,6 +76,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/acctFunction_Later"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -63,22 +87,17 @@
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginPasswordLayer"
-        android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:text="Login"
         android:onClick="login"/>
     <Button
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginButton"
-        android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:text="Register"
         android:onClick="register"/>
     </LinearLayout>
-
 </RelativeLayout>
