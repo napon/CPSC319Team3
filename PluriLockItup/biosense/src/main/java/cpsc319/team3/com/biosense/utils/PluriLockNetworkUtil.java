@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense.utils;
 
+import cpsc319.team3.com.biosense.models.PluriLockPackage;
+
 /**
  * This class is responsible for:
  * - Establishing connection with the PluriLock Server
@@ -15,4 +17,12 @@ package cpsc319.team3.com.biosense.utils;
  */
 public class PluriLockNetworkUtil {
 
+    /**
+     * Sends a PluriLockPackage to the server when there is internet connectivity
+     * or stores it in the local database when there is no network connection.
+     * @param pluriLockPackage
+     */
+    public void sendEvent(PluriLockPackage pluriLockPackage) {
+        // TODO
+    }
 }

@@ -8,4 +8,11 @@ package cpsc319.team3.com.biosense;
  */
 public class PluriLockServerResponseListener {
 
+    /**
+     * Called when the server sends back a response.
+     * @param msg
+     */
+    public void notify(String msg) {
+        // TODO: Client should handle the response.
+    }
 }
