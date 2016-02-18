@@ -10,9 +10,9 @@ import android.view.WindowManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.Robolectric.Reflection;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.util.ReflectionHelpers;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -31,7 +31,7 @@ public class PhoneDataManagerTests {
 
     @Before
     public void setup() {
-        context = Robolectric.application.getApplicationContext();
+        context = RuntimeEnvironment.application.getApplicationContext();
         resources = context.getResources();
         Locale loc = new Locale("English", "US");
         Locale.setDefault(loc);
@@ -52,7 +52,7 @@ public class PhoneDataManagerTests {
 
     @Test
     public void testGetHardwareModel() {
-        Reflection.setFinalStaticField(Build.class, "MODEL", "iPhone");
+        ReflectionHelpers.setStaticField(Build.class, "MODEL", "iPhone");
         assertEquals("iPhone", PhoneDataManager.getHardwareModel());
     }
 
@@ -63,7 +63,7 @@ public class PhoneDataManagerTests {
 
     @Test
     public void testGetManufacturer() {
-        Reflection.setFinalStaticField(Build.class, "MANUFACTURER", "Samsung");
+        ReflectionHelpers.setStaticField(Build.class, "MANUFACTURER", "Samsung");
         assertEquals("Samsung", PhoneDataManager.getManufacturer());
     }
 
@@ -91,7 +91,7 @@ public class PhoneDataManagerTests {
 
     @Test
     public void testGetSDKVersion() {
-        Reflection.setFinalStaticField(Build.VERSION.class, "SDK_INT", 15);
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 15);
         assertEquals(15, PhoneDataManager.getSDKVersion());
     }
 
