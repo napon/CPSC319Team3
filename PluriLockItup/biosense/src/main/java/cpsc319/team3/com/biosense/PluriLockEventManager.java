@@ -32,7 +32,7 @@ public class PluriLockEventManager {
 
     private static PluriLockEventManager eventManager;
 
-    private PluriLockEventManager(Context c, PluriLockServerResponseListener l, String id)
+    protected PluriLockEventManager(Context c, PluriLockServerResponseListener l, String id)
             throws LocationServiceUnavailableException {
         this.context = c;
         this.clientListener = l;
