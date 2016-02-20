@@ -14,9 +14,9 @@ public class PluriLockAPI {
     private PluriLockEventManager eventManager;
     private PluriLockEventListenerManager listenerManager;
 
-    public PluriLockAPI(Context context, PluriLockServerResponseListener callback,
+    public PluriLockAPI(Context context, PluriLockServerResponseListener callback, String id,
                         PluriLockConfig config) throws Exception {
-//        this.eventManager = PluriLockEventManager.getInstance(context, callback, config);
+        this.eventManager = PluriLockEventManager.getInstance(context, callback, id, config);
         this.listenerManager = new PluriLockEventListenerManager();
     }
 
