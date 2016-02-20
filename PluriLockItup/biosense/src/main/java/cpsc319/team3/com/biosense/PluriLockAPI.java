@@ -5,6 +5,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
+import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+
 /**
  * A class through which the client interacts with our API.
  *
@@ -15,7 +17,7 @@ public class PluriLockAPI {
     private PluriLockEventListenerManager listenerManager;
 
     public PluriLockAPI(Context context, PluriLockServerResponseListener callback, String id,
-                        PluriLockConfig config) throws Exception {
+                        PluriLockConfig config) throws LocationServiceUnavailableException {
         this.eventManager = PluriLockEventManager.getInstance(context, callback, id, config);
         this.listenerManager = new PluriLockEventListenerManager();
     }
