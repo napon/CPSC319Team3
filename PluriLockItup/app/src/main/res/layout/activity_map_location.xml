@@ -44,16 +44,15 @@
             android:text="8:00am-5:00pm"
             android:layout_weight="1"/>
     </LinearLayout>
-        <LinearLayout
-            android:id="@+id/MetroBranchLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/branchUBCLayout">
+    <LinearLayout
+        android:id="@+id/MetroBranchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/branchUBCLayout">
         <TextView
             android:id="@+id/metroBranch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ubcBranch"
             android:layout_weight="1"
             android:gravity="center"
             android:text="MetroTown"/>
@@ -64,5 +63,25 @@
             android:layout_weight="1"
             android:text="8:30am-5:30pm"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/vanBranchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/MetroBranchLayout">
+        <TextView
+            android:id="@+id/vanBranch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Vancouver "/>
+        <TextView
+            android:id="@+id/vanTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="8:30am-4:30pm"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

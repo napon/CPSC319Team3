@@ -55,6 +55,12 @@ public class MapLocationActivity extends FragmentActivity implements OnMapReadyC
                 loadedMap.addMarker(new MarkerOptions()
                         .position(burnabyLocation)
                         .title("Metro"));
+
+                //bank location 3
+                LatLng vanLocation = new LatLng(49.281902, -123.124479); //Scotia Theater Vancouver
+                loadedMap.addMarker(new MarkerOptions()
+                        .position(vanLocation)
+                        .title("Scotia Theatre Vancouver"));
             }
         });
     }
