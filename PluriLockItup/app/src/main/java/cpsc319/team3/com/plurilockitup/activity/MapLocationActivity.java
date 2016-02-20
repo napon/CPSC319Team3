@@ -34,22 +34,25 @@ public class MapLocationActivity extends FragmentActivity implements OnMapReadyC
 
     @Override
     public void onMapReady(GoogleMap map) {
-        //center camera
-        LatLng swBound = new LatLng(49.230538, -123.184893); //sw marine + Dunbar
-        LatLng neBound = new LatLng(49.281586, -123.043552); //PNE
-        LatLngBounds vanMap = new LatLngBounds(swBound, neBound);
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(vanMap,0));
 
-        //bank location 1
-        LatLng ubcLocation = new LatLng(49.261283, -123.248711); //UBC ICICS
-        map.addMarker(new MarkerOptions()
-                .position(ubcLocation)
-                .title("UBC"));
+        if(map != null) {
+            //center camera
+            LatLng swBound = new LatLng(49.230538, -123.184893); //sw marine + Dunbar
+            LatLng neBound = new LatLng(49.281586, -123.043552); //PNE
+            LatLngBounds vanMap = new LatLngBounds(swBound, neBound);
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(vanMap, 0));
 
-        //bank location 2
-        LatLng burnabyLocation = new LatLng(49.225469, -123.001106); //Metrotown
-        map.addMarker(new MarkerOptions()
-                .position(burnabyLocation)
-                .title("Metro"));
+            //bank location 1
+            LatLng ubcLocation = new LatLng(49.261283, -123.248711); //UBC ICICS
+            map.addMarker(new MarkerOptions()
+                    .position(ubcLocation)
+                    .title("UBC"));
+
+            //bank location 2
+            LatLng burnabyLocation = new LatLng(49.225469, -123.001106); //Metrotown
+            map.addMarker(new MarkerOptions()
+                    .position(burnabyLocation)
+                    .title("Metro"));
+        }
     }
 }
