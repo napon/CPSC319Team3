@@ -20,7 +20,7 @@
                 android:id="@+id/bankLogo"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@drawable/bank_logo"
+                android:src="@drawable/piggy_logo"
                 />
             <TextView
                 android:layout_width="wrap_content"
