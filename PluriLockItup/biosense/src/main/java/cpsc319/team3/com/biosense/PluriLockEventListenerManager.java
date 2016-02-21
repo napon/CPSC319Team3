@@ -1,19 +1,31 @@
 package cpsc319.team3.com.biosense;
 
+import android.app.Application;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
+import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+
 /**
  * Created by Sunny on 2016-02-14.
  */
-public class PluriLockEventListenerManager {
+public class PluriLockEventListenerManager extends Application {
 
     public View.OnClickListener createClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new RuntimeException("Not yet implemented");
+                //throw new RuntimeException("Not yet implemented");
+
+
+                try {
+                    PluriLockServerResponseListener pServerResponseListener = new PluriLockServerResponseListener();
+                    PluriLockEventManager pManager = PluriLockEventManager.getInstance(getApplicationContext(), pServerResponseListener, "userid");
+                } catch (LocationServiceUnavailableException e) {
+
+                }
+
             }
         };
     }
@@ -42,8 +54,18 @@ public class PluriLockEventListenerManager {
         return new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                throw new RuntimeException("Not yet implemented");
-//                return false;
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    float xCord = event.getX();
+                    float yCord = event.getY();
+                    float pressure = event.getPressure();
+                }
+                try {
+                    PluriLockServerResponseListener pServerResponseListener = new PluriLockServerResponseListener();
+                    PluriLockEventManager pManager = PluriLockEventManager.getInstance(getApplicationContext(), pServerResponseListener, "userid");
+                } catch (LocationServiceUnavailableException e) {
+
+                }
+                return true;
             }
         };
     }
