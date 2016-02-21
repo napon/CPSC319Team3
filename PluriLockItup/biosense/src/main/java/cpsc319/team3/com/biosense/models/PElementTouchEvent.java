@@ -11,8 +11,9 @@ public class PElementTouchEvent extends PluriLockEvent {
     private float elementRelativeCoord;
     private float screenCoord;
 
-    public PElementTouchEvent(float pressure, float fingerOrientation, float elementRelativeCoord,
-                              float screenCoord) {
+    public PElementTouchEvent(int screenOrientation, float pressure, float fingerOrientation,
+                              float elementRelativeCoord, float screenCoord) {
+        super(screenOrientation);
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
         this.elementRelativeCoord = elementRelativeCoord;
