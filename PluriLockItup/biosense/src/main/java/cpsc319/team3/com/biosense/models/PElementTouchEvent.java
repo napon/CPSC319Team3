@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
+import android.graphics.PointF;
+
 /**
  * PElementTouchEvent is a model class that represents a touch action on an element.
  *
@@ -8,11 +10,11 @@ package cpsc319.team3.com.biosense.models;
 public class PElementTouchEvent extends PluriLockEvent {
     private float pressure;
     private float fingerOrientation;
-    private float elementRelativeCoord;
-    private float screenCoord;
+    private PointF elementRelativeCoord;
+    private PointF screenCoord;
 
     public PElementTouchEvent(int screenOrientation, float pressure, float fingerOrientation,
-                              float elementRelativeCoord, float screenCoord) {
+                              PointF elementRelativeCoord, PointF screenCoord) {
         super(screenOrientation);
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
