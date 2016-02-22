@@ -74,7 +74,7 @@ public class PluriLockEventListenerManager extends Application {
                 int screenOrientation = getScreenOrientation();
                 GregorianCalendar timestamp = new GregorianCalendar();
                 float duration = 0; //TODO
-                String userid = "USERID";
+                String userid = "USERID"; //TODO
 
                 try {
                     PluriLockServerResponseListener pluriLockServerResponseListener =
