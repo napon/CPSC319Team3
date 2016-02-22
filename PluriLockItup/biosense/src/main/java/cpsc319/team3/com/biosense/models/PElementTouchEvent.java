@@ -2,6 +2,8 @@ package cpsc319.team3.com.biosense.models;
 
 import android.graphics.PointF;
 
+import java.util.GregorianCalendar;
+
 /**
  * PElementTouchEvent is a model class that represents a touch action on an element.
  *
@@ -13,9 +15,9 @@ public class PElementTouchEvent extends PluriLockEvent {
     private PointF elementRelativeCoord;
     private PointF screenCoord;
 
-    public PElementTouchEvent(int screenOrientation, float pressure, float fingerOrientation,
-                              PointF elementRelativeCoord, PointF screenCoord) {
-        super(screenOrientation);
+    public PElementTouchEvent(int eventID, int screenOrientation, GregorianCalendar timestamp, float pressure,
+                              float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord) {
+        super(eventID, screenOrientation, timestamp);
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
         this.elementRelativeCoord = elementRelativeCoord;

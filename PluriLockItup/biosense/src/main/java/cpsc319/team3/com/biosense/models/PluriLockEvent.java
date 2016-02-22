@@ -32,10 +32,10 @@ public abstract class PluriLockEvent {
     private GregorianCalendar timestamp;
     //need to implement gpsLocation? (not on UML)
 
-    public PluriLockEvent(int screenOrientation) {
-        this.eventID = 0;
+    public PluriLockEvent(int eventID, int screenOrientation, GregorianCalendar timestamp) {
+        this.eventID = eventID;
         this.screenOrientation = screenOrientation;
-        this.timestamp = new GregorianCalendar();
+        this.timestamp = timestamp;
     }
 
 }

@@ -1,10 +1,13 @@
 package cpsc319.team3.com.biosense;
 
 import android.app.Application;
+import android.content.res.Configuration;
 import android.graphics.PointF;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.GregorianCalendar;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
@@ -15,21 +18,25 @@ import cpsc319.team3.com.biosense.models.PluriLockEvent;
  * Created by Sunny on 2016-02-14.
  */
 public class PluriLockEventListenerManager extends Application {
+    int currentEventID = 0;
 
+    /**
     public View.OnClickListener createClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //throw new RuntimeException("Not yet implemented");
-
 
                 try {
-                    PluriLockServerResponseListener pServerResponseListener = new PluriLockServerResponseListener();
-                    PluriLockEventManager pManager = PluriLockEventManager.getInstance(getApplicationContext(), pServerResponseListener, "userid");
+                    PluriLockServerResponseListener pServerResponseListener =
+                            new PluriLockServerResponseListener();
+
+                    PluriLockEventManager pManager =
+                            PluriLockEventManager.getInstance(getApplicationContext(), pServerResponseListener, "userid");
+
+                    PElementTouchEvent pElementTouchEvent = new PElementTouchEvent();
                 } catch (LocationServiceUnavailableException e) {
 
                 }
-
             }
         };
     }
@@ -38,20 +45,8 @@ public class PluriLockEventListenerManager extends Application {
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                throw new RuntimeException("Not yet implemented");
-//                return false;
-            }
-        };
-    }
-
-    public View.OnKeyListener createKeyListener() {
-        return new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                int screenOrientation = 1;
-                float duration = 0;
-
                 try {
+
                     PluriLockServerResponseListener pluriLockServerResponseListener =
                             new PluriLockServerResponseListener();
 
@@ -59,14 +54,45 @@ public class PluriLockEventListenerManager extends Application {
                             PluriLockEventManager.getInstance(getApplicationContext(),
                                     pluriLockServerResponseListener, "userid");
 
-                    PKeyboardTouchEvent pKeyboardTouchEvent = new PKeyboardTouchEvent(screenOrientation,
-                            duration, keyCode);
+                    PKeyboardTouchEvent pKeyboardTouchEvent = new PElementTouchEvent();
 
                     pManager.addPluriLockEvent(pKeyboardTouchEvent);
 
                 } catch (LocationServiceUnavailableException e) {
 
                 }
+                return true;
+            }
+        };
+    } **/
+
+    public View.OnKeyListener createKeyListener() {
+        return new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                int eventID = currentEventID;
+                int screenOrientation = getScreenOrientation();
+                GregorianCalendar timestamp = new GregorianCalendar();
+                float duration = 0; //TODO
+                String userid = "USERID";
+
+                try {
+                    PluriLockServerResponseListener pluriLockServerResponseListener =
+                            new PluriLockServerResponseListener();
+
+                    PluriLockEventManager pManager =
+                            PluriLockEventManager.getInstance(getApplicationContext(),
+                                    pluriLockServerResponseListener, userid);
+
+                    PKeyboardTouchEvent pKeyboardTouchEvent =
+                            new PKeyboardTouchEvent
+                                    (eventID, screenOrientation, timestamp, duration, keyCode);
+
+                    pManager.addPluriLockEvent(pKeyboardTouchEvent);
+
+                } catch (LocationServiceUnavailableException e) {
+                }
+                currentEventID++;
                 return true;
             }
         };
@@ -77,12 +103,14 @@ public class PluriLockEventListenerManager extends Application {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    float xCord = event.getX();
-                    float yCord = event.getY();
-                    PointF screenCoord = new PointF(xCord, yCord);
+                    int eventID = currentEventID;
+                    int screenOrientation = getScreenOrientation();
+                    GregorianCalendar timestamp = new GregorianCalendar();
                     float pressure = event.getPressure();
-                    int screenOrientation = 1; //TODO: get screen orientation
                     float fingerOrientation = event.getOrientation();
+                    PointF elementRelativeCoord = new PointF(event.getX(), event.getY());
+                    PointF screenCoord = new PointF(event.getRawX(), event.getRawY());
+                    String userid = "USERID"; //TODO
 
                     try {
                         PluriLockServerResponseListener pServerResponseListener =
@@ -90,20 +118,30 @@ public class PluriLockEventListenerManager extends Application {
 
                         PluriLockEventManager pManager =
                                 PluriLockEventManager.getInstance(getApplicationContext(),
-                                        pServerResponseListener, "userid"); //TODO: get userid
+                                        pServerResponseListener, userid);
 
                         PElementTouchEvent pElementTouchEvent =
-                                new PElementTouchEvent(screenOrientation, pressure, fingerOrientation,
-                                        screenCoord, screenCoord);
+                                new PElementTouchEvent(eventID, screenOrientation, timestamp,
+                                        pressure, fingerOrientation, screenCoord, screenCoord);
 
                         pManager.addPluriLockEvent(pElementTouchEvent);
-                        //TODO: get element's relative coords
+
                     } catch (LocationServiceUnavailableException e) {
 
                     }
                 }
+                currentEventID++;
                 return true;
             }
         };
+    }
+
+    public int getScreenOrientation() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return 2;
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            return 1;
+        }
+        return 0;
     }
 }
