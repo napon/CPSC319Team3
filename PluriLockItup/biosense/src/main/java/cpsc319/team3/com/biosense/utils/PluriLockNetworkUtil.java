@@ -1,8 +1,5 @@
 package cpsc319.team3.com.biosense.utils;
 
-<<<<<<< HEAD
-//import org.json.JSONException;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -16,12 +13,7 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
-
-||||||| merged common ancestors
-=======
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
-
->>>>>>> master
 /**
  * This class is responsible for:
  * - Establishing connection with the PluriLock Server
@@ -39,7 +31,6 @@ import cpsc319.team3.com.biosense.models.PluriLockPackage;
 @ClientEndpoint
 public class PluriLockNetworkUtil {
 
-<<<<<<< HEAD
 //    /**
 //     * Sends data to PluriLock server and returns a response string
 //     * @param data JSONObject including client's hardware information and PluriLockEvents
@@ -155,8 +146,7 @@ public class PluriLockNetworkUtil {
 
         public void handleMessage(String message);
     }
-||||||| merged common ancestors
-=======
+
     /**
      * Sends a PluriLockPackage to the server when there is internet connectivity
      * or stores it in the local database when there is no network connection.
@@ -165,5 +155,4 @@ public class PluriLockNetworkUtil {
     public void sendEvent(PluriLockPackage pluriLockPackage) {
         // TODO
     }
->>>>>>> master
 }
