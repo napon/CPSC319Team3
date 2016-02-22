@@ -4,10 +4,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.io.IOException;
 import java.net.URI;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -43,16 +45,18 @@ public class PluriLockNetworkUtil {
     Session userSession = null;
     private MessageHandler messageHandler;
     private Context context;
+    private WebSocketContainer container;
+    private URI endpointURI;
 
     public PluriLockNetworkUtil(URI endpointURI, Context c) {
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            //String uri = "ws://localhost:8080" + request.getContextPath() + "/websocket";
-            container.connectToServer(this, endpointURI);
-            context = c;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        this.container = ContainerProvider.getWebSocketContainer();
+        this.endpointURI = endpointURI;
+        this.context = c;
+    }
+
+    private void initiateConnection() throws DeploymentException, IOException {
+        //String uri = "ws://localhost:8080" + request.getContextPath() + "/websocket";
+        container.connectToServer(this, endpointURI);
     }
 
     public static void main(String[] args) throws Exception {

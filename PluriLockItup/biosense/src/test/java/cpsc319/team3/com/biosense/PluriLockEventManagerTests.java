@@ -17,6 +17,7 @@ import org.robolectric.shadows.ShadowContextWrapper;
 
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
@@ -64,7 +65,7 @@ public class PluriLockEventManagerTests {
 
     @Test
     public void testAddPluriLockEventWithNetworkCall() throws LocationServiceUnavailableException,
-            NoSuchFieldException, IllegalAccessException {
+            NoSuchFieldException, IllegalAccessException, URISyntaxException {
         Application application = createApplicationWithPermissions();
         PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
             @Override
@@ -75,7 +76,8 @@ public class PluriLockEventManagerTests {
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(Mockito.mock(URI.class), Mockito.mock(Context.class)));
+                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class))
+        );
         Field injected = PluriLockEventManager.class.getDeclaredField("networkUtil");
         injected.setAccessible(true);
         injected.set(p, network);
@@ -98,7 +100,7 @@ public class PluriLockEventManagerTests {
     }
 
     @Test
-    public void testAddPluriLockEventNoNetworkCall() throws LocationServiceUnavailableException, NoSuchFieldException, IllegalAccessException {
+    public void testAddPluriLockEventNoNetworkCall() throws LocationServiceUnavailableException, NoSuchFieldException, IllegalAccessException, URISyntaxException {
         Application application = createApplicationWithPermissions();
         PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
             @Override
@@ -109,7 +111,7 @@ public class PluriLockEventManagerTests {
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(Mockito.mock(URI.class), Mockito.mock(Context.class))
+                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class))
         );
         Field injected = PluriLockEventManager.class.getDeclaredField("networkUtil");
         injected.setAccessible(true);
