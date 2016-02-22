@@ -124,6 +124,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void seeMap(View view){
-        //TODO....later
+        startActivity(new Intent(this, MapLocationActivity.class));
     }
 }
