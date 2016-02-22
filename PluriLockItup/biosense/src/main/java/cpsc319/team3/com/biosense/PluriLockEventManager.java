@@ -29,14 +29,17 @@ public class PluriLockEventManager {
     private LocationUtil locationUtil;
     private List<PluriLockEvent> pluriLockEvents;
     private String userID;
+    private PluriLockConfig config;
 
     private static PluriLockEventManager eventManager;
 
-    private PluriLockEventManager(Context c, PluriLockServerResponseListener l, String id)
+    protected PluriLockEventManager(Context c, PluriLockServerResponseListener l, String id,
+                                    PluriLockConfig config)
             throws LocationServiceUnavailableException {
         this.context = c;
         this.clientListener = l;
         this.userID = id;
+        this.config = config;
         this.pluriLockEvents = new ArrayList<>();
         this.networkUtil = new PluriLockNetworkUtil();
         this.locationUtil = new LocationUtil(c);
@@ -50,11 +53,11 @@ public class PluriLockEventManager {
      * @return
      */
     public static synchronized PluriLockEventManager getInstance(
-            Context c, PluriLockServerResponseListener l, String id)
+            Context c, PluriLockServerResponseListener l, String id, PluriLockConfig config)
             throws LocationServiceUnavailableException {
 
         if (eventManager == null) {
-            eventManager = new PluriLockEventManager(c, l, id);
+            eventManager = new PluriLockEventManager(c, l, id, config);
         }
 
         return eventManager;
@@ -69,9 +72,9 @@ public class PluriLockEventManager {
      * @param pluriLockEvent
      */
     public void addPluriLockEvent(PluriLockEvent pluriLockEvent) {
-        assert(pluriLockEvents.size() < PluriLockConfig.ACTIONS_PER_UPLOAD);
+        assert(pluriLockEvents.size() < config.getActionsPerUpload());
         this.pluriLockEvents.add(pluriLockEvent);
-        if (pluriLockEvents.size() == PluriLockConfig.ACTIONS_PER_UPLOAD) {
+        if (pluriLockEvents.size() == config.getActionsPerUpload()) {
             PluriLockPackageBuilder eventPackage = new PluriLockPackageBuilder()
                     .countryCode(PhoneDataManager.getCountry())
                     .model(PhoneDataManager.getHardwareModel())
@@ -87,7 +90,7 @@ public class PluriLockEventManager {
             networkUtil.sendEvent(eventPackage.buildPackage());
             pluriLockEvents = new ArrayList<>();
         }
-        assert(pluriLockEvents.size() < PluriLockConfig.ACTIONS_PER_UPLOAD);
+        assert(pluriLockEvents.size() < config.getActionsPerUpload());
     }
 
     /**

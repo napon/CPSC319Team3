@@ -1,5 +1,6 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,18 +9,22 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import cpsc319.team3.com.biosense.PluriLockAPI;
+import cpsc319.team3.com.biosense.PluriLockConfig;
+import cpsc319.team3.com.biosense.PluriLockServerResponseListener;
+import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 import cpsc319.team3.com.plurilockitup.model.Utils;
 
 public class MainActivity extends AppCompatActivity {
-
-
     Customer customer;
     String[] dayAcctList;
     String[] creditAcctList;
     TableLayout dayAcctTable;
     TableLayout creditAcctTable;
+
+    PluriLockAPI plapi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +85,25 @@ public class MainActivity extends AppCompatActivity {
             });
 
             creditAcctTable.addView(row);
+        }
+        setupPLApi();
+    }
+
+    private void setupPLApi() {
+        Context context = getApplicationContext();
+        PluriLockServerResponseListener callback = new PluriLockServerResponseListener() {
+            @Override
+            public void notify(String msg) {
+                // TODO: Check this value and logout the user if needed
+            }
+        };
+        String id = ""; // TODO: What is this value?
+        PluriLockConfig config = new PluriLockConfig();
+
+        try {
+            this.plapi = new PluriLockAPI(context, callback, id, config);
+        } catch (LocationServiceUnavailableException e) {
+            // TODO: Display an error message to user telling them to enable location service?
         }
     }
 

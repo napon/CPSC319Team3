@@ -9,5 +9,13 @@ public class PluriLockConfig {
     /**
      * Number of PluriLockEvents to include in a data packet to the Server.
      */
-    public static int ACTIONS_PER_UPLOAD = 10;
+    protected int actionsPerUpload = 10;
+
+    public int getActionsPerUpload() {
+        return actionsPerUpload;
+    }
+
+    public void setActionsPerUpload(int actionsPerUpload) {
+        this.actionsPerUpload = actionsPerUpload;
+    }
 }
