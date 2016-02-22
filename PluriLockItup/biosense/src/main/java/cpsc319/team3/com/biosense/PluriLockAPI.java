@@ -1,8 +1,6 @@
 package cpsc319.team3.com.biosense;
 
 import android.content.Context;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
