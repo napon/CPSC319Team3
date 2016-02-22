@@ -2,4 +2,5 @@
     <string name="app_name">PluriLockItup</string>
     <string name="message_sample">Thank you for all your hard work \nYou guys are the best!
         \n\nTalk to you soon.</string>
+    <string name="nearestLocationTitle">Find a branch near you:</string>
 </resources>

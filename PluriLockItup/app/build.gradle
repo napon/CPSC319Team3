@@ -25,16 +25,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile project(':biosense')
-    //    compile files('libs/javax.json-1.0.4.jar')
-    //    compile files('libs/javax.json-api-1.0.jar')
-    //    compile files('libs/javax.websocket-client-api-1.1.jar')
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
-    //    compile files('libs/javaee-api-7.0.jar')
-    //compile files('/Users/elaine/CPSC319Team3/PluriLockItup/libs/javax.websocket-client-api-1.1.jar')
-    //compile files('/Users/elaine/CPSC319Team3/PluriLockItup/libs/javax.json-api-1.0.jar')
-    //compile files('/Users/elaine/CPSC319Team3/PluriLockItup/libs/javax.json-1.0.4.jar')
-    //compile files('/Users/elaine/CPSC319Team3/PluriLockItup/libs/javaee-api-7.0.jar')
-    //compile files('/Users/elaine/CPSC319Team3/PluriLockItup/libs/javax.websocket-client-api-1.1.jar')
-    //compile files('/Users/elaine/CPSC319Team3/PluriLockItup/libs/tyrus-client-1.12.jar')
-    //compile files('/Users/elaine/CPSC319Team3/PluriLockItup/libs/tyrus-container-grizzly-1.2.1.jar')
+    compile 'com.google.android.gms:play-services:8.4.0'
 }

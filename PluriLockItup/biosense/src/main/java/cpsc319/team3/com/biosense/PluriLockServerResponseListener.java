@@ -6,6 +6,11 @@ package cpsc319.team3.com.biosense;
  *
  * See the UML Diagram for more implementation details.
  */
-public class PluriLockServerResponseListener {
+public interface PluriLockServerResponseListener {
 
+    /**
+     * Called when the server sends back a response.
+     * @param msg
+     */
+    void notify(String msg);
 }
