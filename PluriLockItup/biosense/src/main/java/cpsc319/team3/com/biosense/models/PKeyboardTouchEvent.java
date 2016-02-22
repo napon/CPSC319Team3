@@ -7,9 +7,9 @@ package cpsc319.team3.com.biosense.models;
  */
 public class PKeyboardTouchEvent extends PluriLockEvent {
     private float duration;
-    private String keyPressed;
+    private int keyPressed;
 
-    public PKeyboardTouchEvent(int screenOrientation, float duration, String keyPressed) {
+    public PKeyboardTouchEvent(int screenOrientation, float duration, int keyPressed) {
         super(screenOrientation);
         this.duration = duration;
         this.keyPressed = keyPressed;

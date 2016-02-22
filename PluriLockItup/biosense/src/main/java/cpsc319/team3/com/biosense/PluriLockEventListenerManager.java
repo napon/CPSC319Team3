@@ -8,6 +8,8 @@ import android.view.View;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
+import cpsc319.team3.com.biosense.models.PKeyboardTouchEvent;
+import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
 /**
  * Created by Sunny on 2016-02-14.
@@ -46,8 +48,26 @@ public class PluriLockEventListenerManager extends Application {
         return new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                throw new RuntimeException("Not yet implemented");
-//                return false;
+                int screenOrientation = 1;
+                float duration = 0;
+
+                try {
+                    PluriLockServerResponseListener pluriLockServerResponseListener =
+                            new PluriLockServerResponseListener();
+
+                    PluriLockEventManager pManager =
+                            PluriLockEventManager.getInstance(getApplicationContext(),
+                                    pluriLockServerResponseListener, "userid");
+
+                    PKeyboardTouchEvent pKeyboardTouchEvent = new PKeyboardTouchEvent(screenOrientation,
+                            duration, keyCode);
+
+                    pManager.addPluriLockEvent(pKeyboardTouchEvent);
+
+                } catch (LocationServiceUnavailableException e) {
+
+                }
+                return true;
             }
         };
     }
@@ -75,13 +95,14 @@ public class PluriLockEventListenerManager extends Application {
                         PElementTouchEvent pElementTouchEvent =
                                 new PElementTouchEvent(screenOrientation, pressure, fingerOrientation,
                                         screenCoord, screenCoord);
+
+                        pManager.addPluriLockEvent(pElementTouchEvent);
                         //TODO: get element's relative coords
                     } catch (LocationServiceUnavailableException e) {
 
                     }
-                    return true;
                 }
-                return false;
+                return true;
             }
         };
     }
