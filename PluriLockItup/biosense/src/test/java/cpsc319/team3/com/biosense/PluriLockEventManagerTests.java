@@ -16,6 +16,7 @@ import org.robolectric.shadows.ShadowContextImpl;
 import org.robolectric.shadows.ShadowContextWrapper;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
@@ -73,7 +74,8 @@ public class PluriLockEventManagerTests {
         };
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
-        PluriLockNetworkUtil network = Mockito.spy(new PluriLockNetworkUtil());
+        PluriLockNetworkUtil network = Mockito.spy(
+                new PluriLockNetworkUtil(Mockito.mock(URI.class), Mockito.mock(Context.class)));
         Field injected = PluriLockEventManager.class.getDeclaredField("networkUtil");
         injected.setAccessible(true);
         injected.set(p, network);
@@ -106,7 +108,9 @@ public class PluriLockEventManagerTests {
         };
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
-        PluriLockNetworkUtil network = Mockito.spy(new PluriLockNetworkUtil());
+        PluriLockNetworkUtil network = Mockito.spy(
+                new PluriLockNetworkUtil(Mockito.mock(URI.class), Mockito.mock(Context.class))
+        );
         Field injected = PluriLockEventManager.class.getDeclaredField("networkUtil");
         injected.setAccessible(true);
         injected.set(p, network);
