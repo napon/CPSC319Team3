@@ -66,14 +66,14 @@ public class PluriLockEventManagerTests {
 
         // Add numActions - 1 number of PluriLockEvents.
         for (int i = 0; i < numActions - 1; i++) {
-            p.addPluriLockEvent(new PElementTouchEvent(1, 1, new GregorianCalendar(), 1, 1, new PointF(0, 0), new PointF(0,0)));
+            p.addPluriLockEvent(new PElementTouchEvent(1, 1, new GregorianCalendar().getTimeInMillis(), 1, 1, new PointF(0, 0), new PointF(0,0)));
         }
 
         // Verify that the network call hasn't been invoked.
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
 
         // Add one more PluriLockEvents.
-        p.addPluriLockEvent(new PScrollEvent(1, 1, new GregorianCalendar(), 1, 0, 1));
+        p.addPluriLockEvent(new PScrollEvent(1, 1, new GregorianCalendar().getTimeInMillis(), 1, 0, 1));
 
         // Verify the network call has been invoked 1 time.
         Mockito.verify(network, Mockito.times(1)).sendEvent(Mockito.any(PluriLockPackage.class));
@@ -93,7 +93,7 @@ public class PluriLockEventManagerTests {
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
 
         // Add one PluriLockEvent.
-        p.addPluriLockEvent(new PKeyboardTouchEvent(0, 1, new GregorianCalendar(), 0, 1));
+        p.addPluriLockEvent(new PKeyboardTouchEvent(0, 1, new GregorianCalendar().getTimeInMillis(), 0, 1));
 
         // Verify that the network call hasn't been invoked.
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));

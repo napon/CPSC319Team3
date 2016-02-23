@@ -29,13 +29,24 @@ import java.util.GregorianCalendar;
 public abstract class PluriLockEvent {
     private int eventID;
     private int screenOrientation; //1 = portrait; 2=landscape
-    private GregorianCalendar timestamp;
+    private long timestamp;
     //need to implement gpsLocation? (not on UML)
 
-    public PluriLockEvent(int eventID, int screenOrientation, GregorianCalendar timestamp) {
+    public PluriLockEvent(int eventID, int screenOrientation, long timestamp) {
         this.eventID = eventID;
         this.screenOrientation = screenOrientation;
         this.timestamp = timestamp;
     }
 
+    public int getEventID() {
+        return eventID;
+    }
+
+    public int getScreenOrientation() {
+        return screenOrientation;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
 }

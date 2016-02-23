@@ -27,17 +27,21 @@ public class PluriLockEventListenerManager {
         this.userid = userid;
     }
 
-    int currentEventID = 0;
+    int currentEventID = 0; //TODO: change eventID to something meaningful
 
-    public View.OnKeyListener createKeyListener() {
+    /** Napon's comments (from github):
+    we want to create one PKeyboardTouchEvent per TWO key presses and record the time between them.
+     We will probably need some sort of a timeout as well in the case when it's not possible to
+     construct a pair of key presses (eg. User types odd number of characters).
+    **/
+     public View.OnKeyListener createKeyListener() {
         return new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 int eventID = currentEventID;
                 int screenOrientation = getScreenOrientation();
-                GregorianCalendar timestamp = new GregorianCalendar();
-                float duration = 0; //TODO
-                String userid = "USERID"; //TODO
+                Long timestamp = new GregorianCalendar().getTimeInMillis();
+                long duration = 0; //TODO
 
                 try {
                     PluriLockServerResponseListener pluriLockServerResponseListener =
@@ -61,6 +65,7 @@ public class PluriLockEventListenerManager {
         };
     }
 
+    //TODO: scroll, swipe, contact area, two-finger press
     public View.OnTouchListener createTouchListener() {
         return new View.OnTouchListener() {
             @Override
@@ -68,12 +73,11 @@ public class PluriLockEventListenerManager {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     int eventID = currentEventID;
                     int screenOrientation = getScreenOrientation();
-                    GregorianCalendar timestamp = new GregorianCalendar();
+                    long timestamp = new GregorianCalendar().getTimeInMillis();
                     float pressure = event.getPressure();
                     float fingerOrientation = event.getOrientation();
                     PointF elementRelativeCoord = new PointF(event.getX(), event.getY());
                     PointF screenCoord = new PointF(event.getRawX(), event.getRawY());
-                    String userid = "USERID"; //TODO
 
                     try {
                         PluriLockServerResponseListener pServerResponseListener =
@@ -100,11 +104,6 @@ public class PluriLockEventListenerManager {
     }
 
     public int getScreenOrientation() {
-        if (applicationContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            return 2;
-        } else if (applicationContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            return 1;
-        }
-        return 0;
+        return applicationContext.getResources().getConfiguration().orientation;
     }
 }

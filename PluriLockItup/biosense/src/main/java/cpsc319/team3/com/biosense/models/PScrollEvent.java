@@ -12,11 +12,23 @@ public class PScrollEvent extends PluriLockEvent {
     private float startCoord;
     private float endCoord;
 
-    public PScrollEvent(int eventID, int screenOrientation, GregorianCalendar timestamp, int orientation, float startCoord, float endCoord) {
+    public PScrollEvent(int eventID, int screenOrientation, long timestamp,
+                        int orientation, float startCoord, float endCoord) {
         super(eventID, screenOrientation, timestamp);
         this.orientation = orientation;
         this.startCoord = startCoord;
         this.endCoord = endCoord;
     }
 
+    public int getOrientation() {
+        return orientation;
+    }
+
+    public float getStartCoord() {
+        return startCoord;
+    }
+
+    public float getEndCoord() {
+        return endCoord;
+    }
 }
