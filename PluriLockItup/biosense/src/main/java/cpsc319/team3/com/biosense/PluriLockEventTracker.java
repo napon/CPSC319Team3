@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense;
 
+import cpsc319.team3.com.biosense.models.PluriLockEvent;
+
 /**
  * This class is responsible for
  * - Initializing specific Android listeners
@@ -11,5 +13,10 @@ package cpsc319.team3.com.biosense;
  * !!! Subject to change by @leesunny.
  */
 public class PluriLockEventTracker {
+    private PluriLockEventManager eventManager;
+
+    void notifyOfEvent(PluriLockEvent pEvent) {
+
+    }
 
 }
