@@ -1,6 +1,7 @@
 package cpsc319.team3.com.biosense;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PointF;
 import android.view.KeyEvent;
@@ -17,54 +18,16 @@ import cpsc319.team3.com.biosense.models.PluriLockEvent;
 /**
  * Created by Sunny on 2016-02-14.
  */
-public class PluriLockEventListenerManager extends Application {
-    int currentEventID = 0;
+public class PluriLockEventListenerManager {
+    private static Context applicationContext;
+    private String userid;
 
-    /**
-    public View.OnClickListener createClickListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    PluriLockServerResponseListener pServerResponseListener =
-                            new PluriLockServerResponseListener();
-
-                    PluriLockEventManager pManager =
-                            PluriLockEventManager.getInstance(getApplicationContext(), pServerResponseListener, "userid");
-
-                    PElementTouchEvent pElementTouchEvent = new PElementTouchEvent();
-                } catch (LocationServiceUnavailableException e) {
-
-                }
-            }
-        };
+    public PluriLockEventListenerManager(Context applicationContext, String userid) {
+        this.applicationContext = applicationContext;
+        this.userid = userid;
     }
 
-    public View.OnLongClickListener createLongClickListener() {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                try {
-
-                    PluriLockServerResponseListener pluriLockServerResponseListener =
-                            new PluriLockServerResponseListener();
-
-                    PluriLockEventManager pManager =
-                            PluriLockEventManager.getInstance(getApplicationContext(),
-                                    pluriLockServerResponseListener, "userid");
-
-                    PKeyboardTouchEvent pKeyboardTouchEvent = new PElementTouchEvent();
-
-                    pManager.addPluriLockEvent(pKeyboardTouchEvent);
-
-                } catch (LocationServiceUnavailableException e) {
-
-                }
-                return true;
-            }
-        };
-    } **/
+    int currentEventID = 0;
 
     public View.OnKeyListener createKeyListener() {
         return new View.OnKeyListener() {
@@ -81,7 +44,7 @@ public class PluriLockEventListenerManager extends Application {
                             new PluriLockServerResponseListener();
 
                     PluriLockEventManager pManager =
-                            PluriLockEventManager.getInstance(getApplicationContext(),
+                            PluriLockEventManager.getInstance(applicationContext,
                                     pluriLockServerResponseListener, userid);
 
                     PKeyboardTouchEvent pKeyboardTouchEvent =
@@ -117,7 +80,7 @@ public class PluriLockEventListenerManager extends Application {
                                 new PluriLockServerResponseListener();
 
                         PluriLockEventManager pManager =
-                                PluriLockEventManager.getInstance(getApplicationContext(),
+                                PluriLockEventManager.getInstance(applicationContext,
                                         pServerResponseListener, userid);
 
                         PElementTouchEvent pElementTouchEvent =
@@ -137,9 +100,9 @@ public class PluriLockEventListenerManager extends Application {
     }
 
     public int getScreenOrientation() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (applicationContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return 2;
-        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        } else if (applicationContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             return 1;
         }
         return 0;
