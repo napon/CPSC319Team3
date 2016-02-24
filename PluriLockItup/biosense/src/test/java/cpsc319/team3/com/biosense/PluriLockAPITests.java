@@ -1,13 +1,22 @@
 
 package cpsc319.team3.com.biosense;
 
+import android.Manifest;
+import android.app.Application;
 import android.content.Context;
+import android.location.LocationManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Shadows;
+import org.robolectric.shadows.ShadowApplication;
+import org.robolectric.shadows.ShadowContextImpl;
+import org.robolectric.shadows.ShadowContextWrapper;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 
@@ -20,9 +29,24 @@ public class PluriLockAPITests {
     private PluriLockServerResponseListener baseListener;
     private PluriLockConfig baseConfig;
     Context testContext;
+
+    //=============================HELPER FUNCTIONS =======================
+    private Application createApplicationWithPermission() {
+        Application application = (Application) ShadowApplication.getInstance().getApplicationContext();
+        ShadowContextWrapper shadowApp = Shadows.shadowOf(application);
+        shadowApp.setPackageName("com.cpsc319.team3");
+        LocationManager mockLocation= Mockito.mock(LocationManager.class);
+        ShadowContextImpl shadowContext = (ShadowContextImpl) Shadows.shadowOf(application.getBaseContext());
+        shadowContext.setSystemService(Context.LOCATION_SERVICE, mockLocation);
+        shadowApp.grantPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+        application.onCreate();
+        return application;
+    }
+
+    //============================= SETUP and TEARDOWN ================================
     @Before
     public void setup() {
-        testContext = RuntimeEnvironment.application.getApplicationContext();
+        testContext = createApplicationWithPermission().getApplicationContext();
         baseConfig = new PluriLockConfig();
         baseListener = new PluriLockServerResponseListener() {
             @Override
@@ -30,6 +54,11 @@ public class PluriLockAPITests {
                 //do nothing.
             }
         };
+    }
+
+    @After
+    public void tearDown(){
+        PluriLockAPI.destroyAPISession();
     }
 
 //===============BASIC BUILD TESTS=====================
