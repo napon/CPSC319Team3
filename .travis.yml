@@ -8,5 +8,7 @@ android:
         - extra-google-m2repository
         - extra-android-m2repository
 
+before_install: cd PluriLockItup
+
 script:
-    - ./PluriLockItup/gradle build connectedCheck
+    - gradle build
