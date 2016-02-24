@@ -11,4 +11,4 @@ android:
 before_install: cd PluriLockItup
 
 script:
-    - gradle build
+    - gradle build && gradle test
