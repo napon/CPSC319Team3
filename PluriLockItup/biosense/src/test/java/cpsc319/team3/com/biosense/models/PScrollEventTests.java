@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 public class PScrollEventTests {
     @Test
     public void sampleTest() throws Exception {
-        PScrollEvent p = new PScrollEvent(1, 1, new GregorianCalendar(), 1, 1, 1);
+        PScrollEvent p = new PScrollEvent(1, 1, 1, 1, 1, 1);
         assertTrue(p.getClass() == PScrollEvent.class);
     }
 }
