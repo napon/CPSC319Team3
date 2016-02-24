@@ -47,7 +47,7 @@ public class PluriLockEventManager {
 
     /**
      * Singleton Design Pattern.
-     * @param c Context of the applicatio
+     * @param c Context of the application
      * @param l Client Listener for server response
      * @param id User ID
      * @return

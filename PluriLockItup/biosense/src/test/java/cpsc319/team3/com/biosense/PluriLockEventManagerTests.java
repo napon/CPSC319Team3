@@ -3,6 +3,7 @@ package cpsc319.team3.com.biosense;
 import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.PointF;
 import android.location.LocationManager;
 
 import org.junit.Before;
@@ -16,8 +17,10 @@ import org.robolectric.shadows.ShadowContextImpl;
 import org.robolectric.shadows.ShadowContextWrapper;
 
 import java.lang.reflect.Field;
+import java.util.GregorianCalendar;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
@@ -86,14 +89,14 @@ public class PluriLockEventManagerTests {
 
         // Add numActions - 1 number of PluriLockEvents.
         for (int i = 0; i < numActions - 1; i++) {
-            p.addPluriLockEvent(new PElementTouchEvent());
+            p.addPluriLockEvent(new PElementTouchEvent(1, 1, new GregorianCalendar().getTimeInMillis(), 1, 1, new PointF(0, 0), new PointF(0,0)));
         }
 
         // Verify that the network call hasn't been invoked.
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
 
         // Add one more PluriLockEvents.
-        p.addPluriLockEvent(new PScrollEvent());
+        p.addPluriLockEvent(new PScrollEvent(1, 1, new GregorianCalendar().getTimeInMillis(), 1, 0, 1));
 
         // Verify the network call has been invoked 1 time.
         Mockito.verify(network, Mockito.times(1)).sendEvent(Mockito.any(PluriLockPackage.class));
@@ -121,7 +124,7 @@ public class PluriLockEventManagerTests {
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
 
         // Add one PluriLockEvent.
-        p.addPluriLockEvent(new PKeyboardTouchEvent());
+        p.addPluriLockEvent(new PKeyboardTouchEvent(0, 1, new GregorianCalendar().getTimeInMillis(), 0, 1));
 
         // Verify that the network call hasn't been invoked.
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
