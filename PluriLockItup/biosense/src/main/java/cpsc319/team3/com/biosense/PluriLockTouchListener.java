@@ -33,7 +33,10 @@ public class PluriLockTouchListener implements View.OnTouchListener{
      * @return true since listener has consumed the event
      */
     public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (event == null) {
+            //do nothing
+        }
+        else if (event.getAction() == MotionEvent.ACTION_DOWN) {
             int eventID = 0; //TODO
             int screenOrientation = 0; //TODO
             long timestamp = new GregorianCalendar().getTimeInMillis();
