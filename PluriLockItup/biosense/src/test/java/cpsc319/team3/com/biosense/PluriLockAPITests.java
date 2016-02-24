@@ -55,6 +55,25 @@ public class PluriLockAPITests {
         PluriLockAPI.createNewSession(this.testContext, this.baseListener, "TEST", this.baseConfig);
         assertTrue(PluriLockAPI.getInstance() != null);
     }
+
+    @Test
+    public void destroyingShouldNotThrowException() throws LocationServiceUnavailableException {
+        afterBuildShouldNotBeNull();
+        try{
+            PluriLockAPI.destroyAPISession();
+
+        } catch (Exception e) {
+            fail("Threw an exception " + e.getClass());
+        }
+    }
+
+    @Test
+    public void afterDestroyShouldBeNull() throws LocationServiceUnavailableException{
+        afterBuildShouldNotBeNull();
+        assertTrue(PluriLockAPI.getInstance() != null);
+        PluriLockAPI.destroyAPISession();
+        assertTrue(PluriLockAPI.getInstance() == null);
+    }
 //===============END OF BASIC BUILD TESTS=====================
 
 }

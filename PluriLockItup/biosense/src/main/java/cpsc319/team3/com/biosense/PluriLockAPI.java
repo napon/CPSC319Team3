@@ -13,12 +13,26 @@ import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 public class PluriLockAPI {
     private PluriLockEventManager eventManager;
     private static PluriLockAPI mySession;
-    
+
     //TODO: add listeners
+
+    /**
+     *
+     * @return existing PluriLockAPI session, or null if one has not yet been made.
+     */
     public static PluriLockAPI getInstance(){
         return mySession;
     }
 
+    /**
+     *
+     * @param context - appcliation context
+     * @param callback - the class the API is to call when a server response arrives
+     * @param userID - the Plurlock UserID of the app
+     * @param config - the settings to use for this API session
+     * @return - the new PluriLockAPI session.
+     * @throws LocationServiceUnavailableException
+     */
     public static PluriLockAPI createNewSession(Context context, PluriLockServerResponseListener callback,
                                    String userID, PluriLockConfig config)
                                     throws LocationServiceUnavailableException{
@@ -26,10 +40,26 @@ public class PluriLockAPI {
         return mySession;
     }
 
-    public PluriLockAPI(Context context, PluriLockServerResponseListener callback, String id,
+    /**
+     * Constructor
+     * @param context - appcliation context
+     * @param callback - the class the API is to call when a server response arrives
+     * @param userID - the Plurlock UserID of the app
+     * @param config - the settings to use for this API session
+     * @throws LocationServiceUnavailableException
+     */
+    private PluriLockAPI(Context context, PluriLockServerResponseListener callback, String userID,
                         PluriLockConfig config) throws LocationServiceUnavailableException {
-        this.eventManager = PluriLockEventManager.getInstance(context, callback, id, config);
+        this.eventManager = PluriLockEventManager.getInstance(context, callback, userID, config);
+        //TODO build EventTracker here too!
 
+    }
+
+    /**
+     * Destroys the existing session (in case of logout, etc)
+     */
+    public static void destroyAPISession(){
+        mySession = null; //add any destruction methods here as well.
     }
 
 
