@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
+import android.graphics.PointF;
+
 import java.util.GregorianCalendar;
 
 /**
@@ -9,11 +11,11 @@ import java.util.GregorianCalendar;
  */
 public class PScrollEvent extends PluriLockEvent {
     private int orientation;
-    private float startCoord;
-    private float endCoord;
+    private PointF startCoord;
+    private PointF endCoord;
 
     public PScrollEvent(int eventID, int screenOrientation, long timestamp,
-                        int orientation, float startCoord, float endCoord) {
+                        int orientation, PointF startCoord, PointF endCoord) {
         super(eventID, screenOrientation, timestamp);
         this.orientation = orientation;
         this.startCoord = startCoord;
@@ -24,11 +26,9 @@ public class PScrollEvent extends PluriLockEvent {
         return orientation;
     }
 
-    public float getStartCoord() {
+    public PointF getStartCoord() {
         return startCoord;
     }
 
-    public float getEndCoord() {
-        return endCoord;
-    }
+    public PointF getEndCoord() { return endCoord; }
 }

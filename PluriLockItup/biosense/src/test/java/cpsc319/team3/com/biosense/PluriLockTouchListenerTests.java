@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 public class PluriLockTouchListenerTests {
     @Test
-    public void sampleTest() throws Exception {
+    public void constructorTest() {
         PluriLockEventTracker pluriLockEventTracker = new PluriLockEventTracker();
         PluriLockTouchListener p = new PluriLockTouchListener(pluriLockEventTracker);
         assertTrue(p.getClass() == PluriLockTouchListener.class);
