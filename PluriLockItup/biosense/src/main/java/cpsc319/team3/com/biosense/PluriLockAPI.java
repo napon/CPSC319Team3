@@ -36,6 +36,9 @@ public class PluriLockAPI {
     public static PluriLockAPI createNewSession(Context context, PluriLockServerResponseListener callback,
                                    String userID, PluriLockConfig config)
                                     throws LocationServiceUnavailableException{
+        if(mySession != null){
+            destroyAPISession();
+        }
         mySession = new PluriLockAPI(context,callback,userID,config);
         return mySession;
     }
@@ -50,6 +53,7 @@ public class PluriLockAPI {
      */
     private PluriLockAPI(Context context, PluriLockServerResponseListener callback, String userID,
                         PluriLockConfig config) throws LocationServiceUnavailableException {
+
         this.eventManager = PluriLockEventManager.getInstance(context, callback, userID, config);
         //TODO build EventTracker here too!
 

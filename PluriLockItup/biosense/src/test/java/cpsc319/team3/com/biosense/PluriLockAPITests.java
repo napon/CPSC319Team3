@@ -103,6 +103,14 @@ public class PluriLockAPITests {
         PluriLockAPI.destroyAPISession();
         assertTrue(PluriLockAPI.getInstance() == null);
     }
+    @Test
+    public void buildingAgainShouldMakeDifferent() throws LocationServiceUnavailableException{
+        PluriLockAPI pluri1 = PluriLockAPI.createNewSession(this.testContext, this.baseListener,
+                "TEST", this.baseConfig);
+        PluriLockAPI pluri2 = PluriLockAPI.createNewSession(this.testContext, this.baseListener,
+                "TEST2", this.baseConfig);
+        assertTrue(pluri1 != pluri2);
+    }
 //===============END OF BASIC BUILD TESTS=====================
 
 }
