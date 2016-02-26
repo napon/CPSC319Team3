@@ -135,13 +135,15 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
             case R.id.feedback_menu:
-                //TODO
+                startActivity(new Intent(this, FeedbackActivity.class));
                 break;
             case R.id.location_menu:
-                //TODO
+                startActivity(new Intent(this, MapLocationActivity.class));
                 break;
             case R.id.logout_menu:
-                //TODO
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
             case R.id.about_menu:
                 //TODO

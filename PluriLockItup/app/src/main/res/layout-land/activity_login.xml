@@ -11,30 +11,6 @@
     tools:context="cpsc319.team3.com.plurilockitup.activity.LoginActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/loginCardLayer"
-        android:layout_marginTop="10dp"
-        android:gravity="right"
-        android:orientation="horizontal" >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Feedback"
-            android:onClick="leaveFeedback"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:layout_marginLeft="10dp"
-            android:text="Find Location"
-            android:onClick="seeMap"/>
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/loginCardLayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
