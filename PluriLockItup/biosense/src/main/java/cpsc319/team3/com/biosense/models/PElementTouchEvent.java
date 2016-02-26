@@ -2,7 +2,9 @@ package cpsc319.team3.com.biosense.models;
 
 import android.graphics.PointF;
 
-import java.util.GregorianCalendar;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * PElementTouchEvent is a model class that represents a touch action on an element.
@@ -10,6 +12,7 @@ import java.util.GregorianCalendar;
  * See the UML Diagram for more implementation details.
  */
 public class PElementTouchEvent extends PluriLockEvent {
+    private static final String EVENT_TYPE = "ELEMENT_TOUCH";
     private float pressure;
     private float fingerOrientation;
     private PointF elementRelativeCoord;
@@ -32,11 +35,33 @@ public class PElementTouchEvent extends PluriLockEvent {
         return fingerOrientation;
     }
 
-    public PointF getElementRelativeCoord() {
-        return elementRelativeCoord;
+    public int getElementRelativeCoordX() {
+        return (int) elementRelativeCoord.x;
     }
 
-    public PointF getScreenCoord() {
-        return screenCoord;
+    public int getElementRelativeCoordY() {
+        return (int) elementRelativeCoord.y;
+    }
+
+    public int getScreenCoordX() {
+        return (int) screenCoord.x;
+    }
+
+    public int getScreenCoordY() { return (int) screenCoord.y; }
+
+    public JSONObject getJSON() {
+        JSONObject jsonObject = super.getJSON();
+        try {
+            jsonObject.put("eventType", EVENT_TYPE);
+            jsonObject.put("pressure", getPressure());
+            jsonObject.put("fingerOrientation", getFingerOrientation());
+            jsonObject.put("elementRelX", getElementRelativeCoordX());
+            jsonObject.put("elementRelY", getElementRelativeCoordY());
+            jsonObject.put("screenX", getScreenCoordX());
+            jsonObject.put("screenY", getScreenCoordY());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }

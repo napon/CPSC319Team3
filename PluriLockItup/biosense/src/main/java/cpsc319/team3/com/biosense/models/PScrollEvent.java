@@ -1,6 +1,8 @@
 package cpsc319.team3.com.biosense.models;
 
-import java.util.GregorianCalendar;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * PScrollEvent is a model class that represents a scroll action by the user.
@@ -8,6 +10,7 @@ import java.util.GregorianCalendar;
  * See the UML Diagram for more implementation details.
  */
 public class PScrollEvent extends PluriLockEvent {
+    private static final String EVENT_TYPE = "SCROLL";
     private int orientation;
     private float startCoord;
     private float endCoord;
@@ -30,5 +33,19 @@ public class PScrollEvent extends PluriLockEvent {
 
     public float getEndCoord() {
         return endCoord;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject jsonObject = super.getJSON();
+        try {
+            jsonObject.put("eventType", EVENT_TYPE);
+            jsonObject.put("scrollDirection", getOrientation());
+            jsonObject.put("start", getStartCoord());
+            jsonObject.put("end", getEndCoord());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }
