@@ -101,7 +101,10 @@ public class MainActivity extends AppCompatActivity {
         PluriLockConfig config = new PluriLockConfig();
 
         try {
-            this.plapi = new PluriLockAPI(context, callback, id, config);
+            this.plapi = PluriLockAPI.getInstance();
+            if(this.plapi == null) {
+                this.plapi = PluriLockAPI.createNewSession(context, callback, id, config);
+            }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?
         }

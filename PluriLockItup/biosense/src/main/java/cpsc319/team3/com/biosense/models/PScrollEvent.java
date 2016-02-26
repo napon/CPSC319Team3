@@ -3,6 +3,8 @@ package cpsc319.team3.com.biosense.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.PointF;
+
 
 /**
  * PScrollEvent is a model class that represents a scroll action by the user.
@@ -12,27 +14,31 @@ import org.json.JSONObject;
 public class PScrollEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "SCROLL";
     private int orientation;
-    private float startCoord;
-    private float endCoord;
+    private PointF startCoord;
+    private PointF endCoord;
 
     public PScrollEvent(int eventID, int screenOrientation, long timestamp,
-                        int orientation, float startCoord, float endCoord) {
+                        int orientation, PointF startCoord, PointF endCoord) {
         super(eventID, screenOrientation, timestamp);
         this.orientation = orientation;
         this.startCoord = startCoord;
         this.endCoord = endCoord;
     }
 
-    public int getOrientation() {
-        return orientation;
+    public int getOrientation() { return orientation; }
+
+    public int getStartCoordX() { return (int) startCoord.x; }
+
+    public int getStartCoordY() {
+        return (int) startCoord.y;
     }
 
-    public float getStartCoord() {
-        return startCoord;
+    public int getEndCoordX() {
+        return (int) endCoord.x;
     }
 
-    public float getEndCoord() {
-        return endCoord;
+    public int getEndCoordY() {
+        return (int) endCoord.y;
     }
 
     @Override
@@ -41,11 +47,14 @@ public class PScrollEvent extends PluriLockEvent {
         try {
             jsonObject.put("eventType", EVENT_TYPE);
             jsonObject.put("scrollDirection", getOrientation());
-            jsonObject.put("start", getStartCoord());
-            jsonObject.put("end", getEndCoord());
+            jsonObject.put("startX", getStartCoordX());
+            jsonObject.put("startY", getStartCoordY());
+            jsonObject.put("endX", getEndCoordX());
+            jsonObject.put("endY", getEndCoordY());
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;
     }
+
 }
