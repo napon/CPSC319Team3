@@ -111,10 +111,10 @@ public class PluriLockPackageTests {
             assertEquals(time, eventObject.getLong("timestamp"));
             assertEquals(0, eventObject.getInt("orientation"));
             assertEquals(3, eventObject.getInt("pressure"));
-            assertEquals(1, eventObject.getInt("elementRelX"));
-            assertEquals(2, eventObject.getInt("elementRelY"));
-            assertEquals(3, eventObject.getInt("screenX"));
-            assertEquals(4, eventObject.getInt("screenY"));
+            assertEquals(1.0, eventObject.getDouble("elementRelX"), DELTA);
+            assertEquals(2.0, eventObject.getDouble("elementRelY"), DELTA);
+            assertEquals(3.0, eventObject.getDouble("screenX"), DELTA);
+            assertEquals(4.0, eventObject.getDouble("screenY"), DELTA);
             assertEquals(4.2, eventObject.getDouble("fingerOrientation"), DELTA);
         } catch (JSONException e) {
             fail(e.getMessage());
@@ -137,10 +137,10 @@ public class PluriLockPackageTests {
             assertEquals(time, eventObject.getLong("timestamp"));
             assertEquals(1, eventObject.getInt("orientation"));
             assertEquals(0, eventObject.getInt("scrollDirection"));
-            assertEquals(9, eventObject.getInt("startX"));
-            assertEquals(8, eventObject.getInt("startY"));
-            assertEquals(7, eventObject.getInt("endX"));
-            assertEquals(4, eventObject.getInt("endY"));
+            assertEquals(9.5, eventObject.getDouble("startX"), DELTA);
+            assertEquals(8.3, eventObject.getDouble("startY"), DELTA);
+            assertEquals(7.6, eventObject.getDouble("endX"), DELTA);
+            assertEquals(4.5, eventObject.getDouble("endY"), DELTA);
         } catch (JSONException e) {
             fail(e.getMessage());
         }

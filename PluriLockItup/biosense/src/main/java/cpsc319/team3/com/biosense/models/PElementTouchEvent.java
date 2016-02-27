@@ -35,19 +35,19 @@ public class PElementTouchEvent extends PluriLockEvent {
         return fingerOrientation;
     }
 
-    public int getElementRelativeCoordX() {
-        return (int) elementRelativeCoord.x;
+    public float getElementRelativeCoordX() {
+        return elementRelativeCoord.x;
     }
 
-    public int getElementRelativeCoordY() {
-        return (int) elementRelativeCoord.y;
+    public float getElementRelativeCoordY() {
+        return elementRelativeCoord.y;
     }
 
-    public int getScreenCoordX() {
-        return (int) screenCoord.x;
+    public float getScreenCoordX() {
+        return screenCoord.x;
     }
 
-    public int getScreenCoordY() { return (int) screenCoord.y; }
+    public float getScreenCoordY() { return screenCoord.y; }
 
     public JSONObject getJSON() {
         JSONObject jsonObject = super.getJSON();

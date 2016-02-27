@@ -27,18 +27,18 @@ public class PScrollEvent extends PluriLockEvent {
 
     public int getOrientation() { return orientation; }
 
-    public int getStartCoordX() { return (int) startCoord.x; }
+    public float getStartCoordX() { return startCoord.x; }
 
-    public int getStartCoordY() {
-        return (int) startCoord.y;
+    public float getStartCoordY() {
+        return startCoord.y;
     }
 
-    public int getEndCoordX() {
-        return (int) endCoord.x;
+    public float getEndCoordX() {
+        return endCoord.x;
     }
 
-    public int getEndCoordY() {
-        return (int) endCoord.y;
+    public float getEndCoordY() {
+        return endCoord.y;
     }
 
     @Override
