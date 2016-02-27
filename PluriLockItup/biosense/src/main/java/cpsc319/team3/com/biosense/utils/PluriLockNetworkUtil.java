@@ -5,7 +5,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
+
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -16,6 +20,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
+
 /**
  * This class is responsible for:
  * - Establishing connection with the PluriLock Server
@@ -48,20 +53,54 @@ public class PluriLockNetworkUtil {
     private WebSocketContainer container;
     private URI endpointURI;
 
-    public PluriLockNetworkUtil(URI endpointURI, Context c) {
+    public PluriLockNetworkUtil(URI endpointURI) {
         this.container = ContainerProvider.getWebSocketContainer();
         this.endpointURI = endpointURI;
-        this.context = c;
+        //this.context = c;
     }
 
     private void initiateConnection() throws DeploymentException, IOException {
-        //String uri = "ws://localhost:8080" + request.getContextPath() + "/websocket";
+        String uri = "ws://localhost:8080" + "/websocket";
         container.connectToServer(this, endpointURI);
     }
 
+//    public static void main(String[] args) throws Exception {
+//        PluriLockNetworkUtil test = new PluriLockNetworkUtil(new URI("wss://129.121.9.44:8001/"));
+//        test.sendMessage("hi");
+//    }
+
     public static void main(String[] args) throws Exception {
-        PluriLockNetworkUtil test = new PluriLockNetworkUtil(new URI("wss://129.121.9.44:8001/"), null);
-        test.sendMessage("hi");
+        final PluriLockNetworkUtil clientEndPoint = new PluriLockNetworkUtil(new URI("ws://129.121.9.44:8001/"));
+//        clientEndPoint.addMessageHandler(new PluriLockNetworkUtil.MessageHandler() {
+//            public void handleMessage(String message) {
+//                JsonObject jsonObject = Json.createReader(new StringReader(message)).readObject();
+//                String userName = jsonObject.getString("user");
+//                //if (!"bot".equals(userName)) {
+//                    clientEndPoint.sendMessage(getMessage("Hello " + userName +", How are you?"));
+//                    // other dirty bot logic goes here.. :)
+//                //}
+//            }
+//        });
+
+        //while (true) {
+            //clientEndPoint.sendMessage(getMessage("Hi There!!"));
+        clientEndPoint.onMessage("hi");
+            //Thread.sleep(30000);
+        //}
+    }
+
+    /**
+     * Create a json representation.
+     *
+     * @param message
+     * @return
+     */
+    private static String getMessage(String message) {
+        return Json.createObjectBuilder()
+                .add("user", "bot")
+                .add("message", message)
+                .build()
+                .toString();
     }
 
     /**
@@ -88,7 +127,7 @@ public class PluriLockNetworkUtil {
     }
 
     /**
-     * Callback hook for Message Events. This method will be invoked when a client send a message.
+     * Callback hook for Message Events. This method will be invoked when a client sends a message.
      *
      * @param message The text message
      */

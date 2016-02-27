@@ -41,7 +41,7 @@ public class PluriLockEventManager {
         this.userID = id;
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
-        this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c);
+        this.networkUtil = new PluriLockNetworkUtil(config.getUrl());
         this.locationUtil = new LocationUtil(c);
     }
 
