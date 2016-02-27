@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -182,6 +184,7 @@ public class PluriLockPackage {
         }
 
         public PluriLockPackageBuilder setEvents(PluriLockEvent[] events) {
+            shuffleArray(events);
             this.events = events;
             return this;
         }
@@ -219,5 +222,21 @@ public class PluriLockPackage {
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    /**
+     * Shuffles an input array.
+     * @param array shuffled in random order.
+     */
+    private static void shuffleArray(PluriLockEvent[] array) {
+        int index;
+        PluriLockEvent temp;
+        Random random = new Random();
+        for (int i = array.length - 1; i > 0; i--) {
+            index = random.nextInt(i + 1);
+            temp = array[index];
+            array[index] = array[i];
+            array[i] = temp;
+        }
     }
 }

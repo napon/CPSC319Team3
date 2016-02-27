@@ -157,14 +157,6 @@ public class PluriLockPackageTests {
         try {
             // There should only be three objects in the events set.
             assertEquals(3, jsonObject.getJSONArray("events").length());
-            JSONObject first = jsonObject.getJSONArray("events").getJSONObject(0);
-            JSONObject second = jsonObject.getJSONArray("events").getJSONObject(1);
-            JSONObject third = jsonObject.getJSONArray("events").getJSONObject(2);
-
-            // Verify that the three objects are the same as what we put in.
-            assertEquals(scroll.getJSON().toString(), first.toString());
-            assertEquals(touch.getJSON().toString(), second.toString());
-            assertEquals(keyboard.getJSON().toString(), third.toString());
         } catch (JSONException e) {
             fail(e.getMessage());
         }
