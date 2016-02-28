@@ -21,9 +21,7 @@ import cpsc319.team3.com.biosense.models.PluriLockEvent;
  *
  */
 public class PluriLockTouchListener implements
-        GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener
-//View.OnTouchListener
+        GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
 {
     private static final String TAG = "PluriLockTouchListener";
 
@@ -32,51 +30,6 @@ public class PluriLockTouchListener implements
     public PluriLockTouchListener(PluriLockEventTracker eventTracker) {
         this.eventTracker = eventTracker;
     }
-
-//    /**
-//     * Override of default onTouch method.
-//     * Listens for touch events and notifies the tracker when touch event occurs
-//     * @param v View PluriLockTouchListener is attached to
-//     * @param event even that trigged the onTouch call
-//     * @return true since listener has consumed the event
-//     */
-//    public boolean onTouch(View v, MotionEvent event) {
-//        if (event == null) {
-//            //do nothing
-//        }
-//
-//        switch (event.getActionMasked()) {
-//            case MotionEvent.ACTION_DOWN:
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                break;
-//            case MotionEvent.ACTION_CANCEL:
-//                break;
-//            default:
-//                break;
-//        }
-//
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            int eventID = 0; //TODO
-//            int screenOrientation = 0; //TODO
-//            long timestamp = new GregorianCalendar().getTimeInMillis();
-//            float pressure = event.getPressure();
-//            float fingerOrientation = event.getOrientation();
-//            PointF elementRelativeCoord = new PointF(event.getX(), event.getY());
-//            PointF screenCoord = new PointF(event.getRawX(), event.getRawY());
-//
-//            PElementTouchEvent pElementTouchEvent =
-//                                new PElementTouchEvent(eventID, screenOrientation, timestamp,
-//                                        pressure, fingerOrientation, screenCoord, screenCoord);
-//
-//            eventTracker.notifyOfEvent(pElementTouchEvent);
-//
-//        }
-//        return true;
-//
-//    }
 
     /**
      * Notified when a single-tap occurs.
@@ -92,6 +45,18 @@ public class PluriLockTouchListener implements
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
         Log.d(TAG, "onSingleTapConfirmed: " + e.toString());
+        int eventID = 0;
+        int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
+        long timestamp = new GregorianCalendar().getTimeInMillis();
+        float pressure = e.getPressure();
+        float fingerOrientation = e.getOrientation();
+        PointF elementRelativeCoord = new PointF(e.getX(), e.getY());
+        PointF screenCord = new PointF(e.getX(), e.getY());
+
+        PElementTouchEvent pElementTouchEvent =
+                new PElementTouchEvent(eventID, screenOrientation, timestamp,
+                        pressure, fingerOrientation, elementRelativeCoord, screenCord);
+        eventTracker.notifyOfEvent(pElementTouchEvent);
         return true;
     }
 
