@@ -19,8 +19,9 @@ public class PElementTouchEvent extends PluriLockEvent {
     private PointF screenCoord;
 
     public PElementTouchEvent(int eventID, int screenOrientation, long timestamp, float pressure,
-                              float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord) {
-        super(eventID, screenOrientation, timestamp);
+                              float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
+                              long duration) {
+        super(eventID, screenOrientation, timestamp, duration);
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
         this.elementRelativeCoord = elementRelativeCoord;
@@ -47,7 +48,9 @@ public class PElementTouchEvent extends PluriLockEvent {
         return screenCoord.x;
     }
 
-    public float getScreenCoordY() { return screenCoord.y; }
+    public float getScreenCoordY() {
+        return screenCoord.y;
+    }
 
     public JSONObject getJSON() {
         JSONObject jsonObject = super.getJSON();

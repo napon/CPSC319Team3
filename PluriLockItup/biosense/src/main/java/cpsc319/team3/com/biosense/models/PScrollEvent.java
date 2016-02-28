@@ -13,19 +13,23 @@ import android.graphics.PointF;
  */
 public class PScrollEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "SCROLL";
-    private int orientation;
+    private scrollDirection scrollDirection;
     private PointF startCoord;
     private PointF endCoord;
 
+    public enum scrollDirection {
+        UP, DOWN, LEFT, RIGHT
+    }
+
     public PScrollEvent(int eventID, int screenOrientation, long timestamp,
-                        int orientation, PointF startCoord, PointF endCoord) {
-        super(eventID, screenOrientation, timestamp);
-        this.orientation = orientation;
+                        scrollDirection scrollDirection, PointF startCoord, PointF endCoord, long duration) {
+        super(eventID, screenOrientation, timestamp, duration);
+        this.scrollDirection = scrollDirection;
         this.startCoord = startCoord;
         this.endCoord = endCoord;
     }
 
-    public int getOrientation() { return orientation; }
+    public scrollDirection getScrollDirection() { return scrollDirection; }
 
     public float getStartCoordX() { return startCoord.x; }
 
@@ -46,7 +50,7 @@ public class PScrollEvent extends PluriLockEvent {
         JSONObject jsonObject = super.getJSON();
         try {
             jsonObject.put("eventType", EVENT_TYPE);
-            jsonObject.put("scrollDirection", getOrientation());
+            jsonObject.put("scrollDirection", getScrollDirection());
             jsonObject.put("startX", getStartCoordX());
             jsonObject.put("startY", getStartCoordY());
             jsonObject.put("endX", getEndCoordX());

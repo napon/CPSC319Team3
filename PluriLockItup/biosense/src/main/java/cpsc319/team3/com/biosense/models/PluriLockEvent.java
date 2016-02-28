@@ -29,11 +29,13 @@ public abstract class PluriLockEvent {
     private int eventID;
     private int screenOrientation; //1 = portrait; 2 = landscape
     private long timestamp;
+    private long duration;
 
-    public PluriLockEvent(int eventID, int screenOrientation, long timestamp) {
+    public PluriLockEvent(int eventID, int screenOrientation, long timestamp, long duration) {
         this.eventID = eventID;
         this.screenOrientation = screenOrientation;
         this.timestamp = timestamp;
+        this.duration = duration;
     }
 
     public int getEventID() {
@@ -48,12 +50,17 @@ public abstract class PluriLockEvent {
         return timestamp;
     }
 
+    public long getDuration() {
+        return duration;
+    }
+
     public JSONObject getJSON() {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", getEventID());
             jsonObject.put("orientation", getScreenOrientation());
             jsonObject.put("timestamp", getTimestamp());
+            jsonObject.put("duration", getDuration());
         } catch (JSONException e) {
             e.printStackTrace();
         }

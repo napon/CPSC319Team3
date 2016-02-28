@@ -11,19 +11,14 @@ import org.json.JSONObject;
  */
 public class PKeyboardTouchEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "SINGLE_KEY";
-    private long duration;
     private int keyPressed;
 
     public PKeyboardTouchEvent(int eventID, int screenOrientation, long timestamp,
                                long duration, int keyPressed) {
-        super(eventID, screenOrientation, timestamp);
-        this.duration = duration;
+        super(eventID, screenOrientation, timestamp, duration);
         this.keyPressed = keyPressed;
     }
 
-    public long getDuration() {
-        return duration;
-    }
 
     public int getKeyPressed() {
         return keyPressed;
@@ -34,7 +29,6 @@ public class PKeyboardTouchEvent extends PluriLockEvent {
         JSONObject jsonObject = super.getJSON();
         try {
             jsonObject.put("eventType", EVENT_TYPE);
-            jsonObject.put("duration", getDuration());
             jsonObject.put("key", getKeyPressed());
         } catch (JSONException e) {
             e.printStackTrace();
