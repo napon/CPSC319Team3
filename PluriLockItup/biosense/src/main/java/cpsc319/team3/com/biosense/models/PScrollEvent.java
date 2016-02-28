@@ -1,8 +1,10 @@
 package cpsc319.team3.com.biosense.models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.PointF;
 
-import java.util.GregorianCalendar;
 
 /**
  * PScrollEvent is a model class that represents a scroll action by the user.
@@ -10,6 +12,7 @@ import java.util.GregorianCalendar;
  * See the UML Diagram for more implementation details.
  */
 public class PScrollEvent extends PluriLockEvent {
+    private static final String EVENT_TYPE = "SCROLL";
     private int orientation;
     private PointF startCoord;
     private PointF endCoord;
@@ -22,13 +25,36 @@ public class PScrollEvent extends PluriLockEvent {
         this.endCoord = endCoord;
     }
 
-    public int getOrientation() {
-        return orientation;
+    public int getOrientation() { return orientation; }
+
+    public float getStartCoordX() { return startCoord.x; }
+
+    public float getStartCoordY() {
+        return startCoord.y;
     }
 
-    public PointF getStartCoord() {
-        return startCoord;
+    public float getEndCoordX() {
+        return endCoord.x;
     }
 
-    public PointF getEndCoord() { return endCoord; }
+    public float getEndCoordY() {
+        return endCoord.y;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject jsonObject = super.getJSON();
+        try {
+            jsonObject.put("eventType", EVENT_TYPE);
+            jsonObject.put("scrollDirection", getOrientation());
+            jsonObject.put("startX", getStartCoordX());
+            jsonObject.put("startY", getStartCoordY());
+            jsonObject.put("endX", getEndCoordX());
+            jsonObject.put("endY", getEndCoordY());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
 }

@@ -1,9 +1,8 @@
 package cpsc319.team3.com.biosense.models;
 
-import android.content.res.Configuration;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.security.Timestamp;
-import java.util.GregorianCalendar;
 
 /**
  * PluriLockEvent is an abstract model class that represents any kind of event tracked by our API.
@@ -28,9 +27,8 @@ import java.util.GregorianCalendar;
  */
 public abstract class PluriLockEvent {
     private int eventID;
-    private int screenOrientation; //1 = portrait; 2=landscape
+    private int screenOrientation; //1 = portrait; 2 = landscape
     private long timestamp;
-    //need to implement gpsLocation? (not on UML)
 
     public PluriLockEvent(int eventID, int screenOrientation, long timestamp) {
         this.eventID = eventID;
@@ -48,5 +46,17 @@ public abstract class PluriLockEvent {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public JSONObject getJSON() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", getEventID());
+            jsonObject.put("orientation", getScreenOrientation());
+            jsonObject.put("timestamp", getTimestamp());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }

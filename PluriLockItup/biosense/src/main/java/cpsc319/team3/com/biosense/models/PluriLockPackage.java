@@ -1,5 +1,9 @@
 package cpsc319.team3.com.biosense.models;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.UUID;
 
 /**
@@ -106,7 +110,21 @@ public class PluriLockPackage {
         private int sdkVersion;
         private PluriLockEvent events[];
 
-        public PluriLockPackageBuilder() { this.id = UUID.randomUUID().toString(); }
+        public PluriLockPackageBuilder() {
+            this.id = UUID.randomUUID().toString();
+            this.countryCode = "";
+            this.deviceModel = "";
+            this.deviceManufacturer = "";
+            this.userID = "";
+            this.language = "";
+            this.timeZone = "";
+            this.latitude = 0.0;
+            this.longitude = 0.0;
+            this.screenWidth = 0;
+            this.screenHeight = 0;
+            this.sdkVersion = 0;
+            this.events = new PluriLockEvent[0];
+        }
 
         public PluriLockPackageBuilder countryCode(String cc) {
             countryCode = cc;
@@ -175,5 +193,31 @@ public class PluriLockPackage {
         public PluriLockPackage buildPackage() {
             return new PluriLockPackage(this);
         }
+    }
+
+    public JSONObject getJSON() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", getId());
+            jsonObject.put("user", getUserID());
+            jsonObject.put("model", getDeviceModel());
+            jsonObject.put("manufacturer", getDeviceManufacturer());
+            jsonObject.put("screenWidth", getScreenWidth());
+            jsonObject.put("screenHeight", getScreenHeight());
+            jsonObject.put("latitude", getLatitude());
+            jsonObject.put("longitude", getLongitude());
+            jsonObject.put("countryCode", getCountryCode());
+            jsonObject.put("language", getLanguage());
+            jsonObject.put("sdkVersion", getSdkVersion());
+            jsonObject.put("timeZone", getTimeZone());
+            JSONArray jsonArray = new JSONArray();
+            for (PluriLockEvent pEvent : getEvents()) {
+                jsonArray.put(pEvent.getJSON());
+            }
+            jsonObject.put("events", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }
