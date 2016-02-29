@@ -22,12 +22,14 @@ import cpsc319.team3.com.plurilockitup.model.Utils;
 
 public class MainActivity extends AppCompatActivity {
     Customer customer;
+    PluriLockAPI plapi;
+
     String[] dayAcctList;
     String[] creditAcctList;
     TableLayout dayAcctTable;
     TableLayout creditAcctTable;
 
-    PluriLockAPI plapi;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                clearSession();
+                finish();
                 break;
             case R.id.about_menu:
                 //TODO
@@ -167,5 +171,10 @@ public class MainActivity extends AppCompatActivity {
             tblRow = (TableRow) creditAcctTable.getChildAt(i);
             ((TextView) tblRow.findViewById(R.id.balance)).setText(customer.getBalanceString(creditAcctList[i]));
         }
+    }
+
+    private void clearSession(){
+        customer = null;
+        PluriLockAPI.destroyAPISession();;
     }
 }
