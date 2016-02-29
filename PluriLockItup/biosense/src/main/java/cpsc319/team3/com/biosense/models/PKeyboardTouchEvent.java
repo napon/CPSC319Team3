@@ -1,6 +1,8 @@
 package cpsc319.team3.com.biosense.models;
 
-import java.util.GregorianCalendar;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * PKeyboardTouchEvent is a model class that represents an input pair of characters on a keyboard.
@@ -8,21 +10,29 @@ import java.util.GregorianCalendar;
  * See the UML Diagram for more implementation details.
  */
 public class PKeyboardTouchEvent extends PluriLockEvent {
-    private long duration;
+    private static final String EVENT_TYPE = "SINGLE_KEY";
     private int keyPressed;
 
     public PKeyboardTouchEvent(int eventID, int screenOrientation, long timestamp,
                                long duration, int keyPressed) {
-        super(eventID, screenOrientation, timestamp);
-        this.duration = duration;
+        super(eventID, screenOrientation, timestamp, duration);
         this.keyPressed = keyPressed;
     }
 
-    public long getDuration() {
-        return duration;
-    }
 
     public int getKeyPressed() {
         return keyPressed;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject jsonObject = super.getJSON();
+        try {
+            jsonObject.put("eventType", EVENT_TYPE);
+            jsonObject.put("key", getKeyPressed());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }
