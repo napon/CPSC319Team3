@@ -8,28 +8,23 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.junit.Test;
-
-import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.junit.runner.RunWith;
-
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.GregorianCalendar;
-
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
+
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class PluriLockTouchListenerTests {
     @Test
-    public void sampleTest() {
-        PluriLockEventTracker pluriLockEventTracker = Mockito.mock(PluriLockEventTracker.class);
+    public void constructorTest() {
+        PluriLockEventTracker pluriLockEventTracker = new PluriLockEventTracker(
+                Mockito.mock(Context.class),
+                Mockito.mock(PluriLockEventManager.class));
         PluriLockTouchListener p = new PluriLockTouchListener(pluriLockEventTracker);
         assertTrue(p.getClass() == PluriLockTouchListener.class);
     }
@@ -88,7 +83,6 @@ public class PluriLockTouchListenerTests {
                 new PElementTouchEvent(0, Configuration.ORIENTATION_LANDSCAPE, 1,
                         1, 1, new PointF(1,1), new PointF(1,1), 0);
 //        verify(eventTrackerMock, times(1)).notifyOfEvent(pElementTouchEvent);
-
     }
 
 }

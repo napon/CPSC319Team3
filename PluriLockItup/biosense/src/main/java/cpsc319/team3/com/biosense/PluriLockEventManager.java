@@ -1,11 +1,16 @@
 package cpsc319.team3.com.biosense;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.websocket.DeploymentException;
+
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.models.PluriLockPackage;
 import cpsc319.team3.com.biosense.models.PluriLockPackage.PluriLockPackageBuilder;
 import cpsc319.team3.com.biosense.models.PluriLockEvent;
 import cpsc319.team3.com.biosense.utils.LocationUtil;
@@ -41,7 +46,7 @@ public class PluriLockEventManager {
         this.userID = id;
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
-        this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c);
+        this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c, this);
         this.locationUtil = new LocationUtil(c);
     }
 
@@ -75,22 +80,32 @@ public class PluriLockEventManager {
         assert(pluriLockEvents.size() < config.getActionsPerUpload());
         this.pluriLockEvents.add(pluriLockEvent);
         if (pluriLockEvents.size() == config.getActionsPerUpload()) {
-            PluriLockPackageBuilder eventPackage = new PluriLockPackageBuilder()
-                    .countryCode(PhoneDataManager.getCountry())
-                    .model(PhoneDataManager.getHardwareModel())
-                    .manufacturer(PhoneDataManager.getManufacturer())
-                    .userID(this.userID)
-                    .language(PhoneDataManager.getDisplayLanguage())
-                    .timeZone(PhoneDataManager.getTimeZone())
-                    .latitude(this.locationUtil.getLatitude())
-                    .longitude(this.locationUtil.getLongitude())
-                    .screenWidth(PhoneDataManager.getScreenWidth(context))
-                    .screenHeight(PhoneDataManager.getScreenHeight(context))
-                    .setEvents(pluriLockEvents.toArray(new PluriLockEvent[pluriLockEvents.size()]));
-            networkUtil.sendEvent(eventPackage.buildPackage());
-            pluriLockEvents = new ArrayList<>();
+            pushAllEvents();
         }
         assert(pluriLockEvents.size() < config.getActionsPerUpload());
+    }
+
+    private void pushAllEvents() {
+        PluriLockPackageBuilder eventPackage = new PluriLockPackageBuilder()
+                .countryCode(PhoneDataManager.getCountry())
+                .model(PhoneDataManager.getHardwareModel())
+                .manufacturer(PhoneDataManager.getManufacturer())
+                .userID(this.userID)
+                .language(PhoneDataManager.getDisplayLanguage())
+                .timeZone(PhoneDataManager.getTimeZone())
+                .latitude(this.locationUtil.getLatitude())
+                .longitude(this.locationUtil.getLongitude())
+                .screenWidth(PhoneDataManager.getScreenWidth(context))
+                .screenHeight(PhoneDataManager.getScreenHeight(context))
+                .setEvents(pluriLockEvents.toArray(new PluriLockEvent[pluriLockEvents.size()]));
+        try {
+            networkUtil.sendEvent(eventPackage.buildPackage());
+        } catch (IOException | DeploymentException e) {
+            // TODO: Store this package for sending again later
+            Log.w(this.getClass().getName(), e.getClass().getName(), e);
+        } finally {
+            pluriLockEvents.clear();
+        }
     }
 
     /**

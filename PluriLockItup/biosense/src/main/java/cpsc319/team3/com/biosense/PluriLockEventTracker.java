@@ -32,7 +32,7 @@ public class PluriLockEventTracker {
     }
 
     void notifyOfEvent(PluriLockEvent pEvent) {
-
+        eventManager.addPluriLockEvent(pEvent);
     }
 
 }
