@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.json.Json;
 import javax.websocket.ClientEndpoint;
@@ -37,35 +38,43 @@ import cpsc319.team3.com.biosense.models.PluriLockPackage;
 @ClientEndpoint
 public class PluriLockNetworkUtil {
 
-//    /**
-//     * Sends data to PluriLock server and returns a response string
-//     * @param data JSONObject including client's hardware information and PluriLockEvents
-//     * @return response string from Plurilock server containing confidence level
-//     */
-//    public String sendEvent(JSONObject data) {
-//
-//    }
-
     Session userSession = null;
     private MessageHandler messageHandler;
     private Context context;
     private WebSocketContainer container;
-//    private URI endpointURI;
+    private URI endpointURI;
 
     public PluriLockNetworkUtil(URI endpointURI) {
         this.container = ContainerProvider.getWebSocketContainer();
-//        this.endpointURI = endpointURI;
-        initiateConnection(endpointURI);
+        this.endpointURI = endpointURI;
+        if(endpointURI != null)
+            initiateConnection(endpointURI);
+        else
+            initiateConnection();
         //this.context = c;
     }
 
-//    private void initiateConnection() throws DeploymentException, IOException {
-//        String uri = "ws://localhost:8080" + "/websocket";
-//        container.connectToServer(this, endpointURI);
-//    }
+    private void initiateConnection() {
+        //String uri = "ws://localhost:8080" + "/websocket";
+        String uri = "ws://184.66.140.77:8080";
+        try {
+            container.connectToServer(this, new URI(uri));
+        }
+        catch (URISyntaxException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (DeploymentException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     private void initiateConnection(URI endpointURI) {
         try {
-            container.connectToServer(this, endpointURI);
+            if(endpointURI != null)
+                container.connectToServer(this, endpointURI);
         }
         catch (DeploymentException e){
             System.out.println(e.getMessage());
@@ -74,12 +83,6 @@ public class PluriLockNetworkUtil {
             System.out.println(e.getMessage());
         }
     }
-
-//    public static void main(String[] args) throws Exception {
-//        PluriLockNetworkUtil test = new PluriLockNetworkUtil(new URI("wss://129.121.9.44:8001/"));
-//        test.sendMessage("hi");
-//    }
-
 
     /**
      * Create a json representation.
@@ -134,10 +137,13 @@ public class PluriLockNetworkUtil {
         }
     }
 
+    /**
+     * Check for network availability.
+     *
+     */
     public boolean preNetworkCheck(){
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        //boolean flag = false;
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (!activeNetwork.isAvailable()) {
             System.out.println("Network connectivity is not possible.");
@@ -153,7 +159,6 @@ public class PluriLockNetworkUtil {
         }
         return true;
     }
-
 
     /**
      * register message handler
@@ -204,7 +209,7 @@ public class PluriLockNetworkUtil {
         while (countMessages < 3) {
             clientEndPoint.sendMessage("hello");
             countMessages++;
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         }
     }
 
