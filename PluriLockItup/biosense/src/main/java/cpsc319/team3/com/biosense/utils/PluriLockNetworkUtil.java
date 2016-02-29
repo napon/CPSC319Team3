@@ -67,8 +67,8 @@ public class PluriLockNetworkUtil {
     }
 
     public boolean preNetworkCheck(){
-        // TODO: Make sure this method is called
-        // TODO: Propagate the exception upwards for the client to handle
+        // TODO: Make sure this method is called somewhere
+        // TODO: Propagate an exceptions upwards for the client to handle if we're offline?
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -118,7 +118,7 @@ public class PluriLockNetworkUtil {
 
     // DEBUG
     public static void main(String[] args) throws Exception {
-        PluriLockNetworkUtil net = new PluriLockNetworkUtil(new URI("ws://echo.websocket.org"), null);
+        PluriLockNetworkUtil net = new PluriLockNetworkUtil(new URI("wss://echo.websocket.org"), null);
         net.initiateConnection();
         net.sendMessage("hi");
         net.sendMessage("hello?");
