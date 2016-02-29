@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.json.Json;
 import javax.websocket.ClientEndpoint;
@@ -50,22 +51,37 @@ public class PluriLockNetworkUtil {
     private MessageHandler messageHandler;
     private Context context;
     private WebSocketContainer container;
-//    private URI endpointURI;
+    private URI endpointURI;
 
     public PluriLockNetworkUtil(URI endpointURI) {
         this.container = ContainerProvider.getWebSocketContainer();
-//        this.endpointURI = endpointURI;
-        initiateConnection(endpointURI);
+        this.endpointURI = endpointURI;
+        if(endpointURI != null)
+            initiateConnection(endpointURI);
+        else
+            initiateConnection();
         //this.context = c;
     }
 
-//    private void initiateConnection() throws DeploymentException, IOException {
-//        String uri = "ws://localhost:8080" + "/websocket";
-//        container.connectToServer(this, endpointURI);
-//    }
+    private void initiateConnection() {
+        String uri = "ws://localhost:8080" + "/websocket";
+        try {
+            container.connectToServer(this, new URI(uri));
+        }
+        catch (URISyntaxException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (DeploymentException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
     private void initiateConnection(URI endpointURI) {
         try {
-            container.connectToServer(this, endpointURI);
+            if(endpointURI != null)
+                container.connectToServer(this, endpointURI);
         }
         catch (DeploymentException e){
             System.out.println(e.getMessage());
