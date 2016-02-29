@@ -1,6 +1,7 @@
 package cpsc319.team3.com.biosense;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
@@ -11,16 +12,18 @@ import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
  * See UML Diagram for more implementation details.
  */
 public class PluriLockAPI {
+    private static final String TAG = "PluriLockAPI";
+
     private PluriLockEventManager eventManager;
+    private PluriLockEventTracker eventTracker;
     private static PluriLockAPI mySession;
 
-    //TODO: add listeners
-
     /**
-     *
+     *ﾖ
      * @return existing PluriLockAPI session, or null if one has not yet been made.
      */
     public static PluriLockAPI getInstance(){
+        Log.v(TAG, "getInstance");
         return mySession;
     }
 
@@ -36,6 +39,7 @@ public class PluriLockAPI {
     public static PluriLockAPI createNewSession(Context context, PluriLockServerResponseListener callback,
                                    String userID, PluriLockConfig config)
                                     throws LocationServiceUnavailableException{
+        Log.v(TAG, "createNewSession");
         if(mySession != null){
             destroyAPISession();
         }
@@ -53,18 +57,26 @@ public class PluriLockAPI {
      */
     private PluriLockAPI(Context context, PluriLockServerResponseListener callback, String userID,
                         PluriLockConfig config) throws LocationServiceUnavailableException {
-
+        Log.v(TAG, "PluriLockAPI constructor");
         this.eventManager = PluriLockEventManager.getInstance(context, callback, userID, config);
-        //TODO build EventTracker here too!
+        this.eventTracker = new PluriLockEventTracker(context, eventManager);
 
     }
+
+    public PluriLockKeyListener createKeyListener() {
+        return new PluriLockKeyListener(eventTracker);
+    }
+
+    public PluriLockTouchListener createTouchListener() {
+        return new PluriLockTouchListener(eventTracker);
+    }
+
 
     /**
      * Destroys the existing session (in case of logout, etc)
      */
     public static void destroyAPISession(){
+        Log.v(TAG, "destroyAPISession");
         mySession = null; //add any destruction methods here as well.
     }
-
-
 }

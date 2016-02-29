@@ -1,6 +1,7 @@
 package cpsc319.team3.com.biosense;
 
 import android.content.Context;
+import android.util.Log;
 
 import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
@@ -15,6 +16,8 @@ import cpsc319.team3.com.biosense.models.PluriLockEvent;
  * !!! Subject to change by @leesunny.
  */
 public class PluriLockEventTracker {
+    private static final String TAG = "PluriLockEventTracker";
+
     private PluriLockEventManager eventManager;
     private Context context;
 
@@ -27,12 +30,14 @@ public class PluriLockEventTracker {
     }
 
     public PluriLockEventTracker(Context context, PluriLockEventManager eventManager) {
+        Log.v(TAG, "PluriLockEventTracker constructor");
         this.context = context;
         this.eventManager = eventManager;
     }
 
     void notifyOfEvent(PluriLockEvent pEvent) {
-
+        Log.v(TAG, "notifyOfEvent");
+        eventManager.addPluriLockEvent(pEvent);
     }
 
 }

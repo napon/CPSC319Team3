@@ -1,9 +1,13 @@
 package cpsc319.team3.com.biosense.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -11,6 +15,7 @@ import java.util.UUID;
  * It contains Phone Hardware information along with a bundle of PluriLockEvents.
  */
 public class PluriLockPackage {
+    private static final String TAG = "PluriLockPackage";
 
     private String id;
     private String countryCode;
@@ -27,6 +32,7 @@ public class PluriLockPackage {
     private PluriLockEvent events[];
 
     private PluriLockPackage(PluriLockPackageBuilder b) {
+        Log.v(TAG, "PluriLockPackage constructor");
         this.id = b.id;
         this.countryCode = b.countryCode;
         this.deviceModel = b.deviceModel;
@@ -182,6 +188,7 @@ public class PluriLockPackage {
         }
 
         public PluriLockPackageBuilder setEvents(PluriLockEvent[] events) {
+            shuffleArray(events);
             this.events = events;
             return this;
         }
@@ -196,6 +203,7 @@ public class PluriLockPackage {
     }
 
     public JSONObject getJSON() {
+        Log.v(TAG, "getJSON");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", getId());
@@ -219,5 +227,22 @@ public class PluriLockPackage {
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    /**
+     * Shuffles an input array.
+     * @param array shuffled in random order.
+     */
+    private static void shuffleArray(PluriLockEvent[] array) {
+        Log.v(TAG, "ShuffleArray");
+        int index;
+        PluriLockEvent temp;
+        Random random = new Random();
+        for (int i = array.length - 1; i > 0; i--) {
+            index = random.nextInt(i + 1);
+            temp = array[index];
+            array[index] = array[i];
+            array[i] = temp;
+        }
     }
 }

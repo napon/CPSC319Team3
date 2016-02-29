@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,12 +28,14 @@ import org.json.JSONObject;
  * See UML Diagram for more implementation details.
  */
 public abstract class PluriLockEvent {
+    private static final String TAG = "PluriLockEvent";
     private int eventID;
     private int screenOrientation; //1 = portrait; 2 = landscape
     private long timestamp;
     private long duration;
 
     public PluriLockEvent(int eventID, int screenOrientation, long timestamp, long duration) {
+        Log.v(TAG, "PluriLockEvent constructor");
         this.eventID = eventID;
         this.screenOrientation = screenOrientation;
         this.timestamp = timestamp;
@@ -55,6 +59,7 @@ public abstract class PluriLockEvent {
     }
 
     public JSONObject getJSON() {
+        Log.v(TAG, "getJSON");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", getEventID());
