@@ -9,9 +9,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cpsc319.team3.com.plurilockitup.activity.BankStatementActivity">
 
+    <LinearLayout
+        android:id="@+id/swipeReminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:gravity="right">
+        <TextView
+            android:id="@+id/swipeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Swipe for next statement"
+            android:textSize="20sp"/>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/swipe_right"/>
+    </LinearLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/swipeReminder"
         />
+
 </RelativeLayout>
