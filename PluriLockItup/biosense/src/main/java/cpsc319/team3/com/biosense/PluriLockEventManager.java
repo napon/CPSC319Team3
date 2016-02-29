@@ -100,10 +100,11 @@ public class PluriLockEventManager {
                 .setEvents(pluriLockEvents.toArray(new PluriLockEvent[pluriLockEvents.size()]));
         try {
             networkUtil.sendEvent(eventPackage.buildPackage());
-            pluriLockEvents.clear(); // Only clear if we succeed in sending the message
         } catch (IOException | DeploymentException e) {
-            // TODO: Should we try sending it again later?
+            // TODO: Store this package for sending again later
             Log.w(this.getClass().getName(), e.getClass().getName(), e);
+        } finally {
+            pluriLockEvents.clear();
         }
     }
 
