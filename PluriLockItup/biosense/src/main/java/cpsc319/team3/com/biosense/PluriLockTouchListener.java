@@ -93,7 +93,7 @@ public class PluriLockTouchListener implements
         Log.d(TAG,"onDown: " + e.toString());
         eventID = 0;
         screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
-        timestamp = new GregorianCalendar().getTimeInMillis();
+        timestamp = e.getDownTime();
         pressure = e.getPressure();
         fingerOrientation = e.getOrientation();
 

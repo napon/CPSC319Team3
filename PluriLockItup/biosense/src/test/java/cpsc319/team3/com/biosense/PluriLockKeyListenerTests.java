@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 public class PluriLockKeyListenerTests {
     @Test
-    public void constructorTest() {
+    public void sampleTest() {
         PluriLockEventTracker pluriLockEventTracker = new PluriLockEventTracker(
                 Mockito.mock(Context.class),
                 Mockito.mock(PluriLockEventManager.class));
