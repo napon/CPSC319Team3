@@ -5,11 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 
 import javax.json.Json;
-import javax.json.JsonObject;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -19,6 +17,7 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
+
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
 
 /**
@@ -51,17 +50,29 @@ public class PluriLockNetworkUtil {
     private MessageHandler messageHandler;
     private Context context;
     private WebSocketContainer container;
-    private URI endpointURI;
+//    private URI endpointURI;
 
     public PluriLockNetworkUtil(URI endpointURI) {
         this.container = ContainerProvider.getWebSocketContainer();
-        this.endpointURI = endpointURI;
+//        this.endpointURI = endpointURI;
+        initiateConnection(endpointURI);
         //this.context = c;
     }
 
-    private void initiateConnection() throws DeploymentException, IOException {
-        String uri = "ws://localhost:8080" + "/websocket";
-        container.connectToServer(this, endpointURI);
+//    private void initiateConnection() throws DeploymentException, IOException {
+//        String uri = "ws://localhost:8080" + "/websocket";
+//        container.connectToServer(this, endpointURI);
+//    }
+    private void initiateConnection(URI endpointURI) {
+        try {
+            container.connectToServer(this, endpointURI);
+        }
+        catch (DeploymentException e){
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage());
+        }
     }
 
 //    public static void main(String[] args) throws Exception {
@@ -69,25 +80,6 @@ public class PluriLockNetworkUtil {
 //        test.sendMessage("hi");
 //    }
 
-    public static void main(String[] args) throws Exception {
-        final PluriLockNetworkUtil clientEndPoint = new PluriLockNetworkUtil(new URI("ws://129.121.9.44:8001/"));
-//        clientEndPoint.addMessageHandler(new PluriLockNetworkUtil.MessageHandler() {
-//            public void handleMessage(String message) {
-//                JsonObject jsonObject = Json.createReader(new StringReader(message)).readObject();
-//                String userName = jsonObject.getString("user");
-//                //if (!"bot".equals(userName)) {
-//                    clientEndPoint.sendMessage(getMessage("Hello " + userName +", How are you?"));
-//                    // other dirty bot logic goes here.. :)
-//                //}
-//            }
-//        });
-
-        //while (true) {
-            //clientEndPoint.sendMessage(getMessage("Hi There!!"));
-        clientEndPoint.onMessage("hi");
-            //Thread.sleep(30000);
-        //}
-    }
 
     /**
      * Create a json representation.
@@ -198,4 +190,22 @@ public class PluriLockNetworkUtil {
     public void sendEvent(PluriLockPackage pluriLockPackage) {
         // TODO
     }
+
+
+    public static void main(String[] args) throws Exception {
+        final PluriLockNetworkUtil clientEndPoint = new PluriLockNetworkUtil(new URI("ws://129.121.9.44:8001/"));
+        clientEndPoint.addMessageHandler(new PluriLockNetworkUtil.MessageHandler() {
+            public void handleMessage(String message) {
+                System.out.println(message);
+            }
+        });
+
+        int countMessages = 0;
+        while (countMessages < 3) {
+            clientEndPoint.sendMessage("hello");
+            countMessages++;
+            Thread.sleep(30000);
+        }
+    }
+
 }
