@@ -3,6 +3,7 @@ package cpsc319.team3.com.biosense.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import org.glassfish.tyrus.client.ClientManager;
 
@@ -16,6 +17,7 @@ import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
 import javax.websocket.Session;
 
+import cpsc319.team3.com.biosense.PluriLockEventManager;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
 
 
@@ -34,20 +36,22 @@ import cpsc319.team3.com.biosense.models.PluriLockPackage;
 
 public class PluriLockNetworkUtil {
     private Session userSession;
-    private Context context;
+
     private URI endpointURI;
+    private Context context;
+    private PluriLockEventManager eventManager;
 
     private ClientManager client;
     private ClientEndpointConfig config;
 
-    public PluriLockNetworkUtil(URI endpointURI, Context context) {
+    public PluriLockNetworkUtil(URI endpointURI, Context context, PluriLockEventManager eventManager) {
         this.endpointURI = endpointURI;
         this.context = context;
         this.config = ClientEndpointConfig.Builder.create().build();
         this.client = ClientManager.createClient();
     }
 
-    private void initiateConnection() throws DeploymentException, IOException {
+    public void initiateConnection() throws DeploymentException, IOException {
         final MessageHandler.Whole<String> messageHandler = new MessageHandler.Whole<String>() {
             @Override
             public void onMessage(String message) {
@@ -87,21 +91,21 @@ public class PluriLockNetworkUtil {
         return true;
     }
 
-    private void sendMessage(String message) throws IOException {
-        System.out.println("Client says: " + message);
-        if (userSession != null) {
-            userSession.getBasicRemote().sendText(message);
-        } else {
-            throw new RuntimeException("foo"); // TODO: Find the correct exception to use
+    private void sendMessage(String message) throws IOException, DeploymentException {
+        if (userSession == null) {
+            initiateConnection();
         }
+        Log.d(this.getClass().getName(), "Client says: " + message);
+        userSession.getBasicRemote().sendText(message);
     }
 
     private void acceptMessage(String message) {
-        // TODO: Process this message, and callback the app
-        System.out.println("Server says: " + message);
+        // TODO: Process this message, and package it into some sort of object
+        Log.d(this.getClass().getName(), "Server says: " + message);
+        eventManager.notifyClient(message);
     }
 
-    private void closeConnection() throws IOException {
+    public void closeConnection() throws IOException {
         userSession.close();
         userSession = null;
     }
@@ -111,20 +115,7 @@ public class PluriLockNetworkUtil {
      * or stores it in the local database when there is no network connection.
      * @param pluriLockPackage
      */
-    public void sendEvent(PluriLockPackage pluriLockPackage) {
-        // TODO: Process this package and call sendMessage()
-    }
-
-
-    // DEBUG
-    public static void main(String[] args) throws Exception {
-        PluriLockNetworkUtil net = new PluriLockNetworkUtil(new URI("wss://echo.websocket.org"), null);
-        net.initiateConnection();
-        net.sendMessage("hi");
-        net.sendMessage("hello?");
-        net.sendMessage("is anyone there?");
-        net.sendMessage("HEEELLLLLOOOO!!!");
-        net.sendMessage("ok bye");
-        net.closeConnection();
+    public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
+        sendMessage(pluriLockPackage.getJSON().toString());
     }
 }
