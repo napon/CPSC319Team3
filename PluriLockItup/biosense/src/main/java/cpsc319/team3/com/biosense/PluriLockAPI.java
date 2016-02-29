@@ -12,12 +12,11 @@ import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
  */
 public class PluriLockAPI {
     private PluriLockEventManager eventManager;
+    private PluriLockEventTracker eventTracker;
     private static PluriLockAPI mySession;
 
-    //TODO: add listeners
-
     /**
-     *
+     *ﾖ
      * @return existing PluriLockAPI session, or null if one has not yet been made.
      */
     public static PluriLockAPI getInstance(){
@@ -55,9 +54,18 @@ public class PluriLockAPI {
                         PluriLockConfig config) throws LocationServiceUnavailableException {
 
         this.eventManager = PluriLockEventManager.getInstance(context, callback, userID, config);
-        //TODO build EventTracker here too!
+        this.eventTracker = new PluriLockEventTracker(context, eventManager);
 
     }
+
+    public PluriLockKeyListener createKeyListener() {
+        return new PluriLockKeyListener(eventTracker);
+    }
+
+    public PluriLockTouchListener createTouchListener() {
+        return new PluriLockTouchListener(eventTracker);
+    }
+
 
     /**
      * Destroys the existing session (in case of logout, etc)
@@ -65,6 +73,4 @@ public class PluriLockAPI {
     public static void destroyAPISession(){
         mySession = null; //add any destruction methods here as well.
     }
-
-
 }
