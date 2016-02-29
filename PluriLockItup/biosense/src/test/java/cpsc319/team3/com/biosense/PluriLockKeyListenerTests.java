@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 public class PluriLockKeyListenerTests {
     @Test
-    public void constructorTest() {
+    public void sampleTest() {
         PluriLockEventTracker pluriLockEventTracker = new PluriLockEventTracker(null, null);
         PluriLockKeyListener p = new PluriLockKeyListener(pluriLockEventTracker);
         assertTrue(p.getClass() == PluriLockKeyListener.class);
