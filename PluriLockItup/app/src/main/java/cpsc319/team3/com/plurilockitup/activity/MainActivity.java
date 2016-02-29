@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO goto statements activity
+                    startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
                 }
             });
 
