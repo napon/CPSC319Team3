@@ -15,7 +15,6 @@ import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.CreditStatement;
 
 public class StatementFragment extends Fragment {
-    String month;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -23,10 +22,12 @@ public class StatementFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_statement, container, false);
         TableLayout statementTable = (TableLayout) view.findViewById(R.id.statementTable);
 
-        this.month = getArguments().getString("month");
+        //Get month list and set frag month title
+        String month = getArguments().getString("month");
         ((TextView)view.findViewById(R.id.purchase_month)).setText(month);
         String[] monthList = getArguments().getStringArray("monthList");
 
+        //create table view for each fragment
         for(int i = 0;i<monthList.length;i++){
             View row = getLayoutInflater(savedInstanceState).inflate(R.layout.statement_row, null);
 

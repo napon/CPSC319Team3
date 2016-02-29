@@ -51,20 +51,6 @@ public class BankStatementActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-
-//            switch (position) {
-//
-//                case 0:
-//                    return new NearbyUsersFragment();
-//                case 1:
-//                    return new ProfileFragment();
-//                case 2:
-//                    return new MessagesFragment();
-//                case 3:
-//                    return new FriendsFragment();
-//                default:
-//                    return null;
-//            }
             Fragment statementFrag = new StatementFragment();
             Bundle bundle = new Bundle();
             bundle.putString("month", monthList[position]);
@@ -76,7 +62,7 @@ public class BankStatementActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return monthList.length;
         }
 
     }
