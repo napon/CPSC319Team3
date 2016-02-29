@@ -27,7 +27,7 @@ public class PluriLockTouchListenerTests {
                 Mockito.mock(PluriLockEventManager.class));
         PluriLockTouchListener touchListener = new PluriLockTouchListener(pluriLockEventTracker);
 
-        assertTrue(touchListener.onDoubleTap(null));
+        assertTrue(touchListener.onDoubleTap(Mockito.mock(MotionEvent.class)));
     }
 
 }
