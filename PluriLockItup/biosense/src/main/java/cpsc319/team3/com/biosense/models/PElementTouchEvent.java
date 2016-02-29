@@ -1,6 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
  * See the UML Diagram for more implementation details.
  */
 public class PElementTouchEvent extends PluriLockEvent {
+    private static final String TAG = "PElementTouchEvent";
     private static final String EVENT_TYPE = "ELEMENT_TOUCH";
     private float pressure;
     private float fingerOrientation;
@@ -22,6 +24,7 @@ public class PElementTouchEvent extends PluriLockEvent {
                               float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
                               long duration) {
         super(eventID, screenOrientation, timestamp, duration);
+        Log.v(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
         this.elementRelativeCoord = elementRelativeCoord;
@@ -53,6 +56,7 @@ public class PElementTouchEvent extends PluriLockEvent {
     }
 
     public JSONObject getJSON() {
+        Log.v(TAG, "getJSON");
         JSONObject jsonObject = super.getJSON();
         try {
             jsonObject.put("eventType", EVENT_TYPE);
