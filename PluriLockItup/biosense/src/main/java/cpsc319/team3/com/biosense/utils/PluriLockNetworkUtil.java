@@ -204,7 +204,7 @@ public class PluriLockNetworkUtil {
         while (countMessages < 3) {
             clientEndPoint.sendMessage("hello");
             countMessages++;
-            Thread.sleep(30000);
+            Thread.sleep(5000);
         }
     }
 
