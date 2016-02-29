@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -19,12 +22,14 @@ import cpsc319.team3.com.plurilockitup.model.Utils;
 
 public class MainActivity extends AppCompatActivity {
     Customer customer;
+    PluriLockAPI plapi;
+
     String[] dayAcctList;
     String[] creditAcctList;
     TableLayout dayAcctTable;
     TableLayout creditAcctTable;
 
-    PluriLockAPI plapi;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +125,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mainmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.feedback_menu:
+                startActivity(new Intent(this, FeedbackActivity.class));
+                break;
+            case R.id.location_menu:
+                startActivity(new Intent(this, MapLocationActivity.class));
+                break;
+            case R.id.logout_menu:
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                clearSession();
+                finish();
+                break;
+            case R.id.about_menu:
+                //TODO
+                break;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
     private void populateBalances(){
         TableRow tblRow;
         for (int i = 0; i < dayAcctList.length; i++){
@@ -130,5 +171,10 @@ public class MainActivity extends AppCompatActivity {
             tblRow = (TableRow) creditAcctTable.getChildAt(i);
             ((TextView) tblRow.findViewById(R.id.balance)).setText(customer.getBalanceString(creditAcctList[i]));
         }
+    }
+
+    private void clearSession(){
+        customer = null;
+        PluriLockAPI.destroyAPISession();;
     }
 }
