@@ -3,19 +3,24 @@ package cpsc319.team3.com.biosense.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
+import org.glassfish.tyrus.client.ClientManager;
 
 import java.io.IOException;
 import java.net.URI;
-import javax.websocket.ClientEndpoint;
-import javax.websocket.CloseReason;
-import javax.websocket.ContainerProvider;
+
+import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
+import javax.websocket.Endpoint;
+import javax.websocket.EndpointConfig;
+import javax.websocket.MessageHandler;
 import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
+
+import cpsc319.team3.com.biosense.PluriLockEventManager;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
+
+
 /**
  * This class is responsible for:
  * - Establishing connection with the PluriLock Server
@@ -26,87 +31,50 @@ import cpsc319.team3.com.biosense.models.PluriLockPackage;
  * - Reacting to changes in the network connectivity of the client's device
  * - Anonymizing client's data before sending it to the server
  * - Parsing the response from the server and passing it to the corresponding listener
- *
- * See the UML Diagram for more implementation details.
  */
 
-@ClientEndpoint
+
 public class PluriLockNetworkUtil {
+    private Session userSession;
 
-//    /**
-//     * Sends data to PluriLock server and returns a response string
-//     * @param data JSONObject including client's hardware information and PluriLockEvents
-//     * @return response string from Plurilock server containing confidence level
-//     */
-//    public String sendEvent(JSONObject data) {
-//
-//    }
-
-    Session userSession = null;
-    private MessageHandler messageHandler;
-    private Context context;
-    private WebSocketContainer container;
     private URI endpointURI;
+    private Context context;
+    private PluriLockEventManager eventManager;
 
-    public PluriLockNetworkUtil(URI endpointURI, Context c) {
-        this.container = ContainerProvider.getWebSocketContainer();
+    private ClientManager client;
+    private ClientEndpointConfig config;
+
+    public PluriLockNetworkUtil(URI endpointURI, Context context, PluriLockEventManager eventManager) {
         this.endpointURI = endpointURI;
-        this.context = c;
+        this.context = context;
+        this.config = ClientEndpointConfig.Builder.create().build();
+        this.client = ClientManager.createClient();
     }
 
-    private void initiateConnection() throws DeploymentException, IOException {
-        //String uri = "ws://localhost:8080" + request.getContextPath() + "/websocket";
-        container.connectToServer(this, endpointURI);
-    }
+    public void initiateConnection() throws DeploymentException, IOException {
+        final MessageHandler.Whole<String> messageHandler = new MessageHandler.Whole<String>() {
+            @Override
+            public void onMessage(String message) {
+                PluriLockNetworkUtil.this.acceptMessage(message);
+            }
+        };
 
-    public static void main(String[] args) throws Exception {
-        PluriLockNetworkUtil test = new PluriLockNetworkUtil(new URI("wss://129.121.9.44:8001/"), null);
-        test.sendMessage("hi");
-    }
+        Endpoint endpoint = new Endpoint() {
+            @Override
+            public void onOpen(Session session, EndpointConfig config) {
+                session.addMessageHandler(messageHandler);
+                PluriLockNetworkUtil.this.userSession = session;
+            }
+        };
 
-    /**
-     * Callback hook for Connection open events.
-     *
-     * @param userSession the userSession which is opened.
-     */
-    @OnOpen
-    public void onOpen(Session userSession) {
-        System.out.println("opening websocket");
-        this.userSession = userSession;
-    }
-
-    /**
-     * Callback hook for Connection close events.
-     *
-     * @param userSession the userSession which is getting closed.
-     * @param reason the reason for connection close
-     */
-    @OnClose
-    public void onClose(Session userSession, CloseReason reason) {
-        System.out.println("closing websocket");
-        this.userSession = null;
-    }
-
-    /**
-     * Callback hook for Message Events. This method will be invoked when a client send a message.
-     *
-     * @param message The text message
-     */
-    @OnMessage
-    public void onMessage(String message) {
-        if (this.messageHandler != null) {
-//            try {
-            this.messageHandler.handleMessage(message);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-        }
+        client.connectToServer(endpoint, config, endpointURI);
     }
 
     public boolean preNetworkCheck(){
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        //boolean flag = false;
+        // TODO: Make sure this method is called somewhere
+        // TODO: Propagate an exceptions upwards for the client to handle if we're offline?
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (!activeNetwork.isAvailable()) {
             System.out.println("Network connectivity is not possible.");
@@ -123,32 +91,23 @@ public class PluriLockNetworkUtil {
         return true;
     }
 
-
-    /**
-     * register message handler
-     *
-     * @param msgHandler
-     */
-    public void addMessageHandler(MessageHandler msgHandler) {
-        this.messageHandler = msgHandler;
+    private void sendMessage(String message) throws IOException, DeploymentException {
+        if (userSession == null) {
+            initiateConnection();
+        }
+        Log.d(this.getClass().getName(), "Client says: " + message);
+        userSession.getBasicRemote().sendText(message);
     }
 
-    /**
-     * Send a message.
-     *
-     * @param message
-     */
-    public void sendMessage(String message) {
-        this.userSession.getAsyncRemote().sendText(message);
+    private void acceptMessage(String message) {
+        // TODO: Process this message, and package it into some sort of object
+        Log.d(this.getClass().getName(), "Server says: " + message);
+        eventManager.notifyClient(message);
     }
 
-    /**
-     * Message handler.
-     *
-     */
-    public static interface MessageHandler {
-
-        public void handleMessage(String message);
+    public void closeConnection() throws IOException {
+        userSession.close();
+        userSession = null;
     }
 
     /**
@@ -156,7 +115,7 @@ public class PluriLockNetworkUtil {
      * or stores it in the local database when there is no network connection.
      * @param pluriLockPackage
      */
-    public void sendEvent(PluriLockPackage pluriLockPackage) {
-        // TODO
+    public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
+        sendMessage(pluriLockPackage.getJSON().toString());
     }
 }

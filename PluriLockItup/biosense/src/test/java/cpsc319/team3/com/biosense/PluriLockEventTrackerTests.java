@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 public class PluriLockEventTrackerTests {
     @Test
     public void sampleTest() throws Exception {
-        PluriLockEventTracker p = new PluriLockEventTracker();
+        PluriLockEventTracker p = new PluriLockEventTracker(null, null);
         assertTrue(p.getClass() == PluriLockEventTracker.class);
     }
 }
