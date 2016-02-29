@@ -35,6 +35,8 @@ import cpsc319.team3.com.biosense.models.PluriLockPackage;
 
 
 public class PluriLockNetworkUtil {
+    private static final String TAG = "PluriLockNetworkUtil";
+
     private Session userSession;
 
     private URI endpointURI;
@@ -45,6 +47,8 @@ public class PluriLockNetworkUtil {
     private ClientEndpointConfig config;
 
     public PluriLockNetworkUtil(URI endpointURI, Context context, PluriLockEventManager eventManager) {
+        Log.d(TAG, "PluriLockNetworkUtil constructor");
+
         this.endpointURI = endpointURI;
         this.context = context;
         this.config = ClientEndpointConfig.Builder.create().build();
@@ -52,6 +56,7 @@ public class PluriLockNetworkUtil {
     }
 
     public void initiateConnection() throws DeploymentException, IOException {
+        Log.d(TAG, "initiateConnection");
         final MessageHandler.Whole<String> messageHandler = new MessageHandler.Whole<String>() {
             @Override
             public void onMessage(String message) {
@@ -92,6 +97,7 @@ public class PluriLockNetworkUtil {
     }
 
     private void sendMessage(String message) throws IOException, DeploymentException {
+        Log.d(TAG, "sendMessage");
         if (userSession == null) {
             initiateConnection();
         }
@@ -100,12 +106,14 @@ public class PluriLockNetworkUtil {
     }
 
     private void acceptMessage(String message) {
+        Log.d(TAG, "acceptMessage");
         // TODO: Process this message, and package it into some sort of object
         Log.d(this.getClass().getName(), "Server says: " + message);
         eventManager.notifyClient(message);
     }
 
     public void closeConnection() throws IOException {
+        Log.d(TAG, "closeConnection");
         userSession.close();
         userSession = null;
     }
