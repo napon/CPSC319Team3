@@ -3,11 +3,13 @@ package cpsc319.team3.com.biosense;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,6 +20,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
+
+import java.util.GregorianCalendar;
+
+import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 
 @RunWith(RobolectricTestRunner.class)
 public class PluriLockTouchListenerTests {
@@ -35,7 +41,8 @@ public class PluriLockTouchListenerTests {
         Resources resourceMock = Mockito.mock(Resources.class);
         Configuration configMock = Mockito.mock(Configuration.class);
 
-        MotionEvent event = MotionEvent.obtain(1, 1, MotionEvent.ACTION_DOWN, 1, 1, 0);
+        MotionEvent event = MotionEvent.obtain(13892, 1, MotionEvent.ACTION_DOWN,
+                4.6f, 3.2f, 0.8f, 1.0f, 0, 1.0f, 1.0f, 1, 0);
 
         when(eventTrackerMock.getContext()).thenReturn(contextMock);
         when(contextMock.getResources()).thenReturn(resourceMock);
@@ -45,7 +52,14 @@ public class PluriLockTouchListenerTests {
 
         PluriLockTouchListener touchListener = new PluriLockTouchListener(eventTrackerMock);
 
+//        assertEquals(0.8f, event.getPressure()); //FAILS - returns 0
+//        assertEquals(13892, event.getDownTime()); //FAILS - returns 0
+
         assertTrue(touchListener.onDown(event));
+        assertEquals(configMock.orientation, touchListener.screenOrientation);
+        //assertEquals(13892, touchListener.timestamp);
+//        assertEquals(0.8f, touchListener.pressure, 0.01f);
+//        assertEquals(0f, touchListener.fingerOrientation, 0.01f);
     }
 
     @Test
@@ -69,7 +83,11 @@ public class PluriLockTouchListenerTests {
         touchListener.onDown(eventDown);
 
         assertTrue(touchListener.onSingleTapUp(eventUp));
-        verify(eventTrackerMock, times(1));
+
+        PElementTouchEvent pElementTouchEvent =
+                new PElementTouchEvent(0, Configuration.ORIENTATION_LANDSCAPE, 1,
+                        1, 1, new PointF(1,1), new PointF(1,1), 0);
+//        verify(eventTrackerMock, times(1)).notifyOfEvent(pElementTouchEvent);
 
     }
 
