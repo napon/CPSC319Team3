@@ -22,7 +22,8 @@ public class PScrollEvent extends PluriLockEvent {
     }
 
     public PScrollEvent(int eventID, int screenOrientation, long timestamp,
-                        scrollDirection scrollDirection, PointF startCoord, PointF endCoord, long duration) {
+                        scrollDirection scrollDirection, PointF startCoord, PointF endCoord,
+                        long duration) {
         super(eventID, screenOrientation, timestamp, duration);
         this.scrollDirection = scrollDirection;
         this.startCoord = startCoord;
