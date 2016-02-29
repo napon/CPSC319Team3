@@ -53,6 +53,7 @@ public class PluriLockNetworkUtil {
         this.context = context;
         this.config = ClientEndpointConfig.Builder.create().build();
         this.client = ClientManager.createClient();
+        this.eventManager = eventManager;
     }
 
     public void initiateConnection() throws DeploymentException, IOException {
@@ -96,13 +97,13 @@ public class PluriLockNetworkUtil {
         return true;
     }
 
-    private void sendMessage(String message) throws IOException, DeploymentException {
+    void sendMessage(String message) throws IOException, DeploymentException {
         Log.d(TAG, "sendMessage");
         if (userSession == null) {
             initiateConnection();
         }
         Log.d(this.getClass().getName(), "Client says: " + message);
-        userSession.getBasicRemote().sendText(message);
+        userSession.getAsyncRemote().sendText(message);
     }
 
     private void acceptMessage(String message) {
