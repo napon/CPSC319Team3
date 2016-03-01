@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
@@ -130,8 +131,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void notify(String msg) {
                 // TODO: Check this value and logout the user if needed
-                if(msg.equals("FAIL")) //TODO change check after implemented method
+                if(msg.equals("FAIL")) { //TODO change check after implemented method
+                    Toast.makeText(MainActivity.this,
+                            "Unauthorized user detected. You have been PluriLockedOut!",
+                            Toast.LENGTH_LONG).show();
                     logout();
+                }
 
             }
         };

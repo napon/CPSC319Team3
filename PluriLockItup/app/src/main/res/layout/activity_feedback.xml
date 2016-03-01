@@ -27,19 +27,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="To:"/>
-            <EditText
-                android:id="@+id/feedback_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
-                android:hint="sarah@bank4cash.ca"
-                android:background="@drawable/textborder"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:text="Message:"/>
 
             <EditText
@@ -48,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:inputType="textMultiLine"
-                android:minLines="6"
+                android:minLines="10"
                 android:maxLines="20"
                 android:gravity="top|start"
                 android:background="@drawable/textborder"
