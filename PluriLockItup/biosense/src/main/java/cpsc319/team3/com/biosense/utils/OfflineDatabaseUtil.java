@@ -70,15 +70,17 @@ public class OfflineDatabaseUtil {
     public List<JSONObject> loadPending(){
         try {
             if(isFilePresent("offlineCacheData")){
-                File file = context.getFileStreamPath("offlineCacheData");
-                FileInputStream stream = new FileInputStream(file);
+//                File file = context.getFileStreamPath("offlineCacheData");123
+//                FileInputStream stream = new FileInputStream(file);
+                FileInputStream stream = context.openFileInput("offlineCacheData");
                 InputStreamReader reader = new InputStreamReader(stream);
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
-                    System.out.println(line);
+                    sb.append(line);
                 }
+                System.out.println(sb.toString());
             }
             else{
                 Log.d("No file", "File not found");
@@ -94,6 +96,7 @@ public class OfflineDatabaseUtil {
         if(isFilePresent("offlineCacheData")) {
             File file = context.getFileStreamPath("offlineCacheData");
             file.delete();
+            Log.d("File deleted", "offlineCacheData");
         }
         else
             Log.d("file not deleted", "No file to delete");
