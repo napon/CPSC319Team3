@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         PluriLockServerResponseListener callback = new PluriLockServerResponseListener() {
             @Override
             public void notify(String msg) {
+                Log.d("YAY", msg);
                 // TODO: Check this value and logout the user if needed
                 if(msg.equals("FAIL")) { //TODO change check after implemented method
                     Toast.makeText(MainActivity.this,
@@ -145,8 +146,9 @@ public class MainActivity extends AppCompatActivity {
         String id = "testUser"; // TODO: What is this value?
         PluriLockConfig config = new PluriLockConfig();
         try {
-            config.setActionsPerUpload(10);
-            config.setUrl(URI.create("ws://129.121.9.44:8001")); // Mock server.
+            config.setActionsPerUpload(1);
+//            config.setUrl(URI.create("ws://echo.websocket.org/"));
+            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
         } catch(Exception e) {}
 
         try {

@@ -3,6 +3,7 @@ package cpsc319.team3.com.biosense.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.glassfish.tyrus.client.ClientManager;
@@ -54,9 +55,10 @@ public class PluriLockNetworkUtil {
         this.config = ClientEndpointConfig.Builder.create().build();
         this.client = ClientManager.createClient();
         this.eventManager = eventManager;
+        initiateConnection();
     }
 
-    public void initiateConnection() throws DeploymentException, IOException {
+    public void initiateConnection() {
         Log.d(TAG, "initiateConnection");
         final MessageHandler.Whole<String> messageHandler = new MessageHandler.Whole<String>() {
             @Override
@@ -66,7 +68,7 @@ public class PluriLockNetworkUtil {
             }
         };
 
-        Endpoint endpoint = new Endpoint() {
+        final Endpoint endpoint = new Endpoint() {
             @Override
             public void onOpen(Session session, EndpointConfig config) {
                 Log.d(TAG, "onOpen");
@@ -75,7 +77,21 @@ public class PluriLockNetworkUtil {
             }
         };
 
-        client.connectToServer(endpoint, config, endpointURI);
+        final AsyncTask<Void, Void, Void> connectionTask = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Log.d(TAG, "Connecting to client in AsyncTask..");
+                    client.connectToServer(endpoint, config, endpointURI);
+                } catch (Exception e) {
+                    // TODO: Handle this outside the async
+                }
+                return null;
+            }
+        };
+
+        Log.d(TAG, "Executing connectionTask AsyncTask..");
+        connectionTask.execute();
         Log.d(TAG, "connecting..");
     }
 
@@ -100,13 +116,23 @@ public class PluriLockNetworkUtil {
         return true;
     }
 
-    void sendMessage(String message) throws IOException, DeploymentException {
+    void sendMessage(final String message) throws IOException, DeploymentException {
         Log.d(TAG, "sendMessage");
-        if (userSession == null) {
-            initiateConnection();
-        }
+//        if (userSession == null) {
+//            initiateConnection();
+//        }
         Log.d(this.getClass().getName(), "Client says: " + message);
-        userSession.getAsyncRemote().sendText(message);
+        final AsyncTask<Void, Void, Void> sendMessageTask = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                Log.d(TAG, "Sending message in AsyncTask...");
+                userSession.getAsyncRemote().sendText(message);
+                return null;
+            }
+        };
+
+        Log.d(TAG, "Executing sendMessage AsyncTask...");
+        sendMessageTask.execute();
     }
 
     private void acceptMessage(String message) {
