@@ -38,11 +38,6 @@ public class BankStatementActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-
-
     private class MainPagerAdapter extends FragmentPagerAdapter {
 
         public MainPagerAdapter(FragmentManager fm){
