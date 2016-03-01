@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.location.LocationManager;
+import android.provider.Settings;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,6 +40,7 @@ public class PluriLockAPITests {
         ShadowContextImpl shadowContext = (ShadowContextImpl) Shadows.shadowOf(application.getBaseContext());
         shadowContext.setSystemService(Context.LOCATION_SERVICE, mockLocation);
         shadowApp.grantPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+        Settings.Secure.putInt(RuntimeEnvironment.application.getContentResolver(), Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
         application.onCreate();
         return application;
     }
