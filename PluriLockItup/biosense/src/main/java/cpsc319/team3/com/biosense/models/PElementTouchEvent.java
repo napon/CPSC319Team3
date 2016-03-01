@@ -24,7 +24,7 @@ public class PElementTouchEvent extends PluriLockEvent {
                               float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
                               long duration) {
         super(eventID, screenOrientation, timestamp, duration);
-        Log.v(TAG, "PElementTouchEvent constructor");
+        Log.d(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
         this.elementRelativeCoord = elementRelativeCoord;
@@ -56,7 +56,7 @@ public class PElementTouchEvent extends PluriLockEvent {
     }
 
     public JSONObject getJSON() {
-        Log.v(TAG, "getJSON");
+        Log.d(TAG, "getJSON");
         JSONObject jsonObject = super.getJSON();
         try {
             jsonObject.put("eventType", EVENT_TYPE);

@@ -61,6 +61,7 @@ public class PluriLockNetworkUtil {
         final MessageHandler.Whole<String> messageHandler = new MessageHandler.Whole<String>() {
             @Override
             public void onMessage(String message) {
+                Log.d(TAG, "onMessage: " + message);
                 PluriLockNetworkUtil.this.acceptMessage(message);
             }
         };
@@ -68,12 +69,14 @@ public class PluriLockNetworkUtil {
         Endpoint endpoint = new Endpoint() {
             @Override
             public void onOpen(Session session, EndpointConfig config) {
+                Log.d(TAG, "onOpen");
                 session.addMessageHandler(messageHandler);
                 PluriLockNetworkUtil.this.userSession = session;
             }
         };
 
         client.connectToServer(endpoint, config, endpointURI);
+        Log.d(TAG, "connecting..");
     }
 
     public boolean preNetworkCheck(){

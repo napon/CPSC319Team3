@@ -16,6 +16,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.URI;
+
 import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.PluriLockServerResponseListener;
@@ -142,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
         };
         String id = "testUser"; // TODO: What is this value?
         PluriLockConfig config = new PluriLockConfig();
+        try {
+            config.setActionsPerUpload(10);
+            config.setUrl(URI.create("ws://129.121.9.44:8001")); // Mock server.
+        } catch(Exception e) {}
 
         try {
             this.plapi = PluriLockAPI.getInstance();

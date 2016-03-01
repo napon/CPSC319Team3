@@ -32,7 +32,7 @@ public class PluriLockPackage {
     private PluriLockEvent events[];
 
     private PluriLockPackage(PluriLockPackageBuilder b) {
-        Log.v(TAG, "PluriLockPackage constructor");
+        Log.d(TAG, "PluriLockPackage constructor");
         this.id = b.id;
         this.countryCode = b.countryCode;
         this.deviceModel = b.deviceModel;
@@ -203,7 +203,7 @@ public class PluriLockPackage {
     }
 
     public JSONObject getJSON() {
-        Log.v(TAG, "getJSON");
+        Log.d(TAG, "getJSON");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", getId());
@@ -234,7 +234,7 @@ public class PluriLockPackage {
      * @param array shuffled in random order.
      */
     private static void shuffleArray(PluriLockEvent[] array) {
-        Log.v(TAG, "ShuffleArray");
+        Log.d(TAG, "ShuffleArray");
         int index;
         PluriLockEvent temp;
         Random random = new Random();
