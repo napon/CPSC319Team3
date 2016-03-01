@@ -20,6 +20,7 @@ import org.robolectric.shadows.ShadowContextImpl;
 import org.robolectric.shadows.ShadowContextWrapper;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -52,7 +53,7 @@ public class PluriLockAPITests {
         baseConfig = new PluriLockConfig();
         baseListener = new PluriLockServerResponseListener() {
             @Override
-            public void notify(String msg) {
+            public void notify(PlurilockServerResponse msg) {
                 //do nothing.
             }
         };

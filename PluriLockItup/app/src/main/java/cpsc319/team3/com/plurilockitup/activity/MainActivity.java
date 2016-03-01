@@ -23,6 +23,7 @@ import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.PluriLockServerResponseListener;
 import cpsc319.team3.com.biosense.PluriLockTouchListener;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 import cpsc319.team3.com.plurilockitup.model.Utils;
@@ -131,10 +132,8 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         PluriLockServerResponseListener callback = new PluriLockServerResponseListener() {
             @Override
-            public void notify(String msg) {
-                Log.d("YAY", msg);
-                // TODO: Check this value and logout the user if needed
-                if(msg.equals("FAIL")) { //TODO change check after implemented method
+            public void notify(PlurilockServerResponse msg) {
+                if(msg.confidenceLevel < 0.5) {
                     Toast.makeText(MainActivity.this,
                             "Unauthorized user detected. You have been PluriLockedOut!",
                             Toast.LENGTH_LONG).show();

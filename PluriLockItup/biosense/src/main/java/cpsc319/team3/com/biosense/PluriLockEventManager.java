@@ -3,6 +3,8 @@ package cpsc319.team3.com.biosense;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
 import cpsc319.team3.com.biosense.models.PluriLockPackage.PluriLockPackageBuilder;
 import cpsc319.team3.com.biosense.models.PluriLockEvent;
+import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 import cpsc319.team3.com.biosense.utils.LocationUtil;
 import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
@@ -118,7 +121,12 @@ public class PluriLockEventManager {
      */
     public void notifyClient(String message) {
         Log.d(TAG, "notifyClient");
-        clientListener.notify(message);
+        try {
+            clientListener.notify(PlurilockServerResponse.fromJsonString(message));
+        } catch (JSONException e) {
+            // TODO: Handle this intelligently
+            e.printStackTrace();
+        }
     }
 
     /**
