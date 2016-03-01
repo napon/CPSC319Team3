@@ -125,6 +125,7 @@ public class PluriLockNetworkUtil {
      * @param pluriLockPackage
      */
     public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
+        Log.d(TAG, "sendEvent");
         sendMessage(pluriLockPackage.getJSON().toString());
     }
 }

@@ -43,7 +43,7 @@ public class PluriLockEventManager {
     protected PluriLockEventManager(Context c, PluriLockServerResponseListener l, String id,
                                     PluriLockConfig config)
             throws LocationServiceUnavailableException {
-        Log.v(TAG, "PluriLockEventManager constructor");
+        Log.d(TAG, "PluriLockEventManager constructor");
         this.context = c;
         this.clientListener = l;
         this.userID = id;
@@ -63,7 +63,7 @@ public class PluriLockEventManager {
     public static synchronized PluriLockEventManager getInstance(
             Context c, PluriLockServerResponseListener l, String id, PluriLockConfig config)
             throws LocationServiceUnavailableException {
-        Log.v(TAG, "getInstance");
+        Log.d(TAG, "getInstance");
         if (eventManager == null) {
             eventManager = new PluriLockEventManager(c, l, id, config);
         }
@@ -80,7 +80,7 @@ public class PluriLockEventManager {
      * @param pluriLockEvent
      */
     public void addPluriLockEvent(PluriLockEvent pluriLockEvent) {
-        Log.v(TAG, "addPluriLockEvent");
+        Log.d(TAG, "addPluriLockEvent");
         assert(pluriLockEvents.size() < config.getActionsPerUpload());
         this.pluriLockEvents.add(pluriLockEvent);
         if (pluriLockEvents.size() == config.getActionsPerUpload()) {
@@ -117,7 +117,7 @@ public class PluriLockEventManager {
      * @param message from the Server.
      */
     public void notifyClient(String message) {
-        Log.v(TAG, "notifyClient");
+        Log.d(TAG, "notifyClient");
         clientListener.notify(message);
     }
 

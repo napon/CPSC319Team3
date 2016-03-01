@@ -23,7 +23,7 @@ public class PluriLockAPI {
      * @return existing PluriLockAPI session, or null if one has not yet been made.
      */
     public static PluriLockAPI getInstance(){
-        Log.v(TAG, "getInstance");
+        Log.d(TAG, "getInstance");
         return mySession;
     }
 
@@ -39,7 +39,7 @@ public class PluriLockAPI {
     public static PluriLockAPI createNewSession(Context context, PluriLockServerResponseListener callback,
                                    String userID, PluriLockConfig config)
                                     throws LocationServiceUnavailableException{
-        Log.v(TAG, "createNewSession");
+        Log.d(TAG, "createNewSession");
         if(mySession != null){
             destroyAPISession();
         }
@@ -57,7 +57,7 @@ public class PluriLockAPI {
      */
     private PluriLockAPI(Context context, PluriLockServerResponseListener callback, String userID,
                         PluriLockConfig config) throws LocationServiceUnavailableException {
-        Log.v(TAG, "PluriLockAPI constructor");
+        Log.d(TAG, "PluriLockAPI constructor");
         this.eventManager = PluriLockEventManager.getInstance(context, callback, userID, config);
         this.eventTracker = new PluriLockEventTracker(context, eventManager);
 
@@ -76,7 +76,7 @@ public class PluriLockAPI {
      * Destroys the existing session (in case of logout, etc)
      */
     public static void destroyAPISession(){
-        Log.v(TAG, "destroyAPISession");
+        Log.d(TAG, "destroyAPISession");
         mySession = null; //add any destruction methods here as well.
     }
 }
