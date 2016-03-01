@@ -3,15 +3,19 @@ package cpsc319.team3.com.biosense.utils;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,13 +30,10 @@ import java.util.List;
 public class OfflineDatabaseUtil {
     Context context;
     int cacheSize;
-    File file;
 
     public OfflineDatabaseUtil(Context context, int cacheSize){
         this.context = context;
         this.cacheSize = cacheSize;
-
-        file = new File(context.getFilesDir(), "offlineCacheData");
     }
 
     public boolean save(JSONObject obj){
@@ -42,18 +43,13 @@ public class OfflineDatabaseUtil {
             if(isFilePresent("offlineCacheData")){
                 File file = context.getFileStreamPath("offlineCacheData");
                 outputStream = new FileOutputStream(file, true);
-                outputStream.write(obj.toString().getBytes());
-                outputStream.close();
-//                FileWriter fw = new FileWriter(file);
-//                fw.write(obj.toString());
-//                fw.close();
+                writeData(outputStream, obj);
                 Log.d("File save", "Append data");
                 return true;
             }
             else {
                 outputStream = context.openFileOutput("offlineCacheData", Context.MODE_PRIVATE);
-                outputStream.write(obj.toString().getBytes());
-                outputStream.close();
+                writeData(outputStream, obj);
                 Log.d("File save", "Save data");
                 return true;
             }
@@ -68,10 +64,9 @@ public class OfflineDatabaseUtil {
     }
 
     public List<JSONObject> loadPending(){
+        List<JSONObject> pendingList = new ArrayList<JSONObject>();
         try {
             if(isFilePresent("offlineCacheData")){
-//                File file = context.getFileStreamPath("offlineCacheData");123
-//                FileInputStream stream = new FileInputStream(file);
                 FileInputStream stream = context.openFileInput("offlineCacheData");
                 InputStreamReader reader = new InputStreamReader(stream);
                 BufferedReader bufferedReader = new BufferedReader(reader);
@@ -80,7 +75,14 @@ public class OfflineDatabaseUtil {
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
                 }
-                System.out.println(sb.toString());
+                String[] array = sb.toString().split("~~");
+                for(int i = 0; i < array.length; i++){
+                    JSONObject obj;
+                    if ((obj = makeJsonObj(array[i])) != null)
+                        pendingList.add(obj);
+                }
+                for(JSONObject o:pendingList)
+                    System.out.println(o.toString());
             }
             else{
                 Log.d("No file", "File not found");
@@ -89,7 +91,7 @@ public class OfflineDatabaseUtil {
         catch (IOException e){
             Log.d("Stream error", e.getMessage());
         }
-        return null;
+        return pendingList;
     }
 
     public void deleteCache(){
@@ -110,6 +112,26 @@ public class OfflineDatabaseUtil {
     private boolean isFilePresent(String fileName){
         File file = context.getFileStreamPath(fileName);
         return file.exists();
+    }
+
+    private void writeData(FileOutputStream outputStream, JSONObject obj) throws IOException{
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
+        bw.write(obj.toString());
+        bw.append("~~");
+        bw.newLine();
+        bw.flush();
+        bw.close();
+    }
+
+    private JSONObject makeJsonObj(String jsonString){
+        JSONObject obj = null;
+        try{
+            obj = new JSONObject(jsonString);
+        }
+        catch (JSONException e) {
+            Log.e("JSON error", "Could not make json object from " + jsonString);
+        }
+        return obj;
     }
 
 }
