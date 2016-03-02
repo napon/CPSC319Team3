@@ -1,8 +1,11 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -129,17 +132,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupPLApi() {
         Context context = getApplicationContext();
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String msg = intent.getStringExtra("msg");
+                        Log.d("YAY!!!!", msg);
+                        if(msg.equals("FAIL")) { //TODO change check after implemented method
+                            Toast.makeText(MainActivity.this,
+                                    "Unauthorized user detected. You have been PluriLockedOut!",
+                                    Toast.LENGTH_LONG).show();
+                            logout();
+                        }
+                    }
+                },
+                new IntentFilter("server-response")
+        );
+
         PluriLockServerResponseListener callback = new PluriLockServerResponseListener() {
             @Override
             public void notify(String msg) {
-                Log.d("YAY", msg);
-                // TODO: Check this value and logout the user if needed
-                if(msg.equals("FAIL")) { //TODO change check after implemented method
-                    Toast.makeText(MainActivity.this,
-                            "Unauthorized user detected. You have been PluriLockedOut!",
-                            Toast.LENGTH_LONG).show();
-                    logout();
-                }
+//                Log.d("YAY", msg);
+//                // TODO: Check this value and logout the user if needed
+//                if(msg.equals("FAIL")) { //TODO change check after implemented method
+//                    Toast.makeText(MainActivity.this,
+//                            "Unauthorized user detected. You have been PluriLockedOut!",
+//                            Toast.LENGTH_LONG).show();
+//                    logout();
+//                }
 
             }
         };

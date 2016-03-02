@@ -1,9 +1,11 @@
 package cpsc319.team3.com.biosense.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.glassfish.tyrus.client.ClientManager;
@@ -139,7 +141,10 @@ public class PluriLockNetworkUtil {
         Log.d(TAG, "acceptMessage");
         // TODO: Process this message, and package it into some sort of object
         Log.d(this.getClass().getName(), "Server says: " + message);
-        eventManager.notifyClient(message);
+//        eventManager.notifyClient(message);
+        Intent intent = new Intent("server-response");
+        intent.putExtra("msg", message);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     public void closeConnection() throws IOException {
