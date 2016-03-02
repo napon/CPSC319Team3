@@ -1,15 +1,61 @@
 package cpsc319.team3.com.biosense.utils;
 
-import org.junit.Test;
+import android.content.Context;
 
-import cpsc319.team3.com.biosense.PhoneDataManager;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.assertTrue;
 
 public class OfflineDatabaseUtilTests {
-    @Test
-    public void sampleTest() throws Exception {
-        OfflineDatabaseUtil p = new OfflineDatabaseUtil();
-        assertTrue(p.getClass() == OfflineDatabaseUtil.class);
+    final static String FILE_NAME = "OfflineTestCache";
+    @Before
+    public void setup() {
+        //delete cache file if present
+        OfflineDatabaseUtil.deleteCache(Mockito.mock(Context.class), FILE_NAME);
     }
+    @Test
+    public void constructorDefaultTest() throws Exception {
+        Context context = Mockito.mock(Context.class);
+        OfflineDatabaseUtil offline = new OfflineDatabaseUtil(context);
+        int oneMB = 1000000;
+        int cacheSize = offline.getCacheSize();
+
+        assertTrue(offline.getClass() == OfflineDatabaseUtil.class);
+        assertTrue(cacheSize == oneMB);
+    }
+
+    @Test
+    public void constructorCacheTest() throws Exception{
+        int cacheSize = 100;
+        Context context = Mockito.mock(Context.class);
+        OfflineDatabaseUtil offline = new OfflineDatabaseUtil(context, cacheSize);
+
+        assertTrue(offline.getClass() == OfflineDatabaseUtil.class);
+        assertTrue(offline.getCacheSize() == cacheSize);
+    }
+
+    //Can not mock text without physically saving file...
+    @Test
+    public void saveTest() throws Exception {
+//        Context context = Mockito.mock(Context.class);
+//        OfflineDatabaseUtil offline = new OfflineDatabaseUtil(context);
+//
+//        try {
+//            JSONObject obj1 = new JSONObject("{\"test\":\"1\"}");
+//            JSONObject obj2 = new JSONObject("{\"test\":\"2\"}");
+//
+//            assertTrue(offline.save(obj1));
+//            assertTrue(offline.save(obj2));
+//
+//            int objSaved = offline.loadPending().toArray().length;
+//            assertTrue(objSaved == 2);
+//        }
+//        catch (JSONException e){
+//            Log.e("JSON  test error", e.getMessage());
+//            fail();
+//        }
+    }
+
 }

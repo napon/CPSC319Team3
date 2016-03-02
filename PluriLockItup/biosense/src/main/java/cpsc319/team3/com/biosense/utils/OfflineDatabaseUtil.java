@@ -167,7 +167,7 @@ public class OfflineDatabaseUtil {
                         pendingList.add(obj);
                 }
                 //Delete cache when objects are returned
-                deleteCache();
+                deleteCache(context, CACHE_DIR);
             }
             else{
                 Log.e("No file", "File not found");
@@ -182,11 +182,11 @@ public class OfflineDatabaseUtil {
     /**
      * Deletes the cache file if it exists
      */
-    public void deleteCache(){
-        if(isFilePresent(CACHE_DIR)) {
-            File file = context.getFileStreamPath(CACHE_DIR);
+    public static void deleteCache(Context context, String fileName){
+        File file = context.getFileStreamPath(fileName);
+        if(file != null) {
             file.delete();
-            Log.d("File deleted", CACHE_DIR);
+            Log.d("File deleted", fileName);
         }
         else
             Log.d("file not deleted", "No file to delete");
