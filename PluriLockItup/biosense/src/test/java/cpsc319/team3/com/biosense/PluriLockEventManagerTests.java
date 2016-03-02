@@ -32,6 +32,7 @@ import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
+import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
 @RunWith(RobolectricTestRunner.class)
@@ -47,7 +48,7 @@ public class PluriLockEventManagerTests {
         Application application = createApplicationWithPermissions();
         PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
             @Override
-            public void notify(String msg) {
+            public void notify(PlurilockServerResponse msg) {
 
             }
         };
@@ -63,7 +64,7 @@ public class PluriLockEventManagerTests {
         application.onCreate();
         PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
             @Override
-            public void notify(String msg) {
+            public void notify(PlurilockServerResponse msg) {
 
             }
         };
@@ -77,7 +78,7 @@ public class PluriLockEventManagerTests {
         Application application = createApplicationWithPermissions();
         PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
             @Override
-            public void notify(String msg) {
+            public void notify(PlurilockServerResponse msg) {
 
             }
         };
@@ -114,7 +115,7 @@ public class PluriLockEventManagerTests {
         Application application = createApplicationWithPermissions();
         PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
             @Override
-            public void notify(String msg) {
+            public void notify(PlurilockServerResponse msg) {
 
             }
         };
@@ -141,7 +142,7 @@ public class PluriLockEventManagerTests {
     public void testNotifyClient() throws LocationServiceUnavailableException {
         PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
             @Override
-            public void notify(String msg) {
+            public void notify(PlurilockServerResponse msg) {
 
             }
         };
