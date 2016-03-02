@@ -31,6 +31,8 @@ public class OfflineDatabaseUtil {
     Context context;
     int cacheSize;
 
+    private static final String CACHE_DIR = "offlineCacheData";
+
     public OfflineDatabaseUtil(Context context, int cacheSize){
         this.context = context;
         this.cacheSize = cacheSize;
@@ -40,25 +42,25 @@ public class OfflineDatabaseUtil {
         FileOutputStream outputStream;
 
         try{
-            if(isFilePresent("offlineCacheData")){
-                File file = context.getFileStreamPath("offlineCacheData");
+            if(isFilePresent(CACHE_DIR) && !isCacheFull(obj.toString())){
+                File file = context.getFileStreamPath(CACHE_DIR);
                 outputStream = new FileOutputStream(file, true);
                 writeData(outputStream, obj);
                 Log.d("File save", "Append data");
                 return true;
             }
             else {
-                outputStream = context.openFileOutput("offlineCacheData", Context.MODE_PRIVATE);
+                outputStream = context.openFileOutput(CACHE_DIR, Context.MODE_PRIVATE);
                 writeData(outputStream, obj);
                 Log.d("File save", "Save data");
                 return true;
             }
         }
         catch (FileNotFoundException e){
-            Log.d("No offline cache file", e.getMessage());
+            Log.d("Cache file error", e.getMessage());
         }
         catch (IOException e){
-            Log.d("Stream error", e.getMessage());
+            Log.d("Stream write error", e.getMessage());
         }
         return false;
     }
@@ -66,19 +68,15 @@ public class OfflineDatabaseUtil {
     public List<JSONObject> loadPending(){
         List<JSONObject> pendingList = new ArrayList<JSONObject>();
         try {
-            if(isFilePresent("offlineCacheData")){
-                FileInputStream stream = context.openFileInput("offlineCacheData");
+            if(isFilePresent(CACHE_DIR)){
+                FileInputStream stream = context.openFileInput(CACHE_DIR);
                 InputStreamReader reader = new InputStreamReader(stream);
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 StringBuilder sb = new StringBuilder();
                 String line;
+                JSONObject obj;
                 while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                String[] array = sb.toString().split("~~");
-                for(int i = 0; i < array.length; i++){
-                    JSONObject obj;
-                    if ((obj = makeJsonObj(array[i])) != null)
+                    if((obj = makeJsonObj(line))!=null)
                         pendingList.add(obj);
                 }
                 for(JSONObject o:pendingList)
@@ -95,18 +93,21 @@ public class OfflineDatabaseUtil {
     }
 
     public void deleteCache(){
-        if(isFilePresent("offlineCacheData")) {
-            File file = context.getFileStreamPath("offlineCacheData");
+        if(isFilePresent(CACHE_DIR)) {
+            File file = context.getFileStreamPath(CACHE_DIR);
             file.delete();
-            Log.d("File deleted", "offlineCacheData");
+            Log.d("File deleted", CACHE_DIR);
         }
         else
             Log.d("file not deleted", "No file to delete");
     }
 
     public int getCacheSize(){
-        //TODO
         return cacheSize;
+    }
+
+    public void setCacheSize(int size){
+        this.cacheSize = size;
     }
 
     private boolean isFilePresent(String fileName){
@@ -114,10 +115,20 @@ public class OfflineDatabaseUtil {
         return file.exists();
     }
 
+    private boolean isCacheFull(String textToAdd){
+        if(!isFilePresent(CACHE_DIR))
+            return false;
+        File file = context.getFileStreamPath(CACHE_DIR);
+        long allocatedFileSize = file.getUsableSpace();
+        int textSize = textToAdd.getBytes().length;
+        long usedFileSize = file.length();
+        long remainingSize = allocatedFileSize - usedFileSize;
+        return ((remainingSize < textSize) || (usedFileSize + textSize) > cacheSize);
+    }
+
     private void writeData(FileOutputStream outputStream, JSONObject obj) throws IOException{
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
         bw.write(obj.toString());
-        bw.append("~~");
         bw.newLine();
         bw.flush();
         bw.close();
