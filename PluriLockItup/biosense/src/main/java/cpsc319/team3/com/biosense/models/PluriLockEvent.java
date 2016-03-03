@@ -35,7 +35,7 @@ public abstract class PluriLockEvent {
     private long duration;
 
     public PluriLockEvent(int eventID, int screenOrientation, long timestamp, long duration) {
-        Log.v(TAG, "PluriLockEvent constructor");
+        Log.d(TAG, "PluriLockEvent constructor");
         this.eventID = eventID;
         this.screenOrientation = screenOrientation;
         this.timestamp = timestamp;
@@ -59,7 +59,7 @@ public abstract class PluriLockEvent {
     }
 
     public JSONObject getJSON() {
-        Log.v(TAG, "getJSON");
+        Log.d(TAG, "getJSON");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", getEventID());

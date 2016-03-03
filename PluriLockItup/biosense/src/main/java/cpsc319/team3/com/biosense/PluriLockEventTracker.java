@@ -30,13 +30,13 @@ public class PluriLockEventTracker {
     }
 
     public PluriLockEventTracker(Context context, PluriLockEventManager eventManager) {
-        Log.v(TAG, "PluriLockEventTracker constructor");
+        Log.d(TAG, "PluriLockEventTracker constructor");
         this.context = context;
         this.eventManager = eventManager;
     }
 
     void notifyOfEvent(PluriLockEvent pEvent) {
-        Log.v(TAG, "notifyOfEvent");
+        Log.d(TAG, "notifyOfEvent");
         eventManager.addPluriLockEvent(pEvent);
     }
 
