@@ -4,10 +4,13 @@ import android.content.Context;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertTrue;
 
+@RunWith(RobolectricTestRunner.class)
 public class OfflineDatabaseUtilTests {
     final static String FILE_NAME = "OfflineTestCache";
     @Before
@@ -39,23 +42,7 @@ public class OfflineDatabaseUtilTests {
     //Can not mock text without physically saving file...
     @Test
     public void saveTest() throws Exception {
-//        Context context = Mockito.mock(Context.class);
-//        OfflineDatabaseUtil offline = new OfflineDatabaseUtil(context);
-//
-//        try {
-//            JSONObject obj1 = new JSONObject("{\"test\":\"1\"}");
-//            JSONObject obj2 = new JSONObject("{\"test\":\"2\"}");
-//
-//            assertTrue(offline.save(obj1));
-//            assertTrue(offline.save(obj2));
-//
-//            int objSaved = offline.loadPending().toArray().length;
-//            assertTrue(objSaved == 2);
-//        }
-//        catch (JSONException e){
-//            Log.e("JSON  test error", e.getMessage());
-//            fail();
-//        }
+
     }
 
 }
