@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        if(cardNum != null && passwordText!= null) {
+        if(cardNum != null && !passwordText.equals("")) {
             //save register for future login
             SharedPreferences.Editor editor = mLoginPref.edit();
             editor.putString(Utils.cardNum, cardNumText.replace("-",""));
