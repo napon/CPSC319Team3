@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "User is not registered. Please register first.", Toast.LENGTH_LONG).show();
         }
         else {
-            if(savedCardNum.equals(cardNumText)){ //correct card#
+            if(savedCardNum.equals(cardNumText.replace("-",""))){ //correct card#
                 if(savedPassword.equals(passwordText)){ //correct LOGIN
                     //get Token ID from Plurilock?? //TODO
                     String purilockToken = "DEFAULTABC123";
@@ -94,18 +94,18 @@ public class LoginActivity extends AppCompatActivity {
         // Card# is checked to allow only integers, it is saved as a string for convenience
         Integer cardNum = null;
         try {
-            cardNum = Integer.valueOf(cardNumText);
+            cardNum = Integer.valueOf(cardNumText.replace("-",""));
         }
         catch (NumberFormatException e){
             Log.e("Register", e.getMessage());
-            Toast.makeText(this, "Invalid card#/password", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Valid card# are between 0000-000-000 and 2147-483-647", Toast.LENGTH_LONG).show();
         }
 
 
         if(cardNum != null && passwordText!= null) {
             //save register for future login
             SharedPreferences.Editor editor = mLoginPref.edit();
-            editor.putString(Utils.cardNum, cardNumText);
+            editor.putString(Utils.cardNum, cardNumText.replace("-",""));
             editor.putString(Utils.password, passwordText);
             editor.commit();
 
