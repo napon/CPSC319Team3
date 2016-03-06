@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense;
 
+import android.text.Editable;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -14,7 +16,16 @@ import cpsc319.team3.com.biosense.models.PKeyboardTouchEvent;
  * PluriLockEventTracker is notified via method call when an keyboard event occurs
  *
  */
-public class PluriLockKeyListener implements View.OnKeyListener {
+public class PluriLockKeyListener implements android.text.method.KeyListener {
+
+    private static final String TAG = "PluriLockKeyListener";
+
+    int eventID;
+    int screenOrientation;
+    long timestamp;
+    float pressure;
+    float fingerOrientation;
+
     private PluriLockEventTracker eventTracker;
 
     public PluriLockKeyListener(PluriLockEventTracker eventTracker) {
@@ -22,14 +33,40 @@ public class PluriLockKeyListener implements View.OnKeyListener {
     }
 
     /**
-     * Override of default onKey method.
-     * Listens for key events and notifies the tracker when key event occurs
-     * @param v View PluriLockKeyListener is attached to
-     * @param keyCode key that triggered the onKey call
-     * @param event event that triggered the onKey call
-     * @return true since listener has consumed the event
+     * Return the type of text that this key listener is manipulating,
+     * as per {@link InputType}.  This is used to
+     * determine the mode of the soft keyboard that is shown for the editor.
+     * <p/>
+     * <p>If you return
+     * {@link InputType#TYPE_NULL}
+     * then <em>no</em> soft keyboard will provided.  In other words, you
+     * must be providing your own key pad for on-screen input and the key
+     * listener will be used to handle input from a hard keyboard.
+     * <p/>
+     * <p>If you
+     * return any other value, a soft input method will be created when the
+     * user puts focus in the editor, which will provide a keypad and also
+     * consume hard key events.  This means that the key listener will generally
+     * not be used, instead the soft input method will take care of managing
+     * key input as per the content type returned here.
      */
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
+    @Override
+    public int getInputType() {
+        return 0;
+    }
+
+    /**
+     * If the key listener wants to handle this key, return true,
+     * otherwise return false and the caller (i.e.&nbsp;the widget host)
+     * will handle the key.
+     *
+     * @param view
+     * @param text
+     * @param keyCode
+     * @param event
+     */
+    @Override
+    public boolean onKeyDown(View view, Editable text, int keyCode, KeyEvent event) {
         int eventID = 0; //TODO
         int screenOrientation = 0; //TODO
         Long timestamp = new GregorianCalendar().getTimeInMillis();
@@ -42,5 +79,46 @@ public class PluriLockKeyListener implements View.OnKeyListener {
         eventTracker.notifyOfEvent(pKeyboardTouchEvent);
 
         return true;
+    }
+
+    /**
+     * If the key listener wants to handle this key release, return true,
+     * otherwise return false and the caller (i.e.&nbsp;the widget host)
+     * will handle the key.
+     *
+     * @param view
+     * @param text
+     * @param keyCode
+     * @param event
+     */
+    @Override
+    public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
+        return false;
+    }
+
+    /**
+     * If the key listener wants to other kinds of key events, return true,
+     * otherwise return false and the caller (i.e.&nbsp;the widget host)
+     * will handle the key.
+     *
+     * @param view
+     * @param text
+     * @param event
+     */
+    @Override
+    public boolean onKeyOther(View view, Editable text, KeyEvent event) {
+        return false;
+    }
+
+    /**
+     * Remove the given shift states from the edited text.
+     *
+     * @param view
+     * @param content
+     * @param states
+     */
+    @Override
+    public void clearMetaKeyState(View view, Editable content, int states) {
+
     }
 }
