@@ -2,6 +2,7 @@ package cpsc319.team3.com.biosense;
 
 import android.text.Editable;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -23,8 +24,6 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
     int eventID;
     int screenOrientation;
     long timestamp;
-    float pressure;
-    float fingerOrientation;
 
     private PluriLockEventTracker eventTracker;
 
@@ -67,16 +66,10 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
      */
     @Override
     public boolean onKeyDown(View view, Editable text, int keyCode, KeyEvent event) {
-        int eventID = 0; //TODO
-        int screenOrientation = 0; //TODO
-        Long timestamp = new GregorianCalendar().getTimeInMillis();
-        long duration = 0; //TODO
-
-        PKeyboardTouchEvent pKeyboardTouchEvent =
-                new PKeyboardTouchEvent
-                        (eventID, screenOrientation, timestamp, duration, keyCode);
-
-        eventTracker.notifyOfEvent(pKeyboardTouchEvent);
+        Log.d(TAG, "onKeyDown: " + event.toString());
+        eventID = 0; //TODO
+        screenOrientation =  eventTracker.getContext().getResources().getConfiguration().orientation;
+        timestamp = event.getDownTime();
 
         return true;
     }
@@ -93,7 +86,16 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
      */
     @Override
     public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
-        return false;
+        Log.d(TAG, "onKeyUp: " + event.toString());
+        long currTimestamp = new GregorianCalendar().getTimeInMillis();
+        long duration = timestamp - currTimestamp;
+
+        PKeyboardTouchEvent pKeyboardTouchEvent =
+                new PKeyboardTouchEvent
+                        (eventID, screenOrientation, timestamp, duration, keyCode);
+
+        eventTracker.notifyOfEvent(pKeyboardTouchEvent);
+        return true;
     }
 
     /**
