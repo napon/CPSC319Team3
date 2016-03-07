@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         String id = "testUser"; // TODO: What is this value?
         PluriLockConfig config = new PluriLockConfig();
         try {
-            config.setActionsPerUpload(1);
+            config.setActionsPerUpload(200);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
             config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
         } catch(Exception e) {}

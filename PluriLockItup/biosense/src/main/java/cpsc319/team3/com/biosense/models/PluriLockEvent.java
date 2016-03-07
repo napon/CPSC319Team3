@@ -13,7 +13,7 @@ import org.json.JSONObject;
  *
  * A PluriLockEvent is one of:
  * - PElementTouchEvent
- * - PKeyboardTouchEvent
+ * - PMonoKeyboardTouchEvent
  * - PScrollEvent
  *
  * (There might be more in the future.. They are listed in the models/ package.)

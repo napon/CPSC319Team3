@@ -5,16 +5,16 @@ import org.json.JSONObject;
 
 
 /**
- * PKeyboardTouchEvent is a model class that represents an input pair of characters on a keyboard.
+ * PMonoKeyboardTouchEvent is a model class that represents a button press on a soft keyboard.
  *
  * See the UML Diagram for more implementation details.
  */
-public class PKeyboardTouchEvent extends PluriLockEvent {
-    private static final String EVENT_TYPE = "SINGLE_KEY";
+public class PMonoKeyboardTouchEvent extends PluriLockEvent {
+    private static final String EVENT_TYPE = "MONOGRAPH";
     private int keyPressed;
 
-    public PKeyboardTouchEvent(int eventID, int screenOrientation, long timestamp,
-                               long duration, int keyPressed) {
+    public PMonoKeyboardTouchEvent(int eventID, int screenOrientation, long timestamp,
+                                   long duration, int keyPressed) {
         super(eventID, screenOrientation, timestamp, duration);
         this.keyPressed = keyPressed;
     }
