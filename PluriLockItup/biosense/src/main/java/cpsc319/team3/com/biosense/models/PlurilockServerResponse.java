@@ -1,5 +1,8 @@
 package cpsc319.team3.com.biosense.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -7,7 +10,7 @@ import org.json.JSONTokener;
 /**
  * Created by Sunny on 2016-03-01.
  */
-public class PlurilockServerResponse {
+public class PlurilockServerResponse implements Parcelable{
 
     public final double confidenceLevel;
 
@@ -21,4 +24,30 @@ public class PlurilockServerResponse {
     }
 
 
+
+    protected PlurilockServerResponse(Parcel in) {
+        confidenceLevel = in.readDouble();
+    }
+
+    public static final Creator<PlurilockServerResponse> CREATOR = new Creator<PlurilockServerResponse>() {
+        @Override
+        public PlurilockServerResponse createFromParcel(Parcel in) {
+            return new PlurilockServerResponse(in);
+        }
+
+        @Override
+        public PlurilockServerResponse[] newArray(int size) {
+            return new PlurilockServerResponse[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(confidenceLevel);
+    }
 }

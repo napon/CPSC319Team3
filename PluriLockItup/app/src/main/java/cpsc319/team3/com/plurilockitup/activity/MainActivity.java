@@ -137,11 +137,9 @@ public class MainActivity extends AppCompatActivity {
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        String msg = intent.getStringExtra("msg");
-//                        PlurilockServerResponse response;
-                        Log.d("YAY!!!!", msg);
-//                        if(msg.confidenceLevel < 0.5) {
-                        if(msg.equals("FAIL")) { //TODO change check after implemented method
+                        PlurilockServerResponse response = intent.getParcelableExtra("msg");
+                        Log.d("Received broadcast: ", response.toString());
+                        if(response.confidenceLevel < 0.5) {
                             Toast.makeText(MainActivity.this,
                                     "Unauthorized user detected. You have been PluriLockedOut!",
                                     Toast.LENGTH_LONG).show();
