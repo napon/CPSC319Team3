@@ -23,7 +23,6 @@ import java.net.URI;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
-import cpsc319.team3.com.biosense.PluriLockServerResponseListener;
 import cpsc319.team3.com.biosense.PluriLockTouchListener;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.plurilockitup.R;
@@ -150,24 +149,10 @@ public class MainActivity extends AppCompatActivity {
                 new IntentFilter("server-response")
         );
 
-        PluriLockServerResponseListener callback = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(String msg) {
-//                Log.d("YAY", msg);
-//                // TODO: Check this value and logout the user if needed
-//                if(msg.equals("FAIL")) { //TODO change check after implemented method
-//                    Toast.makeText(MainActivity.this,
-//                            "Unauthorized user detected. You have been PluriLockedOut!",
-//                            Toast.LENGTH_LONG).show();
-//                    logout();
-//                }
-
-            }
-        };
         String id = "testUser"; // TODO: What is this value?
         PluriLockConfig config = new PluriLockConfig();
         try {
-            config.setActionsPerUpload(200);
+            config.setActionsPerUpload(1);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
             config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
         } catch(Exception e) {}
@@ -175,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             this.plapi = PluriLockAPI.getInstance();
             if(this.plapi == null) {
-                this.plapi = PluriLockAPI.createNewSession(context, callback, id, config);
+                this.plapi = PluriLockAPI.createNewSession(context, id, config);
             }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?

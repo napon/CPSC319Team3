@@ -141,7 +141,6 @@ public class PluriLockNetworkUtil {
         Log.d(TAG, "acceptMessage");
         // TODO: Process this message, and package it into some sort of object
         Log.d(this.getClass().getName(), "Server says: " + message);
-//        eventManager.notifyClient(message);
         Intent intent = new Intent("server-response");
         intent.putExtra("msg", message);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
