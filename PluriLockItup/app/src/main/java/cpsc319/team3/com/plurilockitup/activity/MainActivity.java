@@ -138,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         PlurilockServerResponse response = intent.getParcelableExtra("msg");
-                        Log.d("Received broadcast: ", response.toString());
+                        Log.d("BroadcastReceiver", "Received broadcast: " + response.toString());
                         if(response.confidenceLevel < 0.5) {
+                            Log.d("BroadcastReceiver",
+                                    "Confidence level failed: " + Double.toString(response.confidenceLevel));
                             Toast.makeText(MainActivity.this,
                                     "Unauthorized user detected. You have been PluriLockedOut!",
                                     Toast.LENGTH_LONG).show();
@@ -233,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout(){
+        Log.d("MainActivity", "Logging out!");
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
