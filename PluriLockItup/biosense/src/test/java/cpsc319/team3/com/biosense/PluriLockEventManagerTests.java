@@ -45,14 +45,8 @@ public class PluriLockEventManagerTests {
     @Test
     public void testPluriLockEventManagerWithLocationPermissions() throws LocationServiceUnavailableException {
         Application application = createApplicationWithPermissions();
-        PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(String msg) {
-
-            }
-        };
         PluriLockConfig config = new PluriLockConfig();
-        PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
+        PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
     }
 
     @Test (expected = LocationServiceUnavailableException.class)
@@ -61,28 +55,16 @@ public class PluriLockEventManagerTests {
         ShadowContextWrapper shadowApp = Shadows.shadowOf(application);
         shadowApp.setPackageName("com.cpsc319.team3");
         application.onCreate();
-        PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(String msg) {
-
-            }
-        };
         PluriLockConfig config = new PluriLockConfig();
-        PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
+        PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
     }
 
     @Test
     public void testAddPluriLockEventWithNetworkCall() throws LocationServiceUnavailableException,
             NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException, DeploymentException {
         Application application = createApplicationWithPermissions();
-        PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(String msg) {
-
-            }
-        };
         PluriLockConfig config = new PluriLockConfig();
-        PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
+        PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
                 new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class), p)
         );
@@ -112,14 +94,9 @@ public class PluriLockEventManagerTests {
     @Test
     public void testAddPluriLockEventNoNetworkCall() throws LocationServiceUnavailableException, NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException, DeploymentException {
         Application application = createApplicationWithPermissions();
-        PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(String msg) {
 
-            }
-        };
         PluriLockConfig config = new PluriLockConfig();
-        PluriLockEventManager p = PluriLockEventManager.getInstance(application, listener, "user-foo", config);
+        PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
                 new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class), p)
         );
@@ -135,23 +112,6 @@ public class PluriLockEventManagerTests {
 
         // Verify that the network call hasn't been invoked.
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
-    }
-
-    @Test
-    public void testNotifyClient() throws LocationServiceUnavailableException {
-        PluriLockServerResponseListener listener = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(String msg) {
-
-            }
-        };
-        PluriLockConfig config = new PluriLockConfig();
-        PluriLockServerResponseListener spy = Mockito.spy(listener);
-        Application application = createApplicationWithPermissions();
-        PluriLockEventManager p = PluriLockEventManager.getInstance(application, spy, "user-foo", config);
-
-        p.notifyClient("hello-world");
-        Mockito.verify(spy, Mockito.atLeastOnce()).notify("hello-world");
     }
 
     private Application createApplicationWithPermissions() {
