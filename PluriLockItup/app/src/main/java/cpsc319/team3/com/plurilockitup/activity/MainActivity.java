@@ -1,8 +1,11 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -20,7 +23,6 @@ import java.net.URI;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
-import cpsc319.team3.com.biosense.PluriLockServerResponseListener;
 import cpsc319.team3.com.biosense.PluriLockTouchListener;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
@@ -130,18 +132,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupPLApi() {
         Context context = getApplicationContext();
-        PluriLockServerResponseListener callback = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(PlurilockServerResponse msg) {
-                if(msg.confidenceLevel < 0.5) {
-                    Toast.makeText(MainActivity.this,
-                            "Unauthorized user detected. You have been PluriLockedOut!",
-                            Toast.LENGTH_LONG).show();
-                    logout();
-                }
 
-            }
-        };
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String msg = intent.getStringExtra("msg");
+//                        PlurilockServerResponse response;
+                        Log.d("YAY!!!!", msg);
+//                        if(msg.confidenceLevel < 0.5) {
+                        if(msg.equals("FAIL")) { //TODO change check after implemented method
+                            Toast.makeText(MainActivity.this,
+                                    "Unauthorized user detected. You have been PluriLockedOut!",
+                                    Toast.LENGTH_LONG).show();
+                            logout();
+                        }
+                    }
+                },
+                new IntentFilter("server-response")
+        );
+
         String id = "testUser"; // TODO: What is this value?
         PluriLockConfig config = new PluriLockConfig();
         try {
@@ -153,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             this.plapi = PluriLockAPI.getInstance();
             if(this.plapi == null) {
-                this.plapi = PluriLockAPI.createNewSession(context, callback, id, config);
+                this.plapi = PluriLockAPI.createNewSession(context, id, config);
             }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?

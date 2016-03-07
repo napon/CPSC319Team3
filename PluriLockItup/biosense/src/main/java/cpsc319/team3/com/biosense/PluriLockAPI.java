@@ -30,35 +30,32 @@ public class PluriLockAPI {
     /**
      *
      * @param context - appcliation context
-     * @param callback - the class the API is to call when a server response arrives
      * @param userID - the Plurlock UserID of the app
      * @param config - the settings to use for this API session
      * @return - the new PluriLockAPI session.
      * @throws LocationServiceUnavailableException
      */
-    public static PluriLockAPI createNewSession(Context context, PluriLockServerResponseListener callback,
-                                   String userID, PluriLockConfig config)
+    public static PluriLockAPI createNewSession(Context context, String userID, PluriLockConfig config)
                                     throws LocationServiceUnavailableException{
         Log.d(TAG, "createNewSession");
         if(mySession != null){
             destroyAPISession();
         }
-        mySession = new PluriLockAPI(context,callback,userID,config);
+        mySession = new PluriLockAPI(context,userID,config);
         return mySession;
     }
 
     /**
      * Constructor
      * @param context - appcliation context
-     * @param callback - the class the API is to call when a server response arrives
      * @param userID - the Plurlock UserID of the app
      * @param config - the settings to use for this API session
      * @throws LocationServiceUnavailableException
      */
-    private PluriLockAPI(Context context, PluriLockServerResponseListener callback, String userID,
-                        PluriLockConfig config) throws LocationServiceUnavailableException {
+    private PluriLockAPI(Context context, String userID, PluriLockConfig config)
+            throws LocationServiceUnavailableException {
         Log.d(TAG, "PluriLockAPI constructor");
-        this.eventManager = PluriLockEventManager.getInstance(context, callback, userID, config);
+        this.eventManager = PluriLockEventManager.getInstance(context, userID, config);
         this.eventTracker = new PluriLockEventTracker(context, eventManager);
 
     }

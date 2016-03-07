@@ -35,7 +35,6 @@ public class PluriLockEventManager {
 
     private Context context;
     private PluriLockNetworkUtil networkUtil;
-    private PluriLockServerResponseListener clientListener;
     private LocationUtil locationUtil;
     private List<PluriLockEvent> pluriLockEvents;
     private String userID;
@@ -43,12 +42,10 @@ public class PluriLockEventManager {
 
     private static PluriLockEventManager eventManager;
 
-    protected PluriLockEventManager(Context c, PluriLockServerResponseListener l, String id,
-                                    PluriLockConfig config)
+    protected PluriLockEventManager(Context c, String id, PluriLockConfig config)
             throws LocationServiceUnavailableException {
         Log.d(TAG, "PluriLockEventManager constructor");
         this.context = c;
-        this.clientListener = l;
         this.userID = id;
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
@@ -59,16 +56,15 @@ public class PluriLockEventManager {
     /**
      * Singleton Design Pattern.
      * @param c Context of the application
-     * @param l Client Listener for server response
      * @param id User ID
      * @return
      */
     public static synchronized PluriLockEventManager getInstance(
-            Context c, PluriLockServerResponseListener l, String id, PluriLockConfig config)
+            Context c, String id, PluriLockConfig config)
             throws LocationServiceUnavailableException {
         Log.d(TAG, "getInstance");
         if (eventManager == null) {
-            eventManager = new PluriLockEventManager(c, l, id, config);
+            eventManager = new PluriLockEventManager(c, id, config);
         }
 
         return eventManager;
@@ -112,20 +108,6 @@ public class PluriLockEventManager {
             Log.w(this.getClass().getName(), e.getClass().getName(), e);
         } finally {
             pluriLockEvents.clear();
-        }
-    }
-
-    /**
-     * Passes response from the Server to the client application via the listener.
-     * @param message from the Server.
-     */
-    public void notifyClient(String message) {
-        Log.d(TAG, "notifyClient");
-        try {
-            clientListener.notify(PlurilockServerResponse.fromJsonString(message));
-        } catch (JSONException e) {
-            // TODO: Handle this intelligently
-            e.printStackTrace();
         }
     }
 

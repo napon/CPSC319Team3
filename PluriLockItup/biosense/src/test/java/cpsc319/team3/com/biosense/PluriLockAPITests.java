@@ -20,7 +20,6 @@ import org.robolectric.shadows.ShadowContextImpl;
 import org.robolectric.shadows.ShadowContextWrapper;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
-import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -28,7 +27,6 @@ import static org.junit.Assert.fail;
 @RunWith(RobolectricTestRunner.class)
 public class PluriLockAPITests {
 
-    private PluriLockServerResponseListener baseListener;
     private PluriLockConfig baseConfig;
     Context testContext;
 
@@ -51,12 +49,6 @@ public class PluriLockAPITests {
     public void setup() {
         testContext = createApplicationWithPermission().getApplicationContext();
         baseConfig = new PluriLockConfig();
-        baseListener = new PluriLockServerResponseListener() {
-            @Override
-            public void notify(PlurilockServerResponse msg) {
-                //do nothing.
-            }
-        };
     }
 
     @After
@@ -74,7 +66,7 @@ public class PluriLockAPITests {
     public void standardBuildTestShouldNotThrowErrors(){
 
         try{
-            PluriLockAPI.createNewSession(this.testContext,this.baseListener,"TEST",this.baseConfig);
+            PluriLockAPI.createNewSession(this.testContext, "TEST", this.baseConfig);
         }
         catch(Exception e){
             fail();
@@ -84,7 +76,7 @@ public class PluriLockAPITests {
     @Test
     public void afterBuildShouldNotBeNull() throws LocationServiceUnavailableException {
         assertTrue(PluriLockAPI.getInstance() == null);
-        PluriLockAPI.createNewSession(this.testContext, this.baseListener, "TEST", this.baseConfig);
+        PluriLockAPI.createNewSession(this.testContext, "TEST", this.baseConfig);
         assertTrue(PluriLockAPI.getInstance() != null);
     }
 
@@ -108,10 +100,8 @@ public class PluriLockAPITests {
     }
     @Test
     public void buildingAgainShouldMakeDifferent() throws LocationServiceUnavailableException{
-        PluriLockAPI pluri1 = PluriLockAPI.createNewSession(this.testContext, this.baseListener,
-                "TEST", this.baseConfig);
-        PluriLockAPI pluri2 = PluriLockAPI.createNewSession(this.testContext, this.baseListener,
-                "TEST2", this.baseConfig);
+        PluriLockAPI pluri1 = PluriLockAPI.createNewSession(this.testContext, "TEST", this.baseConfig);
+        PluriLockAPI pluri2 = PluriLockAPI.createNewSession(this.testContext, "TEST2", this.baseConfig);
         assertTrue(pluri1 != pluri2);
     }
 //===============END OF BASIC BUILD TESTS=====================

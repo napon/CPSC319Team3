@@ -19,16 +19,18 @@ public class PElementTouchEvent extends PluriLockEvent {
     private float fingerOrientation;
     private PointF elementRelativeCoord;
     private PointF screenCoord;
+    private float touchArea;
 
     public PElementTouchEvent(int eventID, int screenOrientation, long timestamp, float pressure,
                               float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
-                              long duration) {
+                              long duration, float touchArea) {
         super(eventID, screenOrientation, timestamp, duration);
         Log.d(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
         this.elementRelativeCoord = elementRelativeCoord;
         this.screenCoord = screenCoord;
+        this.touchArea = touchArea;
     }
 
     public float getPressure() {
@@ -55,6 +57,10 @@ public class PElementTouchEvent extends PluriLockEvent {
         return screenCoord.y;
     }
 
+    public float getTouchArea() {
+        return touchArea;
+    }
+
     public JSONObject getJSON() {
         Log.d(TAG, "getJSON");
         JSONObject jsonObject = super.getJSON();
@@ -66,6 +72,7 @@ public class PElementTouchEvent extends PluriLockEvent {
             jsonObject.put("elementRelY", getElementRelativeCoordY());
             jsonObject.put("screenX", getScreenCoordX());
             jsonObject.put("screenY", getScreenCoordY());
+            jsonObject.put("touchArea", getTouchArea());
         } catch (JSONException e) {
             e.printStackTrace();
         }
