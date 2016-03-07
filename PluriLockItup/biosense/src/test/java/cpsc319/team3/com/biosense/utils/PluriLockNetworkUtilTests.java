@@ -51,30 +51,30 @@ public class PluriLockNetworkUtilTests {
 //        assertEquals(responses.get(2), "hey");
 //    }
 
-    @Test
-    public void sampleTest() throws Exception {
-        final List<String> responses = new ArrayList();
-
-        PluriLockEventManager eventManager = Mockito.mock(PluriLockEventManager.class);
-        Mockito.doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                String arg = invocation.getArgumentAt(0, String.class);
-                System.out.println(arg);
-                responses.add(arg);
-                return null;
-            }
-        }).when(eventManager).notifyClient(Mockito.anyString());
-
-        PluriLockNetworkUtil clientEndPoint = new PluriLockNetworkUtil(
-                new URI("ws://129.121.9.44:8001/"),
-                Mockito.mock(Context.class),
-                eventManager
-        );
-
-
-        clientEndPoint.sendMessage("foo");
-        Thread.sleep(3000);
-        assertEquals("{\"confidenceLevel\":0.1234}", responses.get(0));
-    }
+//    @Test
+//    public void sampleTest() throws Exception {
+//        final List<String> responses = new ArrayList();
+//
+//        PluriLockEventManager eventManager = Mockito.mock(PluriLockEventManager.class);
+//        Mockito.doAnswer(new Answer() {
+//            @Override
+//            public Object answer(InvocationOnMock invocation) throws Throwable {
+//                String arg = invocation.getArgumentAt(0, String.class);
+//                System.out.println(arg);
+//                responses.add(arg);
+//                return null;
+//            }
+//        }).when(eventManager).notifyClient(Mockito.anyString());
+//
+//        PluriLockNetworkUtil clientEndPoint = new PluriLockNetworkUtil(
+//                new URI("ws://129.121.9.44:8001/"),
+//                Mockito.mock(Context.class),
+//                eventManager
+//        );
+//
+//
+//        clientEndPoint.sendMessage("foo");
+//        Thread.sleep(3000);
+//        assertEquals("{\"confidenceLevel\":0.1234}", responses.get(0));
+//    }
 }
