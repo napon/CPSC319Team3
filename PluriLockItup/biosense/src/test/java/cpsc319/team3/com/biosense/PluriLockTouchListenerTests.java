@@ -81,7 +81,7 @@ public class PluriLockTouchListenerTests {
 
         PElementTouchEvent pElementTouchEvent =
                 new PElementTouchEvent(0, Configuration.ORIENTATION_LANDSCAPE, 1,
-                        1, 1, new PointF(1,1), new PointF(1,1), 0);
+                        1, 1, new PointF(1,1), new PointF(1,1), 0, 1);
 //        verify(eventTrackerMock, times(1)).notifyOfEvent(pElementTouchEvent);
     }
 

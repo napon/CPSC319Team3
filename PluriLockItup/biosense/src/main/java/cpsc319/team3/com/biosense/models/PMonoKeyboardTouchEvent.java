@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 
 /**
- * PMonoKeyboardTouchEvent is a model class that represents button press a soft keyboard.
+ * PMonoKeyboardTouchEvent is a model class that represents a button press on a soft keyboard.
  *
  * See the UML Diagram for more implementation details.
  */

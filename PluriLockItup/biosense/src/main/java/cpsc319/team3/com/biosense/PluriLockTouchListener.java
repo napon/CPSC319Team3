@@ -31,6 +31,7 @@ public class PluriLockTouchListener implements
     long timestamp;
     float pressure;
     float fingerOrientation;
+    float touchArea;
 
     PluriLockEventTracker eventTracker;
 
@@ -96,6 +97,7 @@ public class PluriLockTouchListener implements
         timestamp = e.getDownTime();
         pressure = e.getPressure();
         fingerOrientation = e.getOrientation();
+        touchArea = e.getSize();
 
         return true;
     }
@@ -132,7 +134,7 @@ public class PluriLockTouchListener implements
 
         PElementTouchEvent pElementTouchEvent =
                 new PElementTouchEvent(eventID, screenOrientation, timestamp,
-                        pressure, fingerOrientation, elementRelativeCoord, screenCord, duration);
+                        pressure, fingerOrientation, elementRelativeCoord, screenCord, duration, touchArea);
         eventTracker.notifyOfEvent(pElementTouchEvent);
         return true;
     }

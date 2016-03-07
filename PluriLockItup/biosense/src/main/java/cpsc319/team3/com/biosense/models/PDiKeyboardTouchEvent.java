@@ -4,7 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Karen on 16-03-06.
+ * PDiKeyboardTouchEvent is a model class that represents button press
+ *
+ *
  */
 public class PDiKeyboardTouchEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "DIGRAPH";

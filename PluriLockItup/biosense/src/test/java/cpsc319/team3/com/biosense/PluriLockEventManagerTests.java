@@ -95,7 +95,7 @@ public class PluriLockEventManagerTests {
         // Add numActions - 1 number of PluriLockEvents.
         for (int i = 0; i < numActions - 1; i++) {
             p.addPluriLockEvent(new PElementTouchEvent(1, 1, System.currentTimeMillis(),
-                    1, 1, new PointF(0, 0), new PointF(0,0), 1));
+                    1, 1, new PointF(0, 0), new PointF(0,0), 1, 1));
         }
 
         // Verify that the network call hasn't been invoked.
