@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import javax.websocket.DeploymentException;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.exception.NetworkServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
@@ -43,14 +44,16 @@ public class PluriLockEventManagerTests {
     }
 
     @Test
-    public void testPluriLockEventManagerWithLocationPermissions() throws LocationServiceUnavailableException {
+    public void testPluriLockEventManagerWithLocationPermissions()
+            throws LocationServiceUnavailableException, NetworkServiceUnavailableException {
         Application application = createApplicationWithPermissions();
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
     }
 
     @Test (expected = LocationServiceUnavailableException.class)
-    public void testPluriLockEventManagerNoLocationPermission() throws LocationServiceUnavailableException {
+    public void testPluriLockEventManagerNoLocationPermission()
+            throws LocationServiceUnavailableException, NetworkServiceUnavailableException {
         Application application = (Application) ShadowApplication.getInstance().getApplicationContext();
         ShadowContextWrapper shadowApp = Shadows.shadowOf(application);
         shadowApp.setPackageName("com.cpsc319.team3");
@@ -61,7 +64,8 @@ public class PluriLockEventManagerTests {
 
     @Test
     public void testAddPluriLockEventWithNetworkCall() throws LocationServiceUnavailableException,
-            NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException, DeploymentException {
+            NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException,
+            DeploymentException, NetworkServiceUnavailableException {
         Application application = createApplicationWithPermissions();
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
@@ -92,7 +96,9 @@ public class PluriLockEventManagerTests {
     }
 
     @Test
-    public void testAddPluriLockEventNoNetworkCall() throws LocationServiceUnavailableException, NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException, DeploymentException {
+    public void testAddPluriLockEventNoNetworkCall() throws LocationServiceUnavailableException,
+            NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException,
+            DeploymentException, NetworkServiceUnavailableException {
         Application application = createApplicationWithPermissions();
 
         PluriLockConfig config = new PluriLockConfig();

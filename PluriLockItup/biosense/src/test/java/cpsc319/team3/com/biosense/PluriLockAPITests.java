@@ -20,6 +20,7 @@ import org.robolectric.shadows.ShadowContextImpl;
 import org.robolectric.shadows.ShadowContextWrapper;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.exception.NetworkServiceUnavailableException;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -74,14 +75,15 @@ public class PluriLockAPITests {
     }
 
     @Test
-    public void afterBuildShouldNotBeNull() throws LocationServiceUnavailableException {
+    public void afterBuildShouldNotBeNull() throws LocationServiceUnavailableException, NetworkServiceUnavailableException {
         assertTrue(PluriLockAPI.getInstance() == null);
         PluriLockAPI.createNewSession(this.testContext, "TEST", this.baseConfig);
         assertTrue(PluriLockAPI.getInstance() != null);
     }
 
     @Test
-    public void destroyingShouldNotThrowException() throws LocationServiceUnavailableException {
+    public void destroyingShouldNotThrowException() throws LocationServiceUnavailableException,
+            NetworkServiceUnavailableException {
         afterBuildShouldNotBeNull();
         try{
             PluriLockAPI.destroyAPISession();
@@ -92,14 +94,16 @@ public class PluriLockAPITests {
     }
 
     @Test
-    public void afterDestroyShouldBeNull() throws LocationServiceUnavailableException{
+    public void afterDestroyShouldBeNull() throws LocationServiceUnavailableException,
+            NetworkServiceUnavailableException {
         afterBuildShouldNotBeNull();
         assertTrue(PluriLockAPI.getInstance() != null);
         PluriLockAPI.destroyAPISession();
         assertTrue(PluriLockAPI.getInstance() == null);
     }
     @Test
-    public void buildingAgainShouldMakeDifferent() throws LocationServiceUnavailableException{
+    public void buildingAgainShouldMakeDifferent() throws LocationServiceUnavailableException,
+            NetworkServiceUnavailableException {
         PluriLockAPI pluri1 = PluriLockAPI.createNewSession(this.testContext, "TEST", this.baseConfig);
         PluriLockAPI pluri2 = PluriLockAPI.createNewSession(this.testContext, "TEST2", this.baseConfig);
         assertTrue(pluri1 != pluri2);
