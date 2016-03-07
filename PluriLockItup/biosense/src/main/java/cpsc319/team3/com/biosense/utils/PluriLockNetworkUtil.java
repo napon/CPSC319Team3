@@ -44,19 +44,17 @@ public class PluriLockNetworkUtil {
 
     private URI endpointURI;
     private Context context;
-    private PluriLockEventManager eventManager;
 
     private ClientManager client;
     private ClientEndpointConfig config;
 
-    public PluriLockNetworkUtil(URI endpointURI, Context context, PluriLockEventManager eventManager) {
+    public PluriLockNetworkUtil(URI endpointURI, Context context) {
         Log.d(TAG, "PluriLockNetworkUtil constructor");
 
         this.endpointURI = endpointURI;
         this.context = context;
         this.config = ClientEndpointConfig.Builder.create().build();
         this.client = ClientManager.createClient();
-        this.eventManager = eventManager;
         initiateConnection();
     }
 
@@ -119,10 +117,6 @@ public class PluriLockNetworkUtil {
     }
 
     void sendMessage(final String message) throws IOException, DeploymentException {
-        Log.d(TAG, "sendMessage");
-//        if (userSession == null) {
-//            initiateConnection();
-//        }
         Log.d(this.getClass().getName(), "Client says: " + message);
         final AsyncTask<Void, Void, Void> sendMessageTask = new AsyncTask<Void, Void, Void>() {
             @Override
