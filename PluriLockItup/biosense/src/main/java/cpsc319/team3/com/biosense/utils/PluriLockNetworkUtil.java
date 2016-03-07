@@ -21,6 +21,7 @@ import javax.websocket.MessageHandler;
 import javax.websocket.Session;
 
 import cpsc319.team3.com.biosense.PluriLockEventManager;
+import cpsc319.team3.com.biosense.exception.NetworkServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
 
 
@@ -49,7 +50,9 @@ public class PluriLockNetworkUtil {
     private ClientManager client;
     private ClientEndpointConfig config;
 
-    public PluriLockNetworkUtil(URI endpointURI, Context context, PluriLockEventManager eventManager) {
+    public PluriLockNetworkUtil(URI endpointURI, Context context, PluriLockEventManager eventManager)
+            throws NetworkServiceUnavailableException {
+        preNetworkCheck();
         Log.d(TAG, "PluriLockNetworkUtil constructor");
 
         this.endpointURI = endpointURI;
@@ -97,10 +100,7 @@ public class PluriLockNetworkUtil {
         Log.d(TAG, "connecting..");
     }
 
-    public boolean preNetworkCheck(){
-        // TODO: Make sure this method is called somewhere
-        // TODO: Propagate an exceptions upwards for the client to handle if we're offline?
-
+    public boolean preNetworkCheck() throws NetworkServiceUnavailableException {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (!activeNetwork.isAvailable()) {
@@ -108,11 +108,9 @@ public class PluriLockNetworkUtil {
             return false;
         } else {
             if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
-                System.out.println("You're not connected to the Internet.");
-                return false;
+                throw new NetworkServiceUnavailableException("You're not connected to the Internet!");
             } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-                System.out.println("You're not connected to WIFI.");
-                return false;
+               throw new NetworkServiceUnavailableException("You're not connected to WIFI.");
             }
         }
         return true;

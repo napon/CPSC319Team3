@@ -25,6 +25,7 @@ import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.PluriLockTouchListener;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.exception.NetworkServiceUnavailableException;
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 import cpsc319.team3.com.plurilockitup.model.Utils;
@@ -151,11 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
         String id = "testUser"; // TODO: What is this value?
         PluriLockConfig config = new PluriLockConfig();
-        try {
-            config.setActionsPerUpload(1);
-//            config.setUrl(URI.create("ws://echo.websocket.org/"));
-            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-        } catch(Exception e) {}
+        config.setActionsPerUpload(1);
+        config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
 
         try {
             this.plapi = PluriLockAPI.getInstance();
@@ -164,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?
+        } catch (NetworkServiceUnavailableException e) {
+            // TODO: Display an error message to user telling them to enable network service?
         }
     }
 
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mainmenu, menu);
         return true;

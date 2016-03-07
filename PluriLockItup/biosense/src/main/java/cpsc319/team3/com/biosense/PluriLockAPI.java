@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.exception.NetworkServiceUnavailableException;
 
 /**
  * A class through which the client interacts with our API.
@@ -36,7 +37,7 @@ public class PluriLockAPI {
      * @throws LocationServiceUnavailableException
      */
     public static PluriLockAPI createNewSession(Context context, String userID, PluriLockConfig config)
-                                    throws LocationServiceUnavailableException{
+            throws LocationServiceUnavailableException, NetworkServiceUnavailableException {
         Log.d(TAG, "createNewSession");
         if(mySession != null){
             destroyAPISession();
@@ -53,7 +54,7 @@ public class PluriLockAPI {
      * @throws LocationServiceUnavailableException
      */
     private PluriLockAPI(Context context, String userID, PluriLockConfig config)
-            throws LocationServiceUnavailableException {
+            throws LocationServiceUnavailableException, NetworkServiceUnavailableException {
         Log.d(TAG, "PluriLockAPI constructor");
         this.eventManager = PluriLockEventManager.getInstance(context, userID, config);
         this.eventTracker = new PluriLockEventTracker(context, eventManager);
