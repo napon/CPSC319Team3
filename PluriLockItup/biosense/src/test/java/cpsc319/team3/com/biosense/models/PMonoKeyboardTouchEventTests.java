@@ -10,11 +10,11 @@ import cpsc319.team3.com.biosense.PhoneDataManager;
 
 import static org.junit.Assert.assertTrue;
 
-public class PKeyboardTouchEventTests {
+public class PMonoKeyboardTouchEventTests {
     @Test
     public void sampleTest() throws Exception {
-        PElementTouchEvent p = new PElementTouchEvent
-                (1, 1, 1, 1, 1, new PointF(1, 1), new PointF(1, 1), 1);
-        assertTrue(p.getClass() == PElementTouchEvent.class);
+        PMonoKeyboardTouchEvent p = new PMonoKeyboardTouchEvent
+                (1, 1, System.currentTimeMillis(), 1, 1);
+        assertTrue(p.getClass() == PMonoKeyboardTouchEvent.class);
     }
 }

@@ -125,7 +125,7 @@ public class PluriLockTouchListener implements
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         Log.d(TAG, "onSingleTapUp: " + e.toString());
-        long currTimestamp = new GregorianCalendar().getTimeInMillis();
+        long currTimestamp = System.currentTimeMillis();
         long duration = timestamp - currTimestamp;
         PointF elementRelativeCoord = new PointF(e.getX(), e.getY());
         PointF screenCord = new PointF(e.getX(), e.getY());

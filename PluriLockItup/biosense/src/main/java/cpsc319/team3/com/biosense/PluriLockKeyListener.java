@@ -8,7 +8,7 @@ import android.view.View;
 
 import java.util.GregorianCalendar;
 
-import cpsc319.team3.com.biosense.models.PKeyboardTouchEvent;
+import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
 
 /**
  * Created by Karen on 16-02-23.
@@ -87,14 +87,14 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
     @Override
     public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
         Log.d(TAG, "onKeyUp: " + event.toString());
-        long currTimestamp = new GregorianCalendar().getTimeInMillis();
+        long currTimestamp = System.currentTimeMillis();
         long duration = timestamp - currTimestamp;
 
-        PKeyboardTouchEvent pKeyboardTouchEvent =
-                new PKeyboardTouchEvent
+        PMonoKeyboardTouchEvent pMonoKeyboardTouchEvent =
+                new PMonoKeyboardTouchEvent
                         (eventID, screenOrientation, timestamp, duration, keyCode);
 
-        eventTracker.notifyOfEvent(pKeyboardTouchEvent);
+        eventTracker.notifyOfEvent(pMonoKeyboardTouchEvent);
         return true;
     }
 
