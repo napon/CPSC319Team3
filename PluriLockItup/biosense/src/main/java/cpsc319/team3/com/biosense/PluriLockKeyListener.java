@@ -8,6 +8,7 @@ import android.view.View;
 
 import java.util.GregorianCalendar;
 
+import cpsc319.team3.com.biosense.models.PDiKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
 
 /**
@@ -26,6 +27,8 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
     long timestamp;
 
     private PluriLockEventTracker eventTracker;
+
+    private PMonoKeyboardTouchEvent lastKey = null;
 
     public PluriLockKeyListener(PluriLockEventTracker eventTracker) {
         this.eventTracker = eventTracker;
@@ -70,7 +73,6 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
         eventID = 0; //TODO
         screenOrientation =  eventTracker.getContext().getResources().getConfiguration().orientation;
         timestamp = event.getDownTime();
-
         return true;
     }
 
@@ -95,6 +97,17 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
                         (eventID, screenOrientation, timestamp, duration, keyCode);
 
         eventTracker.notifyOfEvent(pMonoKeyboardTouchEvent);
+
+        if (lastKey == null) {
+            lastKey = pMonoKeyboardTouchEvent;
+        } else {
+            long diDuration = currTimestamp - lastKey.getTimestamp();
+            int fromKey = lastKey.getKeyPressed();
+            PDiKeyboardTouchEvent pDiKeyboardTouchEvent =
+                    new PDiKeyboardTouchEvent
+                            (eventID, screenOrientation, timestamp, diDuration, fromKey, keyCode);
+            eventTracker.notifyOfEvent(pDiKeyboardTouchEvent);
+        }
         return true;
     }
 

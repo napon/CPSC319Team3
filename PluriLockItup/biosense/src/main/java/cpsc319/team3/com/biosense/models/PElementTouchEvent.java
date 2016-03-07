@@ -20,8 +20,6 @@ public class PElementTouchEvent extends PluriLockEvent {
     private PointF elementRelativeCoord;
     private PointF screenCoord;
 
-    private PMonoKeyboardTouchEvent lastKey = null;
-
     public PElementTouchEvent(int eventID, int screenOrientation, long timestamp, float pressure,
                               float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
                               long duration) {
