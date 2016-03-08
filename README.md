@@ -5,7 +5,7 @@ Noah Sommerfeld | Kelvin Chan | Napon Taratan | Sunny Lee | Karen Guo | Elaine F
 
 ### PluriLock Touch Handler
 ```
-PluriLockTouchListener plTouch = plapi.createTouchListener();
+PluriLockTouchListener plTouch = PluriLockAPI.getInstance().createTouchListener();
 GestureDetector gestD = new GestureDetector(plTouch);
 view.setOnTouchListener(new View.OnTouchListener() {
     @Override
