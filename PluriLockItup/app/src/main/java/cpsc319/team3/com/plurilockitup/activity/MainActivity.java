@@ -158,11 +158,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event){
-//        this.gest.onTouchEvent(event);
-//        return super.onTouchEvent(event);
-//    }
 
     private void setupPLApi() {
         Context context = getApplicationContext();
