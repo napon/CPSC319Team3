@@ -66,7 +66,12 @@ public class PluriLockEventManagerTests {
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class))
+                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class)){
+                    @Override
+                    public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
+                        //Do nothing
+                    }
+                }
         );
         Field injected = PluriLockEventManager.class.getDeclaredField("networkUtil");
         injected.setAccessible(true);
@@ -85,7 +90,7 @@ public class PluriLockEventManagerTests {
 
         // Add one more PluriLockEvents.
         p.addPluriLockEvent(new PScrollEvent(1, 1, System.currentTimeMillis(),
-                PScrollEvent.scrollDirection.UP, new PointF(1,1), new PointF(1,1), 1));
+                PScrollEvent.scrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1));
 
         // Verify the network call has been invoked 1 time.
         Mockito.verify(network, Mockito.times(1)).sendEvent(Mockito.any(PluriLockPackage.class));
