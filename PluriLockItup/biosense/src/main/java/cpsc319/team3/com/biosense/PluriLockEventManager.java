@@ -111,7 +111,9 @@ public class PluriLockEventManager {
     /**
      * Delete the PluriLockEventManager Instance. Used for debugging purposes.
      */
-    public static synchronized void deleteInstance() {
+    public static synchronized void deleteInstance() throws IOException {
+
+        eventManager.networkUtil.closeConnection();
         if (eventManager != null) { eventManager = null; }
     }
 }

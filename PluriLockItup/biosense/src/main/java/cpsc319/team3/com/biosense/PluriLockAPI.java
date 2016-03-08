@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import java.io.IOException;
+
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 
 /**
@@ -36,7 +38,7 @@ public class PluriLockAPI {
      * @throws LocationServiceUnavailableException
      */
     public static PluriLockAPI createNewSession(Context context, String userID, PluriLockConfig config)
-                                    throws LocationServiceUnavailableException{
+            throws LocationServiceUnavailableException, IOException {
         Log.d(TAG, "createNewSession");
         if(mySession != null){
             destroyAPISession();
@@ -72,8 +74,9 @@ public class PluriLockAPI {
     /**
      * Destroys the existing session (in case of logout, etc)
      */
-    public static void destroyAPISession(){
+    public static void destroyAPISession() throws IOException {
         Log.d(TAG, "destroyAPISession");
+        mySession.eventManager.deleteInstance();
         mySession = null; //add any destruction methods here as well.
     }
 }

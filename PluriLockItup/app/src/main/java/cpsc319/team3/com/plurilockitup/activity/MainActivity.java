@@ -19,6 +19,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.net.URI;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
@@ -164,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?
+        } catch (IOException e) {
+            //TODO: Display an error. This probably because old session had issue closing.
         }
     }
 
@@ -228,7 +231,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void clearSession(){
         customer = null;
-        PluriLockAPI.destroyAPISession();
+        try {
+            PluriLockAPI.destroyAPISession();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void logout(){
