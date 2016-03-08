@@ -85,7 +85,7 @@ public class PluriLockPackageTests {
             JSONObject eventObject = jsonObject.getJSONArray("events").getJSONObject(0);
 
             // Test each field from KeyboardTouchEvent is properly defined.
-            assertEquals("SINGLE_KEY", eventObject.getString("eventType"));
+            assertEquals("MONOGRAPH", eventObject.getString("eventType"));
             assertEquals(30, eventObject.getLong("duration"));
             assertEquals((int) 'a', eventObject.getInt("key"));
             assertEquals(0, eventObject.getInt("orientation"));
