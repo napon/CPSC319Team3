@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     GestureDetector gest;
     boolean authorized = true;
     Double MIN_CONF_LEVEL = 0.25;
+    int ACTIONS_PER_UPLOAD = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
                             transferIntent.putExtra("Customer", customer);
                             startActivityForResult(transferIntent, Utils.BANK_TRANSFER);
                         }
-                        return gestD.onTouchEvent(event);
+                        //return false as no other action to listen to
+                        return !gestD.onTouchEvent(event);
                     }
                 });
             }
@@ -124,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                         if (event.getActionMasked() == MotionEvent.ACTION_UP && authorized) {
                             startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
                         }
-                        return gestD.onTouchEvent(event);
+                        //return false as no other action to listen to
+                        return !gestD.onTouchEvent(event);
                     }
                 });
             }
@@ -140,6 +144,19 @@ public class MainActivity extends AppCompatActivity {
             creditAcctTable.addView(row);
         }
 
+        //scrollview handler
+        ScrollView mainScroll = (ScrollView) findViewById(R.id.mainScrollView);
+        if(plapi != null) {
+            final PluriLockTouchListener plTouch = plapi.createTouchListener();
+            mainScroll.setOnTouchListener(new View.OnTouchListener() {
+                GestureDetector gestD = new GestureDetector(plTouch);
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    //return false as no other action to listen to
+                    return !gestD.onTouchEvent(event);
+                }
+            });
+        }
     }
     @Override
     public boolean onTouchEvent(MotionEvent event){
@@ -182,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         String id = "testUser"; // TODO: What is this value?
         PluriLockConfig config = new PluriLockConfig();
         try {
-            config.setActionsPerUpload(1);
+            config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
             config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
         } catch(Exception e) {}
