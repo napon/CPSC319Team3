@@ -12,7 +12,7 @@ import org.json.JSONTokener;
  */
 public class PlurilockServerResponse implements Parcelable{
 
-    public final double confidenceLevel;
+    private final double confidenceLevel;
 
     public static PlurilockServerResponse fromJsonString(String response) throws JSONException {
         JSONObject json = new JSONObject(new JSONTokener(response));
@@ -23,6 +23,9 @@ public class PlurilockServerResponse implements Parcelable{
         this.confidenceLevel = confidenceLevel;
     }
 
+    public double getConfidenceLevel() {
+        return confidenceLevel;
+    }
 
 
     protected PlurilockServerResponse(Parcel in) {

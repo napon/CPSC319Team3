@@ -139,9 +139,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onReceive(Context context, Intent intent) {
                         PlurilockServerResponse response = intent.getParcelableExtra("msg");
                         Log.d("BroadcastReceiver", "Received broadcast: " + response.toString());
-                        if(response.confidenceLevel < 0.5) {
+                        if(response.getConfidenceLevel() < 0.5) {
                             Log.d("BroadcastReceiver",
-                                    "Confidence level failed: " + Double.toString(response.confidenceLevel));
+                                    "Confidence level failed: " + Double.toString(response.getConfidenceLevel()));
                             Toast.makeText(MainActivity.this,
                                     "Unauthorized user detected. You have been PluriLockedOut!",
                                     Toast.LENGTH_LONG).show();
