@@ -19,6 +19,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URI;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     TableLayout creditAcctTable;
 
     GestureDetector gest;
+    boolean authorized = true;
+    Double MIN_CONF_LEVEL = 0.25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Set up PluriLock
         setupPLApi();
-
-
         // add day account table rows
         for(int i = 0; i < dayAcctList.length; i++){
             final int j = i; //click handler needs static int
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     GestureDetector gestD = new GestureDetector(plTouch);
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        if(event.getActionMasked() == MotionEvent.ACTION_UP) {
+                        if(event.getActionMasked() == MotionEvent.ACTION_UP && authorized) {
                             Intent transferIntent = new Intent(MainActivity.this, TransferActivity.class);
                             transferIntent.putExtra("acctName", dayAcctList[j]);
                             transferIntent.putExtra("Customer", customer);
@@ -112,12 +115,27 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) row.findViewById(R.id.balance)).setText(customer.getBalanceString(creditAcctList[i]));
 
             //set click handler
-            row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
-                }
-            });
+            if (plapi != null) {
+                final PluriLockTouchListener plTouch = plapi.createTouchListener();
+                row.setOnTouchListener(new View.OnTouchListener() {
+                    GestureDetector gestD = new GestureDetector(plTouch);
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getActionMasked() == MotionEvent.ACTION_UP && authorized) {
+                            startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
+                        }
+                        return gestD.onTouchEvent(event);
+                    }
+                });
+            }
+            else {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
+                    }
+                });
+            }
 
             creditAcctTable.addView(row);
         }
@@ -138,12 +156,24 @@ public class MainActivity extends AppCompatActivity {
                     public void onReceive(Context context, Intent intent) {
                         String msg = intent.getStringExtra("msg");
                         Log.d("YAY!!!!", msg);
-                        if(msg.equals("FAIL")) { //TODO change check after implemented method
-                            Toast.makeText(MainActivity.this,
-                                    "Unauthorized user detected. You have been PluriLockedOut!",
-                                    Toast.LENGTH_LONG).show();
-                            logout();
+
+                        try {
+                            JSONObject confidenceObj = new JSONObject(msg);
+                            Double confLevel = confidenceObj.getDouble("confidenceLevel");
+                            if(confLevel < MIN_CONF_LEVEL)
+                                logout();
                         }
+                        catch (JSONException e){
+                            String fail = "{\"confidenceLevel\":0.1234}";
+                            if(msg.equals(fail)) { //TODO change check after implemented method
+                                authorized = false;
+                                Toast.makeText(MainActivity.this,
+                                        "Unauthorized user detected. You have been PluriLockedOut!",
+                                        Toast.LENGTH_LONG).show();
+                                logout();
+                            }
+                        }
+
                     }
                 },
                 new IntentFilter("server-response")
@@ -195,11 +225,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MapLocationActivity.class));
                 break;
             case R.id.logout_menu:
-//                Intent intent = new Intent(this, LoginActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                startActivity(intent);
-//                clearSession();
-//                finish();
                 logout();
                 break;
             case R.id.about_menu:
@@ -232,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout(){
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         clearSession();
