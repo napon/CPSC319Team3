@@ -3,6 +3,21 @@ Noah Sommerfeld | Kelvin Chan | Napon Taratan | Sunny Lee | Karen Guo | Elaine F
 
 ##How To
 
+### PluriLock Setup
+```
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    //...
+    Context context = getApplicationContext();
+    String id = "<pluriLockIdToken>";
+    PluriLockConfig config = new PluriLockConfig();
+    PluriLockAPI.createNewSession(context, id, config);
+    //...
+}
+```
+
 ### PluriLock Touch Handler
 ```
 PluriLockTouchListener plTouch = PluriLockAPI.getInstance().createTouchListener();
@@ -15,4 +30,21 @@ view.setOnTouchListener(new View.OnTouchListener() {
     }
 });
 
+```
+
+### PluriLock Receive Response
+```
+LocalBroadcastManager.getInstance(context).registerReceiver(
+    new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String pluriLockResponse = intent.getStringExtra("plResponse");
+
+            JSONObject plConfidenceObj = new JSONObject(pluriLockResponse);
+            Double confLevel = confidenceObj.getDouble("plConfidence");
+            if(confLevel < MIN_CONF_LEVEL) {
+                //DO UN-AUTHORIZED USER ACTION
+            }
+        }
+    }, new IntentFilter("server-response"));
 ```
