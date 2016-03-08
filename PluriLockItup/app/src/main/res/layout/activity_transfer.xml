@@ -11,6 +11,7 @@
     android:focusableInTouchMode="true"
     tools:context="cpsc319.team3.com.plurilockitup.activity.TransferActivity">
     <ScrollView
+        android:id="@+id/transfer_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout

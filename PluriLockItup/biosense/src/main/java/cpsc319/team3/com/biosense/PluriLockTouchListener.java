@@ -4,14 +4,11 @@ import android.graphics.PointF;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import java.util.GregorianCalendar;
 
-import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
-import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
 /**
  * Created by Karen on 16-02-23.
@@ -126,16 +123,21 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        Log.d(TAG, "onSingleTapUp: " + e.toString());
-        long currTimestamp = System.currentTimeMillis();
-        long duration = timestamp - currTimestamp;
-        PointF elementRelativeCoord = new PointF(e.getX(), e.getY());
-        PointF screenCord = new PointF(e.getX(), e.getY());
+        try {
+            Log.d(TAG, "onSingleTapUp: " + e.toString());
+            long currTimestamp = System.currentTimeMillis();
+            long duration = timestamp - currTimestamp;
+            PointF elementRelativeCoord = new PointF(e.getX(), e.getY());
+            PointF screenCord = new PointF(e.getX(), e.getY());
 
-        PElementTouchEvent pElementTouchEvent =
-                new PElementTouchEvent(eventID, screenOrientation, timestamp,
-                        pressure, fingerOrientation, elementRelativeCoord, screenCord, duration, touchArea);
-        eventTracker.notifyOfEvent(pElementTouchEvent);
+            PElementTouchEvent pElementTouchEvent =
+                    new PElementTouchEvent(eventID, screenOrientation, timestamp,
+                            pressure, fingerOrientation, elementRelativeCoord, screenCord, duration, touchArea);
+            eventTracker.notifyOfEvent(pElementTouchEvent);
+        }
+        catch (NullPointerException nullEx){
+            Log.d("Single touch error", nullEx.getMessage());
+        }
         return true;
     }
 
@@ -159,20 +161,25 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(TAG, "onScroll: " + e1.toString()+e2.toString());
+        try {
+            Log.d(TAG, "onScroll: " + e1.toString() + e2.toString());
 
-        PointF startCoord = new PointF(e1.getX(), e1.getY());
-        PointF endCoord = new PointF(e2.getX(), e2.getY());
+            PointF startCoord = new PointF(e1.getX(), e1.getY());
+            PointF endCoord = new PointF(e2.getX(), e2.getY());
 
-        PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
+            PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
 
-        long currTimestamp = new GregorianCalendar().getTimeInMillis();
-        long duration = timestamp - currTimestamp;
+            long currTimestamp = new GregorianCalendar().getTimeInMillis();
+            long duration = timestamp - currTimestamp;
 
-        PScrollEvent pScrollEvent =
-                new PScrollEvent(eventID, screenOrientation, timestamp, scrollDirection,
-                        startCoord, endCoord, duration);
-        eventTracker.notifyOfEvent(pScrollEvent);
+            PScrollEvent pScrollEvent =
+                    new PScrollEvent(eventID, screenOrientation, timestamp, scrollDirection,
+                            startCoord, endCoord, duration);
+            eventTracker.notifyOfEvent(pScrollEvent);
+        }
+        catch (NullPointerException e){
+            Log.d("Scroll error", e.getMessage());
+        }
         return true;
     }
 
@@ -206,19 +213,24 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.d(TAG, "onFling: " + e1.toString() + e2.toString());
-        PointF startCoord = new PointF(e1.getX(), e1.getY());
-        PointF endCoord = new PointF(e2.getX(), e2.getY());
+        try {
+            Log.d(TAG, "onFling: " + e1.toString() + e2.toString());
+            PointF startCoord = new PointF(e1.getX(), e1.getY());
+            PointF endCoord = new PointF(e2.getX(), e2.getY());
 
-        PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
+            PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
 
-        long currTimestamp = new GregorianCalendar().getTimeInMillis();
-        long duration = timestamp - currTimestamp;
+            long currTimestamp = new GregorianCalendar().getTimeInMillis();
+            long duration = timestamp - currTimestamp;
 
-        PScrollEvent pScrollEvent =
-                new PScrollEvent(eventID, screenOrientation, timestamp, scrollDirection,
-                        startCoord, endCoord, duration);
-        eventTracker.notifyOfEvent(pScrollEvent);
+            PScrollEvent pScrollEvent =
+                    new PScrollEvent(eventID, screenOrientation, timestamp, scrollDirection,
+                            startCoord, endCoord, duration);
+            eventTracker.notifyOfEvent(pScrollEvent);
+        }
+        catch (NullPointerException e){
+            Log.d("Fling error", e.getMessage());
+        }
         return true;
     }
 
