@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     GestureDetector gest;
     boolean authorized = true;
     Double MIN_CONF_LEVEL = 0.25;
-    int ACTIONS_PER_UPLOAD = 200;
+    int ACTIONS_PER_UPLOAD = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
         ScrollView mainScroll = (ScrollView) findViewById(R.id.mainScrollView);
         if(plapi != null) {
             final PluriLockTouchListener plTouch = plapi.createTouchListener();
+            final GestureDetector gestD = new GestureDetector(plTouch);
             mainScroll.setOnTouchListener(new View.OnTouchListener() {
-                GestureDetector gestD = new GestureDetector(plTouch);
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     //return false as no other action to listen to
@@ -158,11 +158,11 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-        this.gest.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event){
+//        this.gest.onTouchEvent(event);
+//        return super.onTouchEvent(event);
+//    }
 
     private void setupPLApi() {
         Context context = getApplicationContext();
@@ -172,13 +172,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         String msg = intent.getStringExtra("msg");
-                        Log.d("YAY!!!!", msg);
+                        Log.d("PLock response", msg);
 
                         try {
                             JSONObject confidenceObj = new JSONObject(msg);
                             Double confLevel = confidenceObj.getDouble("confidenceLevel");
-                            if(confLevel < MIN_CONF_LEVEL)
+                            if(confLevel < MIN_CONF_LEVEL) {
+                                authorized = false;
+                                Toast.makeText(context,
+                                        "Unauthorized user detected. You have been PluriLockedOut!",
+                                        Toast.LENGTH_LONG).show();
                                 logout();
+                            }
                         }
                         catch (JSONException e){
                             String fail = "{\"confidenceLevel\":0.1234}";
