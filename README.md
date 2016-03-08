@@ -4,7 +4,7 @@ Noah Sommerfeld | Kelvin Chan | Napon Taratan | Sunny Lee | Karen Guo | Elaine F
 ##How To
 
 ### PluriLock Setup
-```
+```java
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -19,7 +19,7 @@ protected void onCreate(Bundle savedInstanceState) {
 ```
 
 ### PluriLock Touch Handler
-```
+```java
 PluriLockTouchListener plTouch = PluriLockAPI.getInstance().createTouchListener();
 GestureDetector gestD = new GestureDetector(plTouch);
 view.setOnTouchListener(new View.OnTouchListener() {
@@ -33,7 +33,7 @@ view.setOnTouchListener(new View.OnTouchListener() {
 ```
 
 ### PluriLock Receive Response
-```
+```java
 LocalBroadcastManager.getInstance(context).registerReceiver(
     new BroadcastReceiver() {
         @Override
