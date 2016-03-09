@@ -13,6 +13,6 @@ public class PlurilockServerResponseTest {
     public void parseTest() throws Exception {
         String msg = "{confidenceLevel: 0.1234}";
         PlurilockServerResponse response = PlurilockServerResponse.fromJsonString(msg);
-        Assert.assertEquals(0.1234, response.confidenceLevel);
+        Assert.assertEquals(0.1234, response.getConfidenceLevel());
     }
 }
