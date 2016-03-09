@@ -13,6 +13,18 @@ public class PluriLockConfig {
      */
     protected int actionsPerUpload = 10;
 
+    protected String domain = "testDomain";
+
+    public double getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(double appVersion) {
+        this.appVersion = appVersion;
+    }
+
+    protected double appVersion = 1.0;
+
     public URI getUrl() {
         return url;
     }
@@ -29,5 +41,13 @@ public class PluriLockConfig {
 
     public void setActionsPerUpload(int actionsPerUpload) {
         this.actionsPerUpload = actionsPerUpload;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 }

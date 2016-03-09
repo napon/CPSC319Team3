@@ -149,12 +149,14 @@ public class MainActivity extends AppCompatActivity {
                 new IntentFilter("server-response")
         );
 
-        String id = "testUser"; // TODO: What is this value?
+        String id = "team3";
         PluriLockConfig config = new PluriLockConfig();
         try {
             config.setActionsPerUpload(1);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
             config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
+            config.setAppVersion(1.0);
+            config.setDomain("team3");
         } catch(Exception e) {}
 
         try {
