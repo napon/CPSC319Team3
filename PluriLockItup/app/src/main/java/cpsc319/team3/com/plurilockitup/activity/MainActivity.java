@@ -14,10 +14,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URI;
 
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     TableLayout creditAcctTable;
 
     GestureDetector gest;
+    boolean authorized = true;
+    Double MIN_CONF_LEVEL = 0.25;
+    int ACTIONS_PER_UPLOAD = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Set up PluriLock
         setupPLApi();
-
-
         // add day account table rows
         for(int i = 0; i < dayAcctList.length; i++){
             final int j = i; //click handler needs static int
@@ -76,13 +81,14 @@ public class MainActivity extends AppCompatActivity {
                     GestureDetector gestD = new GestureDetector(plTouch);
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        if(event.getActionMasked() == MotionEvent.ACTION_UP) {
+                        if(event.getActionMasked() == MotionEvent.ACTION_UP && authorized) {
                             Intent transferIntent = new Intent(MainActivity.this, TransferActivity.class);
                             transferIntent.putExtra("acctName", dayAcctList[j]);
                             transferIntent.putExtra("Customer", customer);
                             startActivityForResult(transferIntent, Utils.BANK_TRANSFER);
                         }
-                        return gestD.onTouchEvent(event);
+                        //return false as no other action to listen to
+                        return !gestD.onTouchEvent(event);
                     }
                 });
             }
@@ -113,21 +119,45 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) row.findViewById(R.id.balance)).setText(customer.getBalanceString(creditAcctList[i]));
 
             //set click handler
-            row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
-                }
-            });
+            if (plapi != null) {
+                final PluriLockTouchListener plTouch = plapi.createTouchListener();
+                row.setOnTouchListener(new View.OnTouchListener() {
+                    GestureDetector gestD = new GestureDetector(plTouch);
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getActionMasked() == MotionEvent.ACTION_UP && authorized) {
+                            startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
+                        }
+                        //return false as no other action to listen to
+                        return !gestD.onTouchEvent(event);
+                    }
+                });
+            }
+            else {
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
+                    }
+                });
+            }
 
             creditAcctTable.addView(row);
         }
 
-    }
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-        this.gest.onTouchEvent(event);
-        return super.onTouchEvent(event);
+        //scrollview handler
+        ScrollView mainScroll = (ScrollView) findViewById(R.id.mainScrollView);
+        if(plapi != null) {
+            final PluriLockTouchListener plTouch = plapi.createTouchListener();
+            final GestureDetector gestD = new GestureDetector(plTouch);
+            mainScroll.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    //return false as no other action to listen to
+                    return !gestD.onTouchEvent(event);
+                }
+            });
+        }
     }
 
     private void setupPLApi() {
@@ -139,10 +169,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onReceive(Context context, Intent intent) {
                         PlurilockServerResponse response = intent.getParcelableExtra("msg");
                         Log.d("BroadcastReceiver", "Received broadcast: " + response.toString());
-                        if(response.getConfidenceLevel() < 0.5) {
+                        if(response.getConfidenceLevel() < MIN_CONF_LEVEL) {
                             Log.d("BroadcastReceiver",
                                     "Confidence level failed: " + Double.toString(response.getConfidenceLevel()));
-                            Toast.makeText(MainActivity.this,
+                            authorized = false;
+                            Toast.makeText(context,
                                     "Unauthorized user detected. You have been PluriLockedOut!",
                                     Toast.LENGTH_LONG).show();
                             logout();
@@ -152,12 +183,14 @@ public class MainActivity extends AppCompatActivity {
                 new IntentFilter("server-response")
         );
 
-        String id = "testUser"; // TODO: What is this value?
+        String id = "team3";
         PluriLockConfig config = new PluriLockConfig();
         try {
-            config.setActionsPerUpload(1);
+            config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
             config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
+            config.setAppVersion(1.0);
+            config.setDomain("team3");
         } catch(Exception e) {}
 
         try {
@@ -198,11 +231,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MapLocationActivity.class));
                 break;
             case R.id.logout_menu:
-//                Intent intent = new Intent(this, LoginActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                startActivity(intent);
-//                clearSession();
-//                finish();
                 logout();
                 break;
             case R.id.about_menu:
@@ -235,8 +263,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout(){
+<<<<<<< HEAD
         Log.d("MainActivity", "Logging out!");
         Intent intent = new Intent(this, LoginActivity.class);
+||||||| merged common ancestors
+        Intent intent = new Intent(this, LoginActivity.class);
+=======
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+>>>>>>> master
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         clearSession();

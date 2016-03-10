@@ -22,8 +22,10 @@ public class PluriLockPackage {
     private String deviceModel;
     private String deviceManufacturer;
     private String userID;
+    private String domain;
     private String language;
     private String timeZone;
+    private double appVersion;
     private double latitude;
     private double longitude;
     private int screenWidth;
@@ -38,8 +40,10 @@ public class PluriLockPackage {
         this.deviceModel = b.deviceModel;
         this.deviceManufacturer = b.deviceManufacturer;
         this.userID = b.userID;
+        this.domain = b.domain;
         this.language = b.language;
         this.timeZone = b.timeZone;
+        this.appVersion = b.appVersion;
         this.latitude = b.latitude;
         this.longitude = b.longitude;
         this.screenWidth = b.screenWidth;
@@ -64,6 +68,10 @@ public class PluriLockPackage {
         return userID;
     }
 
+    public String getDomain() {
+        return domain;
+    }
+
     public String getDeviceManufacturer() {
         return deviceManufacturer;
     }
@@ -73,6 +81,10 @@ public class PluriLockPackage {
     }
 
     public String getTimeZone() { return timeZone; }
+
+    public double getAppVersion() {
+        return appVersion;
+    }
 
     public double getLatitude() {
         return latitude;
@@ -107,8 +119,10 @@ public class PluriLockPackage {
         private String deviceModel;
         private String deviceManufacturer;
         private String userID;
+        private String domain;
         private String language;
         private String timeZone;
+        private double appVersion;
         private double latitude;
         private double longitude;
         private int screenWidth;
@@ -122,8 +136,10 @@ public class PluriLockPackage {
             this.deviceModel = "";
             this.deviceManufacturer = "";
             this.userID = "";
+            this.domain = "test";
             this.language = "";
             this.timeZone = "";
+            this.appVersion = 1.0;
             this.latitude = 0.0;
             this.longitude = 0.0;
             this.screenWidth = 0;
@@ -152,6 +168,11 @@ public class PluriLockPackage {
             return this;
         }
 
+        public PluriLockPackageBuilder domain(String d) {
+            domain = d;
+            return this;
+        }
+
         public PluriLockPackageBuilder language(String lang) {
             language = lang;
             return this;
@@ -159,6 +180,11 @@ public class PluriLockPackage {
 
         public PluriLockPackageBuilder timeZone(String tz) {
             timeZone = tz;
+            return this;
+        }
+
+        public PluriLockPackageBuilder appVersion(double av) {
+            appVersion = av;
             return this;
         }
 
@@ -206,23 +232,30 @@ public class PluriLockPackage {
         Log.d(TAG, "getJSON");
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", getId());
-            jsonObject.put("user", getUserID());
-            jsonObject.put("model", getDeviceModel());
-            jsonObject.put("manufacturer", getDeviceManufacturer());
-            jsonObject.put("screenWidth", getScreenWidth());
-            jsonObject.put("screenHeight", getScreenHeight());
-            jsonObject.put("latitude", getLatitude());
-            jsonObject.put("longitude", getLongitude());
-            jsonObject.put("countryCode", getCountryCode());
-            jsonObject.put("language", getLanguage());
-            jsonObject.put("sdkVersion", getSdkVersion());
-            jsonObject.put("timeZone", getTimeZone());
+            JSONObject data = new JSONObject();
+
+            jsonObject.put("userID", getUserID());
+            jsonObject.put("btClientType", "android");
+            jsonObject.put("btClientVersion", getAppVersion());
+            jsonObject.put("domain", getDomain());
+            jsonObject.put("data", data);
+
+            data.put("id", getId());
+            data.put("model", getDeviceModel());
+            data.put("manufacturer", getDeviceManufacturer());
+            data.put("screenWidth", getScreenWidth());
+            data.put("screenHeight", getScreenHeight());
+            data.put("latitude", getLatitude());
+            data.put("longitude", getLongitude());
+            data.put("countryCode", getCountryCode());
+            data.put("language", getLanguage());
+            data.put("sdkVersion", getSdkVersion());
+            data.put("timeZone", getTimeZone());
             JSONArray jsonArray = new JSONArray();
             for (PluriLockEvent pEvent : getEvents()) {
                 jsonArray.put(pEvent.getJSON());
             }
-            jsonObject.put("events", jsonArray);
+            data.put("events", jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }

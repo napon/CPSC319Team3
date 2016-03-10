@@ -56,18 +56,19 @@ public class PluriLockPackageTests {
         PluriLockPackage p = b.buildPackage();
         JSONObject jsonRepresentation = p.getJSON();
         try {
+            JSONObject data = jsonRepresentation.getJSONObject("data");
             // Test each field from PhoneDataManager is properly defined.
-            assertEquals("napon", jsonRepresentation.getString("user"));
-            assertEquals("Nexus 6", jsonRepresentation.getString("model"));
-            assertEquals("LG", jsonRepresentation.getString("manufacturer"));
-            assertEquals("Thai", jsonRepresentation.getString("language"));
-            assertEquals("CA", jsonRepresentation.getString("countryCode"));
-            assertEquals("PST", jsonRepresentation.getString("timeZone"));
-            assertEquals(20.0, jsonRepresentation.getDouble("latitude"), DELTA);
-            assertEquals(40.0, jsonRepresentation.getDouble("longitude"), DELTA);
-            assertEquals(600, jsonRepresentation.getInt("screenHeight"));
-            assertEquals(800, jsonRepresentation.getInt("screenWidth"));
-            assertEquals(8, jsonRepresentation.getInt("sdkVersion"));
+            assertEquals("napon", jsonRepresentation.getString("userID"));
+            assertEquals("Nexus 6", data.getString("model"));
+            assertEquals("LG", data.getString("manufacturer"));
+            assertEquals("Thai", data.getString("language"));
+            assertEquals("CA", data.getString("countryCode"));
+            assertEquals("PST", data.getString("timeZone"));
+            assertEquals(20.0, data.getDouble("latitude"), DELTA);
+            assertEquals(40.0, data.getDouble("longitude"), DELTA);
+            assertEquals(600, data.getInt("screenHeight"));
+            assertEquals(800, data.getInt("screenWidth"));
+            assertEquals(8, data.getInt("sdkVersion"));
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -80,9 +81,11 @@ public class PluriLockPackageTests {
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
             // There should only be one object in the events set.
-            assertEquals(1, jsonObject.getJSONArray("events").length());
-            JSONObject eventObject = jsonObject.getJSONArray("events").getJSONObject(0);
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
 
             // Test each field from KeyboardTouchEvent is properly defined.
             assertEquals("MONOGRAPH", eventObject.getString("eventType"));
@@ -103,9 +106,11 @@ public class PluriLockPackageTests {
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{touch}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
             // There should only be one object in the events set.
-            assertEquals(1, jsonObject.getJSONArray("events").length());
-            JSONObject eventObject = jsonObject.getJSONArray("events").getJSONObject(0);
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
 
             // Test each field from ElementTouchEvent is properly defined.
             assertEquals("ELEMENT_TOUCH", eventObject.getString("eventType"));
@@ -131,9 +136,11 @@ public class PluriLockPackageTests {
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scroll}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
             // There should only be one object in the events set.
-            assertEquals(1, jsonObject.getJSONArray("events").length());
-            JSONObject eventObject = jsonObject.getJSONArray("events").getJSONObject(0);
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
 
             // Test each field from ScrollEvent is properly defined.
             assertEquals("SCROLL", eventObject.getString("eventType"));
@@ -160,8 +167,10 @@ public class PluriLockPackageTests {
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scroll, touch, keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
             // There should only be three objects in the events set.
-            assertEquals(3, jsonObject.getJSONArray("events").length());
+            assertEquals(3, data.getJSONArray("events").length());
         } catch (JSONException e) {
             fail(e.getMessage());
         }
