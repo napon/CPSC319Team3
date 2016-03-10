@@ -3,6 +3,8 @@ package cpsc319.team3.com.plurilockitup.activity;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -13,9 +15,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import cpsc319.team3.com.biosense.PluriLockAPI;
+import cpsc319.team3.com.biosense.PluriLockTouchListener;
 import cpsc319.team3.com.plurilockitup.R;
 
 public class MapLocationActivity extends FragmentActivity implements OnMapReadyCallback {
+    PluriLockAPI plapi;
+    GestureDetector gestD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,13 @@ public class MapLocationActivity extends FragmentActivity implements OnMapReadyC
 
         //underline title
         TextView title = (TextView) findViewById(R.id.nearestBranchTitle);
-        title.setPaintFlags(title.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        title.setPaintFlags(title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        plapi = PluriLockAPI.getInstance();
+        if (plapi != null){
+            PluriLockTouchListener plTouch = plapi.createTouchListener();
+            gestD = new GestureDetector(plTouch);
+        }
     }
 
     @Override
@@ -63,5 +75,12 @@ public class MapLocationActivity extends FragmentActivity implements OnMapReadyC
                         .title("Scotia Theatre Vancouver"));
             }
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        if(plapi!= null || gestD != null)
+            return gestD.onTouchEvent(ev);
+        return false; //TODO check if default to false
     }
 }
