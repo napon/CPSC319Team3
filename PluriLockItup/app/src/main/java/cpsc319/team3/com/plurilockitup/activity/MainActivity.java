@@ -263,14 +263,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout(){
-<<<<<<< HEAD
-        Log.d("MainActivity", "Logging out!");
-        Intent intent = new Intent(this, LoginActivity.class);
-||||||| merged common ancestors
-        Intent intent = new Intent(this, LoginActivity.class);
-=======
+        Log.d(LoginActivity.class.getName(), "Logging out!");
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
->>>>>>> master
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         clearSession();
