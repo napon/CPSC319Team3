@@ -53,4 +53,11 @@ public class PlurilockServerResponse implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(confidenceLevel);
     }
+
+    @Override
+    public String toString() {
+        return "PlurilockServerResponse{" +
+                "confidenceLevel=" + confidenceLevel +
+                '}';
+    }
 }
