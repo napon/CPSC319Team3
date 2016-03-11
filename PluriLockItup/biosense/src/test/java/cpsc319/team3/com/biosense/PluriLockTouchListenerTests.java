@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PointF;
 import android.view.MotionEvent;
-import android.view.View;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,7 +79,7 @@ public class PluriLockTouchListenerTests {
         assertTrue(touchListener.onSingleTapUp(eventUp));
 
         PElementTouchEvent pElementTouchEvent =
-                new PElementTouchEvent(0, Configuration.ORIENTATION_LANDSCAPE, 1,
+                new PElementTouchEvent(Configuration.ORIENTATION_LANDSCAPE, 1,
                         1, 1, new PointF(1,1), new PointF(1,1), 0, 1);
 //        verify(eventTrackerMock, times(1)).notifyOfEvent(pElementTouchEvent);
     }

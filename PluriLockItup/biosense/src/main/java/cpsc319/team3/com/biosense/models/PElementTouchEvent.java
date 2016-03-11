@@ -21,10 +21,10 @@ public class PElementTouchEvent extends PluriLockEvent {
     private PointF screenCoord;
     private float touchArea;
 
-    public PElementTouchEvent(int eventID, int screenOrientation, long timestamp, float pressure,
+    public PElementTouchEvent(int screenOrientation, long timestamp, float pressure,
                               float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
                               long duration, float touchArea) {
-        super(eventID, screenOrientation, timestamp, duration);
+        super(screenOrientation, timestamp, duration);
         Log.d(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;

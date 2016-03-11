@@ -11,7 +11,7 @@ public class PDiKeyboardTouchEventTests {
     @Test
     public void sampleTest() throws Exception {
         PDiKeyboardTouchEvent p = new PDiKeyboardTouchEvent
-                (1, 1, System.currentTimeMillis(), 1, 4, 5);
+                (1, System.currentTimeMillis(), 1, 4, 5);
         assertTrue(p.getClass() == PDiKeyboardTouchEvent.class);
     }
 }

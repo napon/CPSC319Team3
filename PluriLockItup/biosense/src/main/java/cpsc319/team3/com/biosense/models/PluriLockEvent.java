@@ -29,21 +29,15 @@ import org.json.JSONObject;
  */
 public abstract class PluriLockEvent {
     private static final String TAG = "PluriLockEvent";
-    private int eventID;
     private int screenOrientation; //1 = portrait; 2 = landscape
     private long timestamp;
     private long duration;
 
-    public PluriLockEvent(int eventID, int screenOrientation, long timestamp, long duration) {
+    public PluriLockEvent(int screenOrientation, long timestamp, long duration) {
         Log.d(TAG, "PluriLockEvent constructor");
-        this.eventID = eventID;
         this.screenOrientation = screenOrientation;
         this.timestamp = timestamp;
         this.duration = duration;
-    }
-
-    public int getEventID() {
-        return eventID;
     }
 
     public int getScreenOrientation() {
@@ -62,7 +56,6 @@ public abstract class PluriLockEvent {
         Log.d(TAG, "getJSON");
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", getEventID());
             jsonObject.put("orientation", getScreenOrientation());
             jsonObject.put("timestamp", getTimestamp());
             jsonObject.put("duration", getDuration());

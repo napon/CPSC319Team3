@@ -23,7 +23,6 @@ public class PluriLockTouchListener implements
 {
     private static final String TAG = "PluriLockTouchListener";
 
-    int eventID;
     int screenOrientation;
     long timestamp;
     float pressure;
@@ -89,7 +88,6 @@ public class PluriLockTouchListener implements
     @Override
     public boolean onDown(MotionEvent e) {
         Log.d(TAG,"onDown: " + e.toString());
-        eventID = 0;
         screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
         timestamp = e.getDownTime();
         pressure = e.getPressure();
@@ -131,7 +129,7 @@ public class PluriLockTouchListener implements
             PointF screenCord = new PointF(e.getX(), e.getY());
 
             PElementTouchEvent pElementTouchEvent =
-                    new PElementTouchEvent(eventID, screenOrientation, timestamp,
+                    new PElementTouchEvent(screenOrientation, timestamp,
                             pressure, fingerOrientation, elementRelativeCoord, screenCord, duration, touchArea);
             eventTracker.notifyOfEvent(pElementTouchEvent);
         }
@@ -173,7 +171,7 @@ public class PluriLockTouchListener implements
             long duration = timestamp - currTimestamp;
 
             PScrollEvent pScrollEvent =
-                    new PScrollEvent(eventID, screenOrientation, timestamp, scrollDirection,
+                    new PScrollEvent(screenOrientation, timestamp, scrollDirection,
                             startCoord, endCoord, duration);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
@@ -224,7 +222,7 @@ public class PluriLockTouchListener implements
             long duration = timestamp - currTimestamp;
 
             PScrollEvent pScrollEvent =
-                    new PScrollEvent(eventID, screenOrientation, timestamp, scrollDirection,
+                    new PScrollEvent(screenOrientation, timestamp, scrollDirection,
                             startCoord, endCoord, duration);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
