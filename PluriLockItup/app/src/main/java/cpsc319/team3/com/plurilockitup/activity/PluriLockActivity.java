@@ -30,7 +30,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
 
     Double MIN_CONF_LEVEL = 0.25;
     int ACTIONS_PER_UPLOAD = 100;
-    boolean authorized = true;
+    protected boolean authorized = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

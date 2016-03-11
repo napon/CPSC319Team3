@@ -2,19 +2,14 @@ package cpsc319.team3.com.plurilockitup.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import cpsc319.team3.com.biosense.PluriLockTouchListener;
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 import cpsc319.team3.com.plurilockitup.model.Utils;
@@ -26,11 +21,6 @@ public class MainActivity extends PluriLockActivity {
     String[] creditAcctList;
     TableLayout dayAcctTable;
     TableLayout creditAcctTable;
-
-    boolean authorized = true;
-    Double MIN_CONF_LEVEL = 0.25;
-    int ACTIONS_PER_UPLOAD = 100;
-    GestureDetector gestD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +36,6 @@ public class MainActivity extends PluriLockActivity {
         dayAcctList = customer.getDayAccountNames();
         creditAcctList = customer.getCreditAcctNames();
 
-        //Set up PluriLock
-//        setupPLApi();
-//        if(plapi != null){
-//            gestD = new GestureDetector(plapi.createTouchListener());
-//        }
         // add day account table rows
         for(int i = 0; i < dayAcctList.length; i++){
             final int j = i; //click handler needs static int
@@ -62,38 +47,17 @@ public class MainActivity extends PluriLockActivity {
             //set account balance
             ((TextView) row.findViewById(R.id.balance)).setText(customer.getBalanceString(dayAcctList[i]));
 
-//            if(plapi != null){
-            if(false){
-                final
-                PluriLockTouchListener plTouch = plapi.createTouchListener();
-                row.setOnTouchListener(new View.OnTouchListener() {
-                    GestureDetector gestD = new GestureDetector(plTouch);
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if(event.getActionMasked() == MotionEvent.ACTION_UP && authorized) {
-                            Intent transferIntent = new Intent(MainActivity.this, TransferActivity.class);
-                            transferIntent.putExtra("acctName", dayAcctList[j]);
-                            transferIntent.putExtra("Customer", customer);
-                            startActivityForResult(transferIntent, Utils.BANK_TRANSFER);
-                        }
-                        //return false as no other action to listen to
-                        return !gestD.onTouchEvent(event);
-                    }
-                });
-            }
-            else{ //plurilock not created but action should be unaffected
-                Log.e("PluriLockAPI", "Plurilock API not created in Main Activity");
-                row.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(MainActivity.super.authorized) {
                         Intent transferIntent = new Intent(MainActivity.this, TransferActivity.class);
                         transferIntent.putExtra("acctName", dayAcctList[j]);
                         transferIntent.putExtra("Customer", customer);
                         startActivityForResult(transferIntent, Utils.BANK_TRANSFER);
                     }
-                });
-            }
-
+                }
+            });
             dayAcctTable.addView(row);
         }
 
@@ -108,106 +72,17 @@ public class MainActivity extends PluriLockActivity {
             ((TextView) row.findViewById(R.id.balance)).setText(customer.getBalanceString(creditAcctList[i]));
 
             //set click handler
-//            if (plapi != null) {
-            if(false){
-                final PluriLockTouchListener plTouch = plapi.createTouchListener();
-                row.setOnTouchListener(new View.OnTouchListener() {
-                    GestureDetector gestD = new GestureDetector(plTouch);
-
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (event.getActionMasked() == MotionEvent.ACTION_UP && authorized) {
-                            startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
-                        }
-                        //return false as no other action to listen to
-                        return !gestD.onTouchEvent(event);
-                    }
-                });
-            }
-            else {
-                row.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(MainActivity.super.authorized)
                         startActivity(new Intent(MainActivity.this, BankStatementActivity.class));
-                    }
-                });
-            }
+                }
+            });
 
             creditAcctTable.addView(row);
         }
-
-        //scrollview handler
-        ScrollView mainScroll = (ScrollView) findViewById(R.id.mainScrollView);
-//        if(plapi != null) {
-        if(false){
-            final PluriLockTouchListener plTouch = plapi.createTouchListener();
-            final GestureDetector gestD = new GestureDetector(plTouch);
-            mainScroll.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    //return false as no other action to listen to
-                    return !gestD.onTouchEvent(event);
-                }
-            });
-        }
     }
-
-//    private void setupPLApi() {
-//        Context context = getApplicationContext();
-//
-//        LocalBroadcastManager.getInstance(context).registerReceiver(
-//                new BroadcastReceiver() {
-//                    @Override
-//                    public void onReceive(Context context, Intent intent) {
-//                        String msg = intent.getStringExtra("msg");
-//                        Log.d("PLock response", msg);
-//
-//                        try {
-//                            JSONObject confidenceObj = new JSONObject(msg);
-//                            Double confLevel = confidenceObj.getDouble("confidenceLevel");
-//                            if(confLevel < MIN_CONF_LEVEL) {
-//                                authorized = false;
-//                                Toast.makeText(context,
-//                                        "Unauthorized user detected. You have been PluriLockedOut!",
-//                                        Toast.LENGTH_LONG).show();
-//                                logout();
-//                            }
-//                        }
-//                        catch (JSONException e){
-//                            String fail = "{\"confidenceLevel\":0.1234}";
-//                            if(msg.equals(fail)) { //TODO change check after implemented method
-//                                authorized = false;
-//                                Toast.makeText(MainActivity.this,
-//                                        "Unauthorized user detected. You have been PluriLockedOut!",
-//                                        Toast.LENGTH_LONG).show();
-//                                logout();
-//                            }
-//                        }
-//
-//                    }
-//                },
-//                new IntentFilter("server-response")
-//        );
-//
-//        String id = "team3";
-//        PluriLockConfig config = new PluriLockConfig();
-//        try {
-//            config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
-////            config.setUrl(URI.create("ws://echo.websocket.org/"));
-//            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-//            config.setAppVersion(1.0);
-//            config.setDomain("team3");
-//        } catch(Exception e) {}
-//
-//        try {
-//            this.plapi = PluriLockAPI.getInstance();
-//            if(this.plapi == null) {
-//                this.plapi = PluriLockAPI.createNewSession(context, id, config);
-//            }
-//        } catch (LocationServiceUnavailableException e) {
-//            // TODO: Display an error message to user telling them to enable location service?
-//        }
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -263,23 +138,9 @@ public class MainActivity extends PluriLockActivity {
         }
     }
 
-//    private void clearSession(){
-//        customer = null;
-//        PluriLockAPI.destroyAPISession();
-//    }
-
     @Override
     protected void logout(){
         customer = null;
         super.logout();
     }
-
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev){
-//        if(gestD != null){
-//            gestD.onTouchEvent(ev);
-//            return super.dispatchTouchEvent(ev);
-//        }
-//        return super.dispatchTouchEvent(ev); //TODO check if default to false
-//    }
 }

@@ -4,32 +4,26 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cpsc319.team3.com.biosense.PluriLockAPI;
-import cpsc319.team3.com.biosense.PluriLockTouchListener;
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 
-public class TransferActivity extends AppCompatActivity {
+public class TransferActivity extends PluriLockActivity {
 
     Spinner acctSpinner;
 
     Customer customer;
     String currAcctName;
 
-    PluriLockAPI plapi;
+//    PluriLockAPI plapi;
     boolean auth = false;
 
     @Override
@@ -51,40 +45,6 @@ public class TransferActivity extends AppCompatActivity {
 
         //Put account names into drop down
         addAccountsToSpinner();
-
-        plapi = PluriLockAPI.getInstance();
-        if(plapi != null){
-            //scroll view
-            ScrollView transferView = (ScrollView) findViewById(R.id.transfer_scroll);
-            final PluriLockTouchListener plTouch = plapi.createTouchListener();
-            final GestureDetector gestD = new GestureDetector(plTouch);
-            transferView.setOnTouchListener(new View.OnTouchListener() {
-//                GestureDetector gestD = new GestureDetector(plTouch);
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    //return false as no other action to listen to
-                    return !gestD.onTouchEvent(event);
-                }
-            });
-
-            // spinner view
-            Spinner spinnerView = (Spinner) findViewById(R.id.transferAcctType);
-            spinnerView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return !gestD.onTouchEvent(event);
-                }
-            });
-
-            //transferButton
-            Button transferButton = (Button) findViewById(R.id.transferBttn);
-            transferButton.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return !gestD.onTouchEvent(event);
-                }
-            });
-        }
     }
 
     /**
@@ -114,16 +74,6 @@ public class TransferActivity extends AppCompatActivity {
         //Create custom alert view
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.confirm_alert, null);
-        if(plapi != null){
-            final PluriLockTouchListener plTouch = plapi.createTouchListener();
-            final GestureDetector gestD = new GestureDetector(plTouch);
-            dialogView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return gestD.onTouchEvent(event);
-                }
-            });
-        }
         ((TextView)dialogView.findViewById(R.id.fromAcctName)).setText(currAcctName);
         ((TextView)dialogView.findViewById(R.id.fromBalance)).setText(customer.getBalanceString(currAcctName));
         String transfAmt = "-$" + amtText;
@@ -149,14 +99,12 @@ public class TransferActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", null);
         AlertDialog dialog = builder.show();
         if(plapi != null) {
-            final PluriLockTouchListener plTouch = plapi.createTouchListener();
-            final GestureDetector gestD = new GestureDetector(plTouch);
             //Yes button
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    auth = true;
-                    return !gestD.onTouchEvent(event);
+                    auth = gestD.onTouchEvent(event);
+                    return !auth;
                 }
             });
             //No button
@@ -167,6 +115,8 @@ public class TransferActivity extends AppCompatActivity {
                 }
             });
         }
+        else
+            Toast.makeText(this, "PluriLock is not enabled. Transfer not allowed at this moment. Please reload app", Toast.LENGTH_LONG).show();
     }
 
     /**
