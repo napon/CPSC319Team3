@@ -5,12 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import cpsc319.team3.com.plurilockitup.R;
 
-public class BankStatementActivity extends AppCompatActivity {
+public class BankStatementActivity extends PluriLockActivity {
 
     FragmentPagerAdapter fmPageAdapter;
     ViewPager mainPager;

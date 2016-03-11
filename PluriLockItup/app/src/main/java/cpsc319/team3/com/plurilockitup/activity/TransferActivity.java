@@ -23,7 +23,6 @@ public class TransferActivity extends PluriLockActivity {
     Customer customer;
     String currAcctName;
 
-//    PluriLockAPI plapi;
     boolean auth = false;
 
     @Override
