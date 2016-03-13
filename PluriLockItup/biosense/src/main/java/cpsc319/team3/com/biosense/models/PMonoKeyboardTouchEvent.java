@@ -13,9 +13,9 @@ public class PMonoKeyboardTouchEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "MONOGRAPH";
     private int keyPressed;
 
-    public PMonoKeyboardTouchEvent(int eventID, int screenOrientation, long timestamp,
+    public PMonoKeyboardTouchEvent(int screenOrientation, long timestamp,
                                    long duration, int keyPressed) {
-        super(eventID, screenOrientation, timestamp, duration);
+        super(screenOrientation, timestamp, duration);
         this.keyPressed = keyPressed;
     }
 

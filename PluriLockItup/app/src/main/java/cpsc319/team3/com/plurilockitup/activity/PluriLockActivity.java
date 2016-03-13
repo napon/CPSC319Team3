@@ -29,20 +29,26 @@ public abstract class PluriLockActivity extends AppCompatActivity {
     GestureDetector gestD;
 
     Double MIN_CONF_LEVEL = 0.25;
-    int ACTIONS_PER_UPLOAD = 100;
+    int ACTIONS_PER_UPLOAD = 1;
     protected boolean authorized = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //sets up the Plurilock API
         plapi = PluriLockAPI.getInstance();
-        if(plapi == null)
+        if(plapi == null) {
             setupPLApi();
-
-        gestD = new GestureDetector(plapi.createTouchListener());
+            //PLA gesture detector for touch event
+            gestD = new GestureDetector(plapi.createTouchListener());
+        }
     }
 
+    /*
+        One simple overriding method covers all touch event handles for PLA
+        Additional overriding of this method is allowed in individual classes
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev){
         if(gestD != null){

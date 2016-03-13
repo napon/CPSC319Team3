@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.glassfish.tyrus.client.ClientManager;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,6 +23,7 @@ import javax.websocket.Session;
 
 import cpsc319.team3.com.biosense.PluriLockEventManager;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
+import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 
 
 /**
@@ -136,8 +138,15 @@ public class PluriLockNetworkUtil {
         // TODO: Process this message, and package it into some sort of object
         Log.d(this.getClass().getName(), "Server says: " + message);
         Intent intent = new Intent("server-response");
-        intent.putExtra("msg", message);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        try {
+            PlurilockServerResponse response = PlurilockServerResponse.fromJsonString(message);
+            intent.putExtra("msg", response);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        } catch (JSONException e) {
+            Log.d(this.getClass().getName(), "Could not parse JSON message! " + message);
+            // TODO: Add broadcast for this?
+            e.printStackTrace();
+        }
     }
 
     public void closeConnection() throws IOException {
