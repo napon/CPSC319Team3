@@ -77,7 +77,7 @@ public class PluriLockPackageTests {
     @Test
     public void testGetJSONWithKeyboardTouchEvent() {
         // Create and add a KeyboardTouchEvent to the PluriLockPackage.
-        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(0, time, 30, (int) 'a');
+        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(1, time, 30, (int) 'a');
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -91,7 +91,32 @@ public class PluriLockPackageTests {
             assertEquals("MONOGRAPH", eventObject.getString("eventType"));
             assertEquals(30, eventObject.getLong("duration"));
             assertEquals((int) 'a', eventObject.getInt("key"));
-            assertEquals(0, eventObject.getInt("orientation"));
+            assertEquals(1, eventObject.getInt("orientation"));
+            assertEquals(time, eventObject.getLong("timestamp"));
+        } catch (JSONException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetJSONWithDiKeyboardTouchEvent() {
+        // Create and add a KeyboardTouchEvent to the PluriLockPackage.
+        PDiKeyboardTouchEvent keyboard = new PDiKeyboardTouchEvent(2, time, 200, (int) 'a', (int) 'b');
+        PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
+        JSONObject jsonObject = p.getJSON();
+        try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
+            // There should only be one object in the events set.
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
+
+            // Test each field from KeyboardTouchEvent is properly defined.
+            assertEquals("DIGRAPH", eventObject.getString("eventType"));
+            assertEquals(200, eventObject.getLong("duration"));
+            assertEquals((int) 'a', eventObject.getInt("fromKey"));
+            assertEquals((int) 'b', eventObject.getInt("toKey"));
+            assertEquals(2, eventObject.getInt("orientation"));
             assertEquals(time, eventObject.getLong("timestamp"));
         } catch (JSONException e) {
             fail(e.getMessage());
@@ -102,7 +127,7 @@ public class PluriLockPackageTests {
     public void testGetJSONWithElementTouchEvent() {
         // Create and add a ElementTouchEvent to the PluriLockPackage.
         PElementTouchEvent touch = new PElementTouchEvent(0, time, 3.0f, 4.2f,
-                new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 1, 1.0f);
+                new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 200, 3.7f);
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{touch}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -117,12 +142,13 @@ public class PluriLockPackageTests {
             assertEquals(time, eventObject.getLong("timestamp"));
             assertEquals(0, eventObject.getInt("orientation"));
             assertEquals(3, eventObject.getInt("pressure"));
+            assertEquals(200, eventObject.getLong("duration"));
             assertEquals(1.0, eventObject.getDouble("elementRelX"), DELTA);
             assertEquals(2.0, eventObject.getDouble("elementRelY"), DELTA);
             assertEquals(3.0, eventObject.getDouble("screenX"), DELTA);
             assertEquals(4.0, eventObject.getDouble("screenY"), DELTA);
             assertEquals(4.2, eventObject.getDouble("fingerOrientation"), DELTA);
-            assertEquals(1.0, eventObject.getDouble("touchArea"), DELTA);
+            assertEquals(3.7, eventObject.getDouble("touchArea"), DELTA);
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -132,7 +158,7 @@ public class PluriLockPackageTests {
     public void testGetJSONWithScrollEvent() {
         // Create and add a ScrollEvent to the PluriLockPackage.
         PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.scrollDirection.UP,
-                new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 1);
+                new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 200);
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scroll}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -146,6 +172,7 @@ public class PluriLockPackageTests {
             assertEquals("SCROLL", eventObject.getString("eventType"));
             assertEquals(time, eventObject.getLong("timestamp"));
             assertEquals(1, eventObject.getInt("orientation"));
+            assertEquals(200, eventObject.getLong("duration"));
             assertEquals("UP", eventObject.getString("scrollDirection"));
             assertEquals(9.5, eventObject.getDouble("startX"), DELTA);
             assertEquals(8.3, eventObject.getDouble("startY"), DELTA);
