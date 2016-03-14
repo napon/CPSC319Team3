@@ -25,6 +25,7 @@ public class PluriLockPackage {
     private String domain;
     private String language;
     private String timeZone;
+    private String appName;
     private double appVersion;
     private double latitude;
     private double longitude;
@@ -49,6 +50,7 @@ public class PluriLockPackage {
         this.screenWidth = b.screenWidth;
         this.screenHeight = b.screenHeight;
         this.sdkVersion = b.sdkVersion;
+        this.appName = b.appName;
         this.events = b.events;
     }
 
@@ -81,6 +83,8 @@ public class PluriLockPackage {
     }
 
     public String getTimeZone() { return timeZone; }
+
+    public String getAppName() {return appName; }
 
     public double getAppVersion() {
         return appVersion;
@@ -122,6 +126,7 @@ public class PluriLockPackage {
         private String domain;
         private String language;
         private String timeZone;
+        private String appName;
         private double appVersion;
         private double latitude;
         private double longitude;
@@ -139,6 +144,7 @@ public class PluriLockPackage {
             this.domain = "test";
             this.language = "";
             this.timeZone = "";
+            this.appName = "";
             this.appVersion = 1.0;
             this.latitude = 0.0;
             this.longitude = 0.0;
@@ -180,6 +186,11 @@ public class PluriLockPackage {
 
         public PluriLockPackageBuilder timeZone(String tz) {
             timeZone = tz;
+            return this;
+        }
+
+        public PluriLockPackageBuilder appName(String an) {
+            appName = an;
             return this;
         }
 
@@ -251,6 +262,7 @@ public class PluriLockPackage {
             data.put("language", getLanguage());
             data.put("sdkVersion", getSdkVersion());
             data.put("timeZone", getTimeZone());
+            data.put("appName", getAppName());
             JSONArray jsonArray = new JSONArray();
             for (PluriLockEvent pEvent : getEvents()) {
                 jsonArray.put(pEvent.getJSON());

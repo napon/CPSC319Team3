@@ -59,6 +59,11 @@ public class PhoneDataManager {
     }
 
     /**
+     * @return app's name.
+     */
+    public static String getAppName() { return "PLURILOCKITUP"; }
+
+    /**
      * @return number of CPU cores.
      */
     public static int getNumberOfCPUCores() {
