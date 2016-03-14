@@ -85,6 +85,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
             config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
             config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
+//            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
             config.setAppVersion(1.0);
             config.setDomain("team3");
         } catch(Exception e) {}
