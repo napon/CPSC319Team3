@@ -4,6 +4,7 @@ import android.graphics.PointF;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 
 import java.util.GregorianCalendar;
 
@@ -19,7 +20,7 @@ import cpsc319.team3.com.biosense.models.PScrollEvent;
  *
  */
 public class PluriLockTouchListener implements
-        GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
+        GestureDetector.OnGestureListener, View.OnTouchListener
 {
     private static final String TAG = "PluriLockTouchListener";
 
@@ -33,48 +34,6 @@ public class PluriLockTouchListener implements
 
     public PluriLockTouchListener(PluriLockEventTracker eventTracker) {
         this.eventTracker = eventTracker;
-    }
-
-    /**
-     * Notified when a single-tap occurs.
-     * <p/>
-     * Unlike { OnGestureListener#onSingleTapUp(MotionEvent)}, this
-     * will only be called after the detector is confident that the user's
-     * first tap is not followed by a second tap leading to a double-tap
-     * gesture.
-     *
-     * @param e The down motion event of the single-tap.
-     * @return true if the event is consumed, else false
-     */
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
-        Log.d(TAG, "onSingleTapConfirmed: " + e.toString());
-        return true;
-    }
-
-    /**
-     * Notified when a double-tap occurs.
-     *
-     * @param e The down motion event of the first tap of the double-tap.
-     * @return true if the event is consumed, else false
-     */
-    @Override
-    public boolean onDoubleTap(MotionEvent e) {
-        Log.d(TAG, "onDoubleTap: " + e.toString());
-        return true;
-    }
-
-    /**
-     * Notified when an event within a double-tap gesture occurs, including
-     * the down, move, and up events.
-     *
-     * @param e The motion event that occurred during the double-tap gesture.
-     * @return true if the event is consumed, else false
-     */
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
-        Log.d(TAG, "onDoubleTapEvent: " + e.toString());
-        return true;
     }
 
     /**
@@ -247,5 +206,20 @@ public class PluriLockTouchListener implements
                 return PScrollEvent.scrollDirection.UP;
             }
         }
+    }
+
+    /**
+     * Called when a touch event is dispatched to a view. This allows listeners to
+     * get a chance to respond before the target view.
+     *
+     * @param v     The view the touch event has been dispatched to.
+     * @param event The MotionEvent object containing full information about
+     *              the event.
+     * @return True if the listener has consumed the event, false otherwise.
+     */
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        return true;
     }
 }
