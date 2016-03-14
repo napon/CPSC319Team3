@@ -17,7 +17,7 @@ import cpsc319.team3.com.biosense.models.PScrollEvent;
  *
  * A Listener class for touch events.
  * PluriLockEventTracker is notified via method call when touch event occurs
- * A PElementTouchEvent or a PScrollEvent is created depending on the type of touch
+ * A PElementTouchEvent, PScrollEvent or a PScaleEvent is created depending on the type of touch
  *
  */
 public class PluriLockTouchListener implements
