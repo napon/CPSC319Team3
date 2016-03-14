@@ -11,8 +11,8 @@ import org.json.JSONObject;
 public class PScaleEvent extends PluriLockEvent{
     private static final String EVENT_TYPE = "SCALE";
     private scaleDirection scaleDirection;
-    private float averageSpanX;
-    private float averageSpanY;
+    private float spanX;
+    private float spanY;
 
     public enum scaleDirection {
         INWARDS, OUTWARDS
@@ -20,23 +20,23 @@ public class PScaleEvent extends PluriLockEvent{
 
     public PScaleEvent(int screenOrientation, long timestamp, long duration,
                        scaleDirection scaleDirection,
-                       float averageSpanX, float averageSpanY) {
+                       float spanX, float spanY) {
         super(screenOrientation, timestamp, duration);
         this.scaleDirection = scaleDirection;
-        this.averageSpanX = averageSpanX;
-        this.averageSpanY = averageSpanY;
+        this.spanX = spanX;
+        this.spanY = spanY;
     }
 
     public PScaleEvent.scaleDirection getScaleDirection() {
         return scaleDirection;
     }
 
-    public float getAverageSpanX() {
-        return averageSpanX;
+    public float getSpanX() {
+        return spanX;
     }
 
-    public float getAverageSpanY() {
-        return averageSpanY;
+    public float getSpanY() {
+        return spanY;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class PScaleEvent extends PluriLockEvent{
         try {
             jsonObject.put("eventType", EVENT_TYPE);
             jsonObject.put("scaleDirection", getScaleDirection());
-            jsonObject.put("averageSpanX", getAverageSpanX());
-            jsonObject.put("averageSpanY", getAverageSpanY());
+            jsonObject.put("spanX", getSpanX());
+            jsonObject.put("spanY", getSpanY());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -184,6 +184,32 @@ public class PluriLockPackageTests {
     }
 
     @Test
+    public void testGetJSONWithScaleEvent() {
+        // Create and add a ScaleEvent to the PluriLockPackage.
+        PScaleEvent scale = new PScaleEvent(1, time, 42, PScaleEvent.scaleDirection.INWARDS, 2.5f, 6.7f);
+        PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scale}).buildPackage();
+        JSONObject jsonObject = p.getJSON();
+        try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
+            // There should only be one object in the events set.
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
+
+            // Test each field from ScaleEvent is properly defined
+            assertEquals("SCALE", eventObject.getString("eventType"));
+            assertEquals(time, eventObject.getLong("timestamp"));
+            assertEquals(1, eventObject.getInt("orientation"));
+            assertEquals(42, eventObject.getLong("duration"));
+            assertEquals("INWARDS", eventObject.getString("scaleDirection"));
+            assertEquals(2.5f, eventObject.getDouble("spanX"), DELTA);
+            assertEquals(6.7f , eventObject.getDouble("spanY"), DELTA);
+        } catch (JSONException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
     public void testGetJSONWithMultipleEvents() {
         // Create and add multiple events to the PluriLockPackage.
         PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.scrollDirection.UP,
