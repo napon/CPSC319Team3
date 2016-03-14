@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             if(savedCardNum.equals(cardNumText.replace("-",""))){ //correct card#
                 if(savedPassword.equals(passwordText)){ //correct LOGIN
                     //get Token ID from Plurilock?? //TODO
-                    String purilockToken = "DEFAULTABC123";
+                    String purilockToken = getPlToken(savedCardNum.charAt(0));
                     //initiate customer
                     Customer.rebuild(purilockToken);
                     //go to main activity
@@ -116,6 +116,25 @@ public class LoginActivity extends AppCompatActivity {
         }
         else{
             Toast.makeText(this, "Invalid card#/password", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private String getPlToken(char cardFirstNum){
+        switch (cardFirstNum){
+            case '1':
+                return "Kelvin";
+            case '2':
+                return "Elaine";
+            case '3':
+                return "Noah";
+            case '4':
+                return "Sunny";
+            case '5':
+                return "Karen";
+            case '6':
+                return "Napon";
+            default:
+                return "Default123";
         }
     }
 }
