@@ -21,7 +21,7 @@ import cpsc319.team3.com.biosense.models.PScrollEvent;
  *
  */
 public class PluriLockTouchListener implements
-        GestureDetector.OnGestureListener, View.OnTouchListener,
+        GestureDetector.OnGestureListener,
         ScaleGestureDetector.OnScaleGestureListener
 {
     private static final String TAG = "PluriLockTouchListener";
@@ -208,21 +208,6 @@ public class PluriLockTouchListener implements
                 return PScrollEvent.scrollDirection.UP;
             }
         }
-    }
-
-    /**
-     * Called when a touch event is dispatched to a view. This allows listeners to
-     * get a chance to respond before the target view.
-     *
-     * @param v     The view the touch event has been dispatched to.
-     * @param event The MotionEvent object containing full information about
-     *              the event.
-     * @return True if the listener has consumed the event, false otherwise.
-     */
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        return true;
     }
 
     /**
