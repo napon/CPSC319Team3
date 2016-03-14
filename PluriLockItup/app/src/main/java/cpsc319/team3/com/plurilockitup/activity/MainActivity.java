@@ -84,49 +84,6 @@ public class MainActivity extends PluriLockActivity {
         }
     }
 
-//    private void setupPLApi() {
-//        Context context = getApplicationContext();
-//
-//        LocalBroadcastManager.getInstance(context).registerReceiver(
-//                new BroadcastReceiver() {
-//                    @Override
-//                    public void onReceive(Context context, Intent intent) {
-//                        PlurilockServerResponse response = intent.getParcelableExtra("msg");
-//                        Log.d("BroadcastReceiver", "Received broadcast: " + response.toString());
-//                        if(response.getConfidenceLevel() < MIN_CONF_LEVEL) {
-//                            Log.d("BroadcastReceiver",
-//                                    "Confidence level failed: " + Double.toString(response.getConfidenceLevel()));
-//                            authorized = false;
-//                            Toast.makeText(context,
-//                                    "Unauthorized user detected. You have been PluriLockedOut!",
-//                                    Toast.LENGTH_LONG).show();
-//                            logout();
-//                        }
-//                    }
-//                },
-//                new IntentFilter("server-response")
-//        );
-//
-//        String id = "team3";
-//        PluriLockConfig config = new PluriLockConfig();
-//        try {
-//            config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
-////            config.setUrl(URI.create("ws://echo.websocket.org/"));
-//            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-//            config.setAppVersion(1.0);
-//            config.setDomain("team3");
-//        } catch(Exception e) {}
-//
-//        try {
-//            this.plapi = PluriLockAPI.getInstance();
-//            if(this.plapi == null) {
-//                this.plapi = PluriLockAPI.createNewSession(context, id, config);
-//            }
-//        } catch (LocationServiceUnavailableException e) {
-//            // TODO: Display an error message to user telling them to enable location service?
-//        }
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Utils.BANK_TRANSFER){

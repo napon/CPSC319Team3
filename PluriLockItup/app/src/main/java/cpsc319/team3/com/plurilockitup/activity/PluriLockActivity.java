@@ -12,14 +12,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.net.URI;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 
 /**
  * Created by kelvinchan on 16-03-10.
@@ -65,30 +63,17 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        String msg = intent.getStringExtra("msg");
-                        Log.d("PLock response", msg);
-
-                        try {
-                            JSONObject confidenceObj = new JSONObject(msg);
-                            Double confLevel = confidenceObj.getDouble("confidenceLevel");
-                            if (confLevel < MIN_CONF_LEVEL) {
-                                authorized = false;
-                                Toast.makeText(context,
-                                        "Unauthorized user detected. You have been PluriLockedOut!",
-                                        Toast.LENGTH_LONG).show();
-                                logout();
-                            }
-                        } catch (JSONException e) {
-                            String fail = "{\"confidenceLevel\":0.1234}";
-                            if (msg.equals(fail)) { //TODO change check after implemented method
-                                authorized = false;
-                                Toast.makeText(getApplicationContext(),
-                                        "Unauthorized user detected. You have been PluriLockedOut!",
-                                        Toast.LENGTH_LONG).show();
-                                logout();
-                            }
+                        PlurilockServerResponse response = intent.getParcelableExtra("msg");
+                        Log.d("BroadcastReceiver", "Received broadcast: " + response.toString());
+                        if(response.getConfidenceLevel() < MIN_CONF_LEVEL) {
+                            Log.d("BroadcastReceiver",
+                                    "Confidence level failed: " + Double.toString(response.getConfidenceLevel()));
+                            authorized = false;
+                            Toast.makeText(context,
+                                    "Unauthorized user detected. You have been PluriLockedOut!",
+                                    Toast.LENGTH_LONG).show();
+                            logout();
                         }
-
                     }
                 },
                 new IntentFilter("server-response")
