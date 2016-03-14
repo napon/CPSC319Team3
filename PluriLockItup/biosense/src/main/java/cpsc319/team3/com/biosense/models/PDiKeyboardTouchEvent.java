@@ -13,9 +13,9 @@ public class PDiKeyboardTouchEvent extends PluriLockEvent {
     private int fromKey;
     private int toKey;
 
-    public PDiKeyboardTouchEvent(int eventID, int screenOrientation, long timestamp,
+    public PDiKeyboardTouchEvent(int screenOrientation, long timestamp,
                                  long duration, int fromKey, int toKey) {
-        super(eventID, screenOrientation, timestamp, duration);
+        super(screenOrientation, timestamp, duration);
         this.fromKey = fromKey;
         this.toKey = toKey;
     }

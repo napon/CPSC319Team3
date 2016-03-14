@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
-import java.util.GregorianCalendar;
-
 import cpsc319.team3.com.biosense.models.PDiKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
 
@@ -22,7 +20,6 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
 
     private static final String TAG = "PluriLockKeyListener";
 
-    int eventID;
     int screenOrientation;
     long timestamp;
 
@@ -70,7 +67,6 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
     @Override
     public boolean onKeyDown(View view, Editable text, int keyCode, KeyEvent event) {
         Log.d(TAG, "onKeyDown: " + event.toString());
-        eventID = 0; //TODO
         screenOrientation =  eventTracker.getContext().getResources().getConfiguration().orientation;
         timestamp = event.getDownTime();
         return true;
@@ -94,7 +90,7 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
 
         PMonoKeyboardTouchEvent pMonoKeyboardTouchEvent =
                 new PMonoKeyboardTouchEvent
-                        (eventID, screenOrientation, timestamp, duration, keyCode);
+                        (screenOrientation, timestamp, duration, keyCode);
 
         eventTracker.notifyOfEvent(pMonoKeyboardTouchEvent);
 
@@ -105,7 +101,7 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
             int fromKey = lastKey.getKeyPressed();
             PDiKeyboardTouchEvent pDiKeyboardTouchEvent =
                     new PDiKeyboardTouchEvent
-                            (eventID, screenOrientation, timestamp, diDuration, fromKey, keyCode);
+                            (screenOrientation, timestamp, diDuration, fromKey, keyCode);
             eventTracker.notifyOfEvent(pDiKeyboardTouchEvent);
         }
         return true;

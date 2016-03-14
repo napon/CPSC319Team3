@@ -20,7 +20,6 @@ import org.robolectric.shadows.ShadowContextWrapper;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.GregorianCalendar;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -66,7 +65,7 @@ public class PluriLockEventManagerTests {
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class)){
+                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class)) {
                     @Override
                     public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
                         //Do nothing
@@ -81,7 +80,7 @@ public class PluriLockEventManagerTests {
 
         // Add numActions - 1 number of PluriLockEvents.
         for (int i = 0; i < numActions - 1; i++) {
-            p.addPluriLockEvent(new PElementTouchEvent(1, 1, System.currentTimeMillis(),
+            p.addPluriLockEvent(new PElementTouchEvent(1, System.currentTimeMillis(),
                     1, 1, new PointF(0, 0), new PointF(0,0), 1, 1));
         }
 
@@ -89,7 +88,7 @@ public class PluriLockEventManagerTests {
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
 
         // Add one more PluriLockEvents.
-        p.addPluriLockEvent(new PScrollEvent(1, 1, System.currentTimeMillis(),
+        p.addPluriLockEvent(new PScrollEvent(1, System.currentTimeMillis(),
                 PScrollEvent.scrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1));
 
         // Verify the network call has been invoked 1 time.
@@ -113,7 +112,7 @@ public class PluriLockEventManagerTests {
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
 
         // Add one PluriLockEvent.
-        p.addPluriLockEvent(new PMonoKeyboardTouchEvent(0, 1, System.currentTimeMillis(), 0, 1));
+        p.addPluriLockEvent(new PMonoKeyboardTouchEvent(1, System.currentTimeMillis(), 0, 1));
 
         // Verify that the network call hasn't been invoked.
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
