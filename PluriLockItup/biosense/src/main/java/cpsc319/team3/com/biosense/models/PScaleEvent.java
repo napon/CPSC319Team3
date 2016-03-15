@@ -20,8 +20,8 @@ public class PScaleEvent extends PluriLockEvent{
 
     public PScaleEvent(int screenOrientation, long timestamp, long duration,
                        scaleDirection scaleDirection,
-                       float spanX, float spanY) {
-        super(screenOrientation, timestamp, duration);
+                       float spanX, float spanY, MotionCode motionCode) {
+        super(screenOrientation, timestamp, duration, motionCode);
         this.scaleDirection = scaleDirection;
         this.spanX = spanX;
         this.spanY = spanY;

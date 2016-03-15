@@ -17,18 +17,19 @@ public class PElementTouchEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "ELEMENT_TOUCH";
     private float pressure;
     private float fingerOrientation;
-    private PointF elementRelativeCoord;
+    private PointF precisionXY;
     private PointF screenCoord;
     private float touchArea;
+    private int pointerCount;
 
     public PElementTouchEvent(int screenOrientation, long timestamp, float pressure,
-                              float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
-                              long duration, float touchArea) {
-        super(screenOrientation, timestamp, duration);
+                              float fingerOrientation, PointF precisionXY, PointF screenCoord,
+                              long duration, float touchArea, MotionCode MotionCode, int pointerCount) {
+        super(screenOrientation, timestamp, duration, MotionCode);
         Log.d(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
-        this.elementRelativeCoord = elementRelativeCoord;
+        this.precisionXY = precisionXY;
         this.screenCoord = screenCoord;
         this.touchArea = touchArea;
     }
@@ -42,11 +43,11 @@ public class PElementTouchEvent extends PluriLockEvent {
     }
 
     public float getElementRelativeCoordX() {
-        return elementRelativeCoord.x;
+        return precisionXY.x;
     }
 
     public float getElementRelativeCoordY() {
-        return elementRelativeCoord.y;
+        return precisionXY.y;
     }
 
     public float getScreenCoordX() {

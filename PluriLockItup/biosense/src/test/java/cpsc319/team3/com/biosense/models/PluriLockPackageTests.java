@@ -157,7 +157,7 @@ public class PluriLockPackageTests {
     @Test
     public void testGetJSONWithScrollEvent() {
         // Create and add a ScrollEvent to the PluriLockPackage.
-        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.scrollDirection.UP,
+        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.ScrollDirection.UP,
                 new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 200);
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scroll}).buildPackage();
         JSONObject jsonObject = p.getJSON();
@@ -173,7 +173,7 @@ public class PluriLockPackageTests {
             assertEquals(time, eventObject.getLong("timestamp"));
             assertEquals(1, eventObject.getInt("orientation"));
             assertEquals(200, eventObject.getLong("duration"));
-            assertEquals("UP", eventObject.getString("scrollDirection"));
+            assertEquals("UP", eventObject.getString("ScrollDirection"));
             assertEquals(9.5, eventObject.getDouble("startX"), DELTA);
             assertEquals(8.3, eventObject.getDouble("startY"), DELTA);
             assertEquals(7.6, eventObject.getDouble("endX"), DELTA);
@@ -212,7 +212,7 @@ public class PluriLockPackageTests {
     @Test
     public void testGetJSONWithMultipleEvents() {
         // Create and add multiple events to the PluriLockPackage.
-        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.scrollDirection.UP,
+        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.ScrollDirection.UP,
                 new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 1);
         PElementTouchEvent touch = new PElementTouchEvent(0, time, 3.0f, 4.2f,
                 new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 1, 1.0f);

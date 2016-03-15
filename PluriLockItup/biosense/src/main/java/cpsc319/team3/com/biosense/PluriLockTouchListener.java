@@ -5,12 +5,12 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
 
 import java.util.GregorianCalendar;
 
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
+import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
 /**
  * Created by Karen on 16-02-23.
@@ -26,11 +26,11 @@ public class PluriLockTouchListener implements
 {
     private static final String TAG = "PluriLockTouchListener";
 
-    int screenOrientation;
-    long timestamp;
-    float pressure;
-    float fingerOrientation;
-    float touchArea;
+//    int screenOrientation;
+//    long timestamp;
+//    float pressure;
+//    float fingerOrientation;
+//    float touchArea;
 
     PluriLockEventTracker eventTracker;
 
@@ -49,12 +49,27 @@ public class PluriLockTouchListener implements
     @Override
     public boolean onDown(MotionEvent e) {
         Log.d(TAG,"onDown: " + e.toString());
-        screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
-        timestamp = e.getDownTime();
-        pressure = e.getPressure();
-        fingerOrientation = e.getOrientation();
-        touchArea = e.getSize();
+        try {
+            long currTimestamp = System.currentTimeMillis();
+            long duration = e.getEventTime() - e.getDownTime();
+            PointF precisionXY = new PointF(e.getXPrecision(), e.getYPrecision());
+            PointF screenCord = new PointF(e.getX(), e.getY());
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
+            long timestamp = e.getDownTime();
+            float pressure = e.getPressure();
+            float fingerOrientation = e.getOrientation();
+            float touchArea = e.getSize();
+            int pointerCount = e.getPointerCount();
 
+            PElementTouchEvent pElementTouchEvent =
+                    new PElementTouchEvent(screenOrientation, currTimestamp,
+                            pressure, fingerOrientation, precisionXY, screenCord, duration,
+                            touchArea, PluriLockEvent.MotionCode.DOWN, pointerCount);
+            eventTracker.notifyOfEvent(pElementTouchEvent);
+        }
+        catch (NullPointerException nullEx) {
+            Log.d("Single touch error", nullEx.getMessage());
+        }
         return true;
     }
 
@@ -82,16 +97,22 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
+        Log.d(TAG, "onSingleTapUp: " + e.toString());
         try {
-            Log.d(TAG, "onSingleTapUp: " + e.toString());
             long currTimestamp = System.currentTimeMillis();
-            long duration = timestamp - currTimestamp;
-            PointF elementRelativeCoord = new PointF(e.getX(), e.getY());
+            long duration = e.getEventTime() - e.getDownTime();
+            PointF precisionXY = new PointF(e.getXPrecision(), e.getYPrecision());
             PointF screenCord = new PointF(e.getX(), e.getY());
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
+            float pressure = e.getPressure();
+            float fingerOrientation = e.getOrientation();
+            float touchArea = e.getSize();
+            int pointerCount = e.getPointerCount();
 
             PElementTouchEvent pElementTouchEvent =
-                    new PElementTouchEvent(screenOrientation, timestamp,
-                            pressure, fingerOrientation, elementRelativeCoord, screenCord, duration, touchArea);
+                    new PElementTouchEvent(screenOrientation, currTimestamp,
+                            pressure, fingerOrientation, precisionXY, screenCord, duration,
+                            touchArea, PluriLockEvent.MotionCode.UP, pointerCount);
             eventTracker.notifyOfEvent(pElementTouchEvent);
         }
         catch (NullPointerException nullEx){
@@ -120,20 +141,17 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.d(TAG, "onScroll: " + e1.toString() + e2.toString());
         try {
-            Log.d(TAG, "onScroll: " + e1.toString() + e2.toString());
-
+            long currTimestamp = System.currentTimeMillis();
+            long duration = e2.getEventTime() - e1.getDownTime();
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
-
-            PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
-
-            long currTimestamp = new GregorianCalendar().getTimeInMillis();
-            long duration = timestamp - currTimestamp;
-
+            PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
             PScrollEvent pScrollEvent =
-                    new PScrollEvent(screenOrientation, timestamp, scrollDirection,
-                            startCoord, endCoord, duration);
+                    new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
+                            startCoord, endCoord, duration, PluriLockEvent.MotionCode.SCROLL);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){
@@ -172,19 +190,17 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.d(TAG, "onFling: " + e1.toString() + e2.toString());
         try {
-            Log.d(TAG, "onFling: " + e1.toString() + e2.toString());
+            long currTimestamp = System.currentTimeMillis();
+            long duration = e2.getEventTime() - e1.getDownTime();
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
-
-            PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
-
-            long currTimestamp = new GregorianCalendar().getTimeInMillis();
-            long duration = timestamp - currTimestamp;
-
+            PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
             PScrollEvent pScrollEvent =
-                    new PScrollEvent(screenOrientation, timestamp, scrollDirection,
-                            startCoord, endCoord, duration);
+                    new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
+                            startCoord, endCoord, duration, PluriLockEvent.MotionCode.FLING);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){
@@ -193,19 +209,19 @@ public class PluriLockTouchListener implements
         return true;
     }
 
-    public PScrollEvent.scrollDirection getScrollDirection(PointF startCoord, PointF endCoord) {
+    public PScrollEvent.ScrollDirection getScrollDirection(PointF startCoord, PointF endCoord) {
         //Swipe left or right
         if (Math.abs(startCoord.x - endCoord.x) > Math.abs(startCoord.y - endCoord.y)) {
             if (startCoord.x > endCoord.x) { //scroll left
-                return PScrollEvent.scrollDirection.LEFT;
+                return PScrollEvent.ScrollDirection.LEFT;
             } else { //scroll right
-                return PScrollEvent.scrollDirection.RIGHT;
+                return PScrollEvent.ScrollDirection.RIGHT;
             }
         } else { //Scroll up or down
             if (startCoord.y < endCoord.y) { //scroll down
-                return PScrollEvent.scrollDirection.DOWN;
+                return PScrollEvent.ScrollDirection.DOWN;
             } else {
-                return PScrollEvent.scrollDirection.UP;
+                return PScrollEvent.ScrollDirection.UP;
             }
         }
     }

@@ -13,24 +13,24 @@ import android.graphics.PointF;
  */
 public class PScrollEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "SCROLL";
-    private scrollDirection scrollDirection;
+    private ScrollDirection scrollDirection;
     private PointF startCoord;
     private PointF endCoord;
 
-    public enum scrollDirection {
+    public enum ScrollDirection {
         UP, DOWN, LEFT, RIGHT
     }
 
     public PScrollEvent(int screenOrientation, long timestamp,
-                        scrollDirection scrollDirection, PointF startCoord, PointF endCoord,
-                        long duration) {
-        super(screenOrientation, timestamp, duration);
+                        ScrollDirection scrollDirection, PointF startCoord, PointF endCoord,
+                        long duration, MotionCode motionCode) {
+        super(screenOrientation, timestamp, duration, motionCode);
         this.scrollDirection = scrollDirection;
         this.startCoord = startCoord;
         this.endCoord = endCoord;
     }
 
-    public scrollDirection getScrollDirection() { return scrollDirection; }
+    public ScrollDirection getScrollDirection() { return scrollDirection; }
 
     public float getStartCoordX() { return startCoord.x; }
 

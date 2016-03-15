@@ -32,12 +32,19 @@ public abstract class PluriLockEvent {
     private int screenOrientation; //1 = portrait; 2 = landscape
     private long timestamp;
     private long duration;
+    private MotionCode MotionCode;
 
-    public PluriLockEvent(int screenOrientation, long timestamp, long duration) {
+    public PluriLockEvent(int screenOrientation, long timestamp, long duration,
+                          MotionCode MotionCode) {
         Log.d(TAG, "PluriLockEvent constructor");
         this.screenOrientation = screenOrientation;
         this.timestamp = timestamp;
         this.duration = duration;
+        this.MotionCode = MotionCode;
+    }
+
+    public enum MotionCode {
+        SCROLL, FLING, DOWN, UP, KEY
     }
 
     public int getScreenOrientation() {

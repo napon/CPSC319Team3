@@ -89,7 +89,7 @@ public class PluriLockEventManagerTests {
 
         // Add one more PluriLockEvents.
         p.addPluriLockEvent(new PScrollEvent(1, System.currentTimeMillis(),
-                PScrollEvent.scrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1));
+                PScrollEvent.ScrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1));
 
         // Verify the network call has been invoked 1 time.
         Mockito.verify(network, Mockito.times(1)).sendEvent(Mockito.any(PluriLockPackage.class));
