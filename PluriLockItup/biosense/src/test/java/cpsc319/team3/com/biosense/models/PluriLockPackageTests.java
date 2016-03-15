@@ -150,6 +150,7 @@ public class PluriLockPackageTests {
             assertEquals(4.0, eventObject.getDouble("screenY"), DELTA);
             assertEquals(4.2, eventObject.getDouble("fingerOrientation"), DELTA);
             assertEquals(3.7, eventObject.getDouble("touchArea"), DELTA);
+            assertEquals(MotionEvent.ACTION_UP, eventObject.getInt("motionEventCode"));
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -179,6 +180,7 @@ public class PluriLockPackageTests {
             assertEquals(8.3, eventObject.getDouble("startY"), DELTA);
             assertEquals(7.6, eventObject.getDouble("endX"), DELTA);
             assertEquals(4.5, eventObject.getDouble("endY"), DELTA);
+            assertEquals(MotionEvent.ACTION_SCROLL, eventObject.getInt("motionEventCode"));
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -206,6 +208,7 @@ public class PluriLockPackageTests {
             assertEquals("INWARDS", eventObject.getString("scaleDirection"));
             assertEquals(2.5f, eventObject.getDouble("spanX"), DELTA);
             assertEquals(6.7f , eventObject.getDouble("spanY"), DELTA);
+            assertEquals(MotionEvent.ACTION_DOWN, eventObject.getInt("motionEventCode"));
         } catch (JSONException e) {
             fail(e.getMessage());
         }
