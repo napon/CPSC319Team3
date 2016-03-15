@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
             case '6':
                 return "Napon";
             default:
-                return "Default123";
+                return "team3";
         }
     }
 }
