@@ -53,11 +53,12 @@ public class PluriLockTouchListener implements
             float fingerOrientation = e.getOrientation();
             float touchArea = e.getSize();
             int pointerCount = e.getPointerCount();
+            int motionEventCode = e.getActionMasked();
 
             PElementTouchEvent pElementTouchEvent =
                     new PElementTouchEvent(screenOrientation, currTimestamp,
                             pressure, fingerOrientation, precisionXY, screenCord, duration,
-                            touchArea, PluriLockEvent.MotionCode.DOWN, pointerCount);
+                            touchArea, motionEventCode, pointerCount);
             eventTracker.notifyOfEvent(pElementTouchEvent);
         }
         catch (NullPointerException nullEx) {
@@ -105,7 +106,7 @@ public class PluriLockTouchListener implements
             PElementTouchEvent pElementTouchEvent =
                     new PElementTouchEvent(screenOrientation, currTimestamp,
                             pressure, fingerOrientation, precisionXY, screenCord, duration,
-                            touchArea, PluriLockEvent.MotionCode.UP, pointerCount);
+                            touchArea, MotionEvent.ACTION_UP, pointerCount);
             eventTracker.notifyOfEvent(pElementTouchEvent);
         }
         catch (NullPointerException nullEx){
@@ -142,9 +143,11 @@ public class PluriLockTouchListener implements
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
             PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
+            int motionEventCode = e1.getActionMasked();
+
             PScrollEvent pScrollEvent =
                     new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
-                            startCoord, endCoord, duration, PluriLockEvent.MotionCode.SCROLL);
+                            startCoord, endCoord, duration, motionEventCode);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){
@@ -191,9 +194,11 @@ public class PluriLockTouchListener implements
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
             PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
+            int motionEventCode = e2.getActionMasked();
+
             PScrollEvent pScrollEvent =
                     new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
-                            startCoord, endCoord, duration, PluriLockEvent.MotionCode.FLING);
+                            startCoord, endCoord, duration, motionEventCode);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){

@@ -2,6 +2,7 @@ package cpsc319.team3.com.biosense.models;
 
 import android.graphics.PointF;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,16 +23,20 @@ public class PElementTouchEvent extends PluriLockEvent {
     private float touchArea;
     private int pointerCount;
 
+    private int motionEventCode;
+
     public PElementTouchEvent(int screenOrientation, long timestamp, float pressure,
                               float fingerOrientation, PointF precisionXY, PointF screenCoord,
-                              long duration, float touchArea, MotionCode MotionCode, int pointerCount) {
-        super(screenOrientation, timestamp, duration, MotionCode);
+                              long duration, float touchArea, int motionCode, int pointerCount) {
+        super(screenOrientation, timestamp, duration);
         Log.d(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
         this.precisionXY = precisionXY;
         this.screenCoord = screenCoord;
         this.touchArea = touchArea;
+        this.motionEventCode = motionCode;
+        this.pointerCount = pointerCount;
     }
 
     public float getPressure() {
@@ -62,6 +67,15 @@ public class PElementTouchEvent extends PluriLockEvent {
         return touchArea;
     }
 
+    public int getMotionEventCode() {
+        return motionEventCode;
+    }
+
+    public int getPointerCount() {
+        return pointerCount;
+    }
+
+
     public JSONObject getJSON() {
         Log.d(TAG, "getJSON");
         JSONObject jsonObject = super.getJSON();
@@ -74,6 +88,8 @@ public class PElementTouchEvent extends PluriLockEvent {
             jsonObject.put("screenX", getScreenCoordX());
             jsonObject.put("screenY", getScreenCoordY());
             jsonObject.put("touchArea", getTouchArea());
+            jsonObject.put("motionEventCode", getMotionEventCode());
+            jsonObject.put("pointerCount", getPointerCount());
         } catch (JSONException e) {
             e.printStackTrace();
         }

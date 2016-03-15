@@ -13,6 +13,7 @@ public class PScaleEvent extends PluriLockEvent{
     private scaleDirection scaleDirection;
     private float spanX;
     private float spanY;
+    private int motionEventCode;
 
     public enum scaleDirection {
         INWARDS, OUTWARDS
@@ -20,11 +21,12 @@ public class PScaleEvent extends PluriLockEvent{
 
     public PScaleEvent(int screenOrientation, long timestamp, long duration,
                        scaleDirection scaleDirection,
-                       float spanX, float spanY, MotionCode motionCode) {
-        super(screenOrientation, timestamp, duration, motionCode);
+                       float spanX, float spanY, int motionCode) {
+        super(screenOrientation, timestamp, duration);
         this.scaleDirection = scaleDirection;
         this.spanX = spanX;
         this.spanY = spanY;
+        this.motionEventCode = motionCode;
     }
 
     public PScaleEvent.scaleDirection getScaleDirection() {
@@ -39,6 +41,10 @@ public class PScaleEvent extends PluriLockEvent{
         return spanY;
     }
 
+    public int getMotionEventCode() {
+        return motionEventCode;
+    }
+
     @Override
     public JSONObject getJSON() {
         JSONObject jsonObject = super.getJSON();
@@ -47,6 +53,7 @@ public class PScaleEvent extends PluriLockEvent{
             jsonObject.put("scaleDirection", getScaleDirection());
             jsonObject.put("spanX", getSpanX());
             jsonObject.put("spanY", getSpanY());
+            jsonObject.put("motionEventCode", getMotionEventCode());
         } catch (JSONException e) {
             e.printStackTrace();
         }

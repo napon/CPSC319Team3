@@ -16,6 +16,7 @@ public class PScrollEvent extends PluriLockEvent {
     private ScrollDirection scrollDirection;
     private PointF startCoord;
     private PointF endCoord;
+    private int motionEventCode;
 
     public enum ScrollDirection {
         UP, DOWN, LEFT, RIGHT
@@ -23,11 +24,16 @@ public class PScrollEvent extends PluriLockEvent {
 
     public PScrollEvent(int screenOrientation, long timestamp,
                         ScrollDirection scrollDirection, PointF startCoord, PointF endCoord,
-                        long duration, MotionCode motionCode) {
-        super(screenOrientation, timestamp, duration, motionCode);
+                        long duration, int motionCode) {
+        super(screenOrientation, timestamp, duration);
         this.scrollDirection = scrollDirection;
         this.startCoord = startCoord;
         this.endCoord = endCoord;
+        this.motionEventCode = motionCode;
+    }
+
+    public int getMotionEventCode() {
+        return motionEventCode;
     }
 
     public ScrollDirection getScrollDirection() { return scrollDirection; }
@@ -56,6 +62,7 @@ public class PScrollEvent extends PluriLockEvent {
             jsonObject.put("startY", getStartCoordY());
             jsonObject.put("endX", getEndCoordX());
             jsonObject.put("endY", getEndCoordY());
+            jsonObject.put("motionEventCode", getMotionEventCode());
         } catch (JSONException e) {
             e.printStackTrace();
         }

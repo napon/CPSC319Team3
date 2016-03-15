@@ -15,7 +15,7 @@ public class PMonoKeyboardTouchEvent extends PluriLockEvent {
 
     public PMonoKeyboardTouchEvent(int screenOrientation, long timestamp,
                                    long duration, int keyPressed) {
-        super(screenOrientation, timestamp, duration, PluriLockEvent.MotionCode.KEY);
+        super(screenOrientation, timestamp, duration);
         this.keyPressed = keyPressed;
     }
 
