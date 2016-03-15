@@ -10,7 +10,7 @@ import static junit.framework.Assert.assertTrue;
 public class PScaleEventTests {
     @Test
     public void sampleTest() throws Exception {
-        PScaleEvent p = new PScaleEvent(1, 1, 1, PScaleEvent.scaleDirection.INWARDS, 3.7f, 4.5f);
+        PScaleEvent p = new PScaleEvent(1, 1, 1, PScaleEvent.scaleDirection.INWARDS, 3.7f, 4.5f, PluriLockEvent.MotionCode.SCALE);
         assertTrue(p.getClass() == PScaleEvent.class);
     }
 }

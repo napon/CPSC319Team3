@@ -44,7 +44,7 @@ public abstract class PluriLockEvent {
     }
 
     public enum MotionCode {
-        SCROLL, FLING, DOWN, UP, KEY
+        SCROLL, FLING, DOWN, UP, KEY, SCALE
     }
 
     public int getScreenOrientation() {
