@@ -1,14 +1,13 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import cpsc319.team3.com.plurilockitup.R;
 
-public class FeedbackActivity extends AppCompatActivity {
+public class FeedbackActivity extends PluriLockActivity {
 
     EditText feedback_message;
 
