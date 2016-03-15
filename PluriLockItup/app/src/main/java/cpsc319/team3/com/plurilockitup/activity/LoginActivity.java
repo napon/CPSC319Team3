@@ -1,9 +1,12 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +46,35 @@ public class LoginActivity extends AppCompatActivity {
         //try to retrieve registered account
         savedCardNum = mLoginPref.getString(Utils.cardNum, null);
         savedPassword = mLoginPref.getString(Utils.password, null);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        String provider = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        if(!provider.equals("")){
+            //GPS Enabled
+        }else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("This app requires location service to keep your banking session secure. Please enable location service before proceeding");
+            builder.setTitle("GPS location required");
+            builder.setPositiveButton("Location settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("Not Right Now", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.setCancelable(false);
+            builder.show();
+        }
     }
 
     /**
