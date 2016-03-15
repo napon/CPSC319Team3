@@ -26,12 +26,6 @@ public class PluriLockTouchListener implements
 {
     private static final String TAG = "PluriLockTouchListener";
 
-//    int screenOrientation;
-//    long timestamp;
-//    float pressure;
-//    float fingerOrientation;
-//    float touchArea;
-
     PluriLockEventTracker eventTracker;
 
     public PluriLockTouchListener(PluriLockEventTracker eventTracker) {
@@ -48,14 +42,13 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onDown(MotionEvent e) {
-        Log.d(TAG,"onDown: " + e.toString());
         try {
+            Log.d(TAG,"onDown: " + e.toString());
             long currTimestamp = System.currentTimeMillis();
             long duration = e.getEventTime() - e.getDownTime();
             PointF precisionXY = new PointF(e.getXPrecision(), e.getYPrecision());
             PointF screenCord = new PointF(e.getX(), e.getY());
             int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
-            long timestamp = e.getDownTime();
             float pressure = e.getPressure();
             float fingerOrientation = e.getOrientation();
             float touchArea = e.getSize();
@@ -97,8 +90,8 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        Log.d(TAG, "onSingleTapUp: " + e.toString());
         try {
+            Log.d(TAG, "onSingleTapUp: " + e.toString());
             long currTimestamp = System.currentTimeMillis();
             long duration = e.getEventTime() - e.getDownTime();
             PointF precisionXY = new PointF(e.getXPrecision(), e.getYPrecision());
@@ -141,8 +134,8 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(TAG, "onScroll: " + e1.toString() + e2.toString());
         try {
+            Log.d(TAG, "onScroll: " + e1.toString() + e2.toString());
             long currTimestamp = System.currentTimeMillis();
             long duration = e2.getEventTime() - e1.getDownTime();
             int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
