@@ -202,7 +202,7 @@ public class PluriLockTouchListener implements
                 return PScrollEvent.scrollDirection.RIGHT;
             }
         } else { //Scroll up or down
-            if (startCoord.y > startCoord.y) { //scroll down
+            if (startCoord.y < endCoord.y) { //scroll down
                 return PScrollEvent.scrollDirection.DOWN;
             } else {
                 return PScrollEvent.scrollDirection.UP;
