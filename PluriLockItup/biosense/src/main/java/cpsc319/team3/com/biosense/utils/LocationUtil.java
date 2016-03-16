@@ -1,15 +1,13 @@
 package cpsc319.team3.com.biosense.utils;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 
+import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 
 /**
@@ -20,25 +18,27 @@ public class LocationUtil implements LocationListener {
     private static double lat = 0.0;
     private static double lon = 0.0;
 
-    public LocationUtil(Context c) throws LocationServiceUnavailableException {
-        if (!locationServicesEnabled(c)) {
-            throw new LocationServiceUnavailableException("Device Location is disabled.");
-        } else {
-            LocationManager lm = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
-            try {
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            } catch (SecurityException e) {}
-        }
-    }
-
-    private boolean locationServicesEnabled(Context context) {
-        int locationMode = 0;
+    public LocationUtil(Context c, PluriLockConfig config) throws LocationServiceUnavailableException {
+        if (config.ignoreLocation()) return;
         try {
-            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+            // API >= 19
+            String provider1 = Settings.Secure.getString(c.getContentResolver(),
+                    Settings.Secure.LOCATION_MODE);
+            // API < 19
+            String provider2 = Settings.Secure.getString(c.getContentResolver(),
+                    Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+            if (provider1 != null && provider1.equals(Settings.Secure.LOCATION_MODE_OFF)) {
+                throw new LocationServiceUnavailableException("Location not available");
+            }
+
+            if (provider2 != null && provider2.equals("")) {
+                throw new LocationServiceUnavailableException("Location not available");
+            }
+
+            LocationManager lm = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        } catch (SecurityException e) { e.printStackTrace(); }
     }
 
     public static double getLatitude() { return lat; }

@@ -17,6 +17,7 @@ import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowContextImpl;
 import org.robolectric.shadows.ShadowContextWrapper;
 
+import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 
 import static org.junit.Assert.assertEquals;
@@ -33,25 +34,26 @@ public class LocationUtilTests {
         assertEquals(0.0, LocationUtil.getLongitude(), DELTA);
     }
 
-    @Test (expected = LocationServiceUnavailableException.class)
+    @Test
     public void testLocationUtilNoPermission() throws LocationServiceUnavailableException {
         Application application = (Application) ShadowApplication.getInstance().getApplicationContext();
         ShadowContextWrapper shadowApp = Shadows.shadowOf(application);
         shadowApp.setPackageName("com.cpsc319.team3");
         application.onCreate();
-        locationUtil = new LocationUtil(application);
+        PluriLockConfig config = new PluriLockConfig();
+        locationUtil = new LocationUtil(application, config);
     }
 
     @Test
     public void testLocationUtilWithPermission() throws LocationServiceUnavailableException {
         Application application = createApplicationWithPermission();
-        locationUtil = new LocationUtil(application);
+        locationUtil = new LocationUtil(application, new PluriLockConfig());
     }
 
     @Test
     public void testOnLocationChanged() throws LocationServiceUnavailableException {
         Application application = createApplicationWithPermission();
-        locationUtil = new LocationUtil(application);
+        locationUtil = new LocationUtil(application, new PluriLockConfig());
 
         Location location = new Location(LocationManager.NETWORK_PROVIDER);
         location.setLatitude(15.1);
@@ -66,7 +68,7 @@ public class LocationUtilTests {
     @Test
     public void testOnLocationChangedTwice() throws LocationServiceUnavailableException {
         Application application = createApplicationWithPermission();
-        locationUtil = new LocationUtil(application);
+        locationUtil = new LocationUtil(application, new PluriLockConfig());
 
         Location location = new Location(LocationManager.NETWORK_PROVIDER);
         location.setLatitude(15.1);

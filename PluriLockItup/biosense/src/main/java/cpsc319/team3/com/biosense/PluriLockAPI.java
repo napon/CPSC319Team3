@@ -57,7 +57,6 @@ public class PluriLockAPI {
         Log.d(TAG, "PluriLockAPI constructor");
         this.eventManager = PluriLockEventManager.getInstance(context, userID, config);
         this.eventTracker = new PluriLockEventTracker(context, eventManager);
-
     }
 
     public PluriLockKeyListener createKeyListener() {
