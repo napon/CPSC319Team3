@@ -18,6 +18,7 @@ import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
+import cpsc319.team3.com.plurilockitup.model.Customer;
 
 /**
  * Created by kelvinchan on 16-03-10.
@@ -79,13 +80,14 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                 new IntentFilter("server-response")
         );
 
-        String id = "team3";
+//        String id = "team3";
+        String userId = Customer.getInstance().getuId();
         PluriLockConfig config = new PluriLockConfig();
         try {
             config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
-            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-//            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
+//            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
+            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
             config.setAppVersion(1.0);
             config.setDomain("team3");
         } catch(Exception e) {}
@@ -93,7 +95,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         try {
             this.plapi = PluriLockAPI.getInstance();
             if(this.plapi == null) {
-                this.plapi = PluriLockAPI.createNewSession(context, id, config);
+                this.plapi = PluriLockAPI.createNewSession(context, userId, config);
             }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?
