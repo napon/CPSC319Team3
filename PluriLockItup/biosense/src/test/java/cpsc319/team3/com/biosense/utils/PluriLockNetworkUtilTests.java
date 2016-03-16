@@ -10,13 +10,6 @@ import android.provider.Settings;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
@@ -45,6 +38,12 @@ import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class PluriLockNetworkUtilTests {
@@ -79,6 +78,23 @@ public class PluriLockNetworkUtilTests {
 
     @Test
     public void testSend() throws Exception {
+
+        //mock connection
+        Context c = Mockito.mock(Context.class);
+        Field injectedContext = PluriLockNetworkUtil.class.getDeclaredField("context");
+        injectedContext.setAccessible(true);
+        injectedContext.set(networkUtil, c);
+        ConnectivityManager cm = Mockito.mock(ConnectivityManager.class);
+        NetworkInfo network = Mockito.mock(NetworkInfo.class);
+        when(c.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(cm);
+        when(cm.getActiveNetworkInfo()).thenReturn(network);
+        
+        //network on
+        when(network.isAvailable()).thenReturn(true);
+        when(network.isConnectedOrConnecting()).thenReturn(true);
+        when(network.getType()).thenReturn(ConnectivityManager.TYPE_WIFI);
+
+        //mock session
         Field injected = PluriLockNetworkUtil.class.getDeclaredField("userSession");
         injected.setAccessible(true);
         injected.set(networkUtil, userSession);
