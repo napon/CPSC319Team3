@@ -19,11 +19,19 @@ public class PMonoKeyboardTouchEvent extends PluriLockEvent {
         this.keyPressed = keyPressed;
     }
 
-
+    /**
+     * Android has an unique int for each key
+     * Get the key pressed
+     * @return Android keycode
+     */
     public int getKeyPressed() {
         return keyPressed;
     }
 
+    /**
+     * Generates JSON object of PMonoKeyboardTouchEvent
+     * @return JSON object PMonoKeyboardTouchEvent
+     */
     @Override
     public JSONObject getJSON() {
         JSONObject jsonObject = super.getJSON();

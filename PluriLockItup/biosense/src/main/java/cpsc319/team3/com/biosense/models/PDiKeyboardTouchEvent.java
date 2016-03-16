@@ -20,10 +20,24 @@ public class PDiKeyboardTouchEvent extends PluriLockEvent {
         this.toKey = toKey;
     }
 
+    /**
+     * Android has an unique int for each key
+     * Get the first key pressed
+     * @return Android keycode
+     */
     public int getFromKey() { return fromKey; }
 
+    /**
+     * Android has an unique int for each key
+     * Get the second key pressed
+     * @return Android keycode
+     */
     public int getToKey() { return toKey; }
 
+    /**
+     * Generates JSON object of PDiKeyboardTouchEvent
+     * @return JSON object PDiKeyboardTouchEvent
+     */
     @Override
     public JSONObject getJSON() {
         JSONObject jsonObject = super.getJSON();
