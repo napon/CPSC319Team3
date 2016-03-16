@@ -16,16 +16,24 @@
         android:layout_alignParentBottom="true"
         android:visibility="visible"
         android:gravity="right">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/swipe_right"/>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/swipe_right"/>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/swipe_right"/>
         <TextView
             android:id="@+id/swipeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Swipe for next statement"
             android:textSize="20sp"/>
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/swipe_right"/>
     </LinearLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
