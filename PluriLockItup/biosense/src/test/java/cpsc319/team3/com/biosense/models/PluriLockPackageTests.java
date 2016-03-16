@@ -1,6 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
 import android.graphics.PointF;
+import android.view.MotionEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ public class PluriLockPackageTests {
                 .longitude(40.0)
                 .model("Nexus 6")
                 .timeZone("PST")
+                .appName("PLURILOCKITUP")
                 .countryCode("CA")
                 .language("Thai")
                 .manufacturer("LG")
@@ -64,6 +66,7 @@ public class PluriLockPackageTests {
             assertEquals("Thai", data.getString("language"));
             assertEquals("CA", data.getString("countryCode"));
             assertEquals("PST", data.getString("timeZone"));
+            assertEquals("PLURILOCKITUP", data.getString("appName"));
             assertEquals(20.0, data.getDouble("latitude"), DELTA);
             assertEquals(40.0, data.getDouble("longitude"), DELTA);
             assertEquals(600, data.getInt("screenHeight"));
@@ -127,7 +130,7 @@ public class PluriLockPackageTests {
     public void testGetJSONWithElementTouchEvent() {
         // Create and add a ElementTouchEvent to the PluriLockPackage.
         PElementTouchEvent touch = new PElementTouchEvent(0, time, 3.0f, 4.2f,
-                new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 200, 3.7f);
+                new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 200, 3.7f, MotionEvent.ACTION_UP, 1);
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{touch}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -149,6 +152,7 @@ public class PluriLockPackageTests {
             assertEquals(4.0, eventObject.getDouble("screenY"), DELTA);
             assertEquals(4.2, eventObject.getDouble("fingerOrientation"), DELTA);
             assertEquals(3.7, eventObject.getDouble("touchArea"), DELTA);
+            assertEquals(MotionEvent.ACTION_UP, eventObject.getInt("motionEventCode"));
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -157,8 +161,8 @@ public class PluriLockPackageTests {
     @Test
     public void testGetJSONWithScrollEvent() {
         // Create and add a ScrollEvent to the PluriLockPackage.
-        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.scrollDirection.UP,
-                new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 200);
+        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.ScrollDirection.UP,
+                new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 200, MotionEvent.ACTION_SCROLL);
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scroll}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -178,6 +182,35 @@ public class PluriLockPackageTests {
             assertEquals(8.3, eventObject.getDouble("startY"), DELTA);
             assertEquals(7.6, eventObject.getDouble("endX"), DELTA);
             assertEquals(4.5, eventObject.getDouble("endY"), DELTA);
+            assertEquals(MotionEvent.ACTION_SCROLL, eventObject.getInt("motionEventCode"));
+        } catch (JSONException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetJSONWithScaleEvent() {
+        // Create and add a ScaleEvent to the PluriLockPackage.
+        PScaleEvent scale = new PScaleEvent(1, time, 42, PScaleEvent.ScaleDirection.INWARDS,
+                2.5f, 6.7f, MotionEvent.ACTION_DOWN);
+        PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scale}).buildPackage();
+        JSONObject jsonObject = p.getJSON();
+        try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
+            // There should only be one object in the events set.
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
+
+            // Test each field from ScaleEvent is properly defined
+            assertEquals("SCALE", eventObject.getString("eventType"));
+            assertEquals(time, eventObject.getLong("timestamp"));
+            assertEquals(1, eventObject.getInt("orientation"));
+            assertEquals(42, eventObject.getLong("duration"));
+            assertEquals("INWARDS", eventObject.getString("ScaleDirection"));
+            assertEquals(2.5f, eventObject.getDouble("spanX"), DELTA);
+            assertEquals(6.7f , eventObject.getDouble("spanY"), DELTA);
+            assertEquals(MotionEvent.ACTION_DOWN, eventObject.getInt("motionEventCode"));
         } catch (JSONException e) {
             fail(e.getMessage());
         }
@@ -186,10 +219,10 @@ public class PluriLockPackageTests {
     @Test
     public void testGetJSONWithMultipleEvents() {
         // Create and add multiple events to the PluriLockPackage.
-        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.scrollDirection.UP,
-                new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 1);
+        PScrollEvent scroll = new PScrollEvent(1, time, PScrollEvent.ScrollDirection.UP,
+                new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 1, MotionEvent.ACTION_SCROLL);
         PElementTouchEvent touch = new PElementTouchEvent(0, time, 3.0f, 4.2f,
-                new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 1, 1.0f);
+                new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 1, 1.0f, MotionEvent.ACTION_UP, 1);
         PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(0, time, 30, (int) 'a');
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scroll, touch, keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();

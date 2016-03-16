@@ -4,31 +4,27 @@ import android.graphics.PointF;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
+import android.view.ScaleGestureDetector;
 
 import java.util.GregorianCalendar;
 
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
+import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
 /**
  * Created by Karen on 16-02-23.
  *
  * A Listener class for touch events.
  * PluriLockEventTracker is notified via method call when touch event occurs
- * A PElementTouchEvent or a PScrollEvent is created depending on the type of touch
+ * A PElementTouchEvent, PScrollEvent or a PScaleEvent is created depending on the type of touch
  *
  */
 public class PluriLockTouchListener implements
-        GestureDetector.OnGestureListener, View.OnTouchListener
+        GestureDetector.OnGestureListener,
+        ScaleGestureDetector.OnScaleGestureListener
 {
     private static final String TAG = "PluriLockTouchListener";
-
-    int screenOrientation;
-    long timestamp;
-    float pressure;
-    float fingerOrientation;
-    float touchArea;
 
     PluriLockEventTracker eventTracker;
 
@@ -46,13 +42,28 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onDown(MotionEvent e) {
-        Log.d(TAG,"onDown: " + e.toString());
-        screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
-        timestamp = e.getDownTime();
-        pressure = e.getPressure();
-        fingerOrientation = e.getOrientation();
-        touchArea = e.getSize();
+        try {
+            Log.d(TAG,"onDown: " + e.toString());
+            long currTimestamp = System.currentTimeMillis();
+            long duration = e.getEventTime() - e.getDownTime();
+            PointF precisionXY = new PointF(e.getXPrecision(), e.getYPrecision());
+            PointF screenCord = new PointF(e.getX(), e.getY());
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
+            float pressure = e.getPressure();
+            float fingerOrientation = e.getOrientation();
+            float touchArea = e.getSize();
+            int pointerCount = e.getPointerCount();
+            int motionEventCode = e.getActionMasked();
 
+            PElementTouchEvent pElementTouchEvent =
+                    new PElementTouchEvent(screenOrientation, currTimestamp,
+                            pressure, fingerOrientation, precisionXY, screenCord, duration,
+                            touchArea, motionEventCode, pointerCount);
+            eventTracker.notifyOfEvent(pElementTouchEvent);
+        }
+        catch (NullPointerException nullEx) {
+            Log.d("Single touch error", nullEx.getMessage());
+        }
         return true;
     }
 
@@ -83,13 +94,19 @@ public class PluriLockTouchListener implements
         try {
             Log.d(TAG, "onSingleTapUp: " + e.toString());
             long currTimestamp = System.currentTimeMillis();
-            long duration = timestamp - currTimestamp;
-            PointF elementRelativeCoord = new PointF(e.getX(), e.getY());
+            long duration = e.getEventTime() - e.getDownTime();
+            PointF precisionXY = new PointF(e.getXPrecision(), e.getYPrecision());
             PointF screenCord = new PointF(e.getX(), e.getY());
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
+            float pressure = e.getPressure();
+            float fingerOrientation = e.getOrientation();
+            float touchArea = e.getSize();
+            int pointerCount = e.getPointerCount();
 
             PElementTouchEvent pElementTouchEvent =
-                    new PElementTouchEvent(screenOrientation, timestamp,
-                            pressure, fingerOrientation, elementRelativeCoord, screenCord, duration, touchArea);
+                    new PElementTouchEvent(screenOrientation, currTimestamp,
+                            pressure, fingerOrientation, precisionXY, screenCord, duration,
+                            touchArea, MotionEvent.ACTION_UP, pointerCount);
             eventTracker.notifyOfEvent(pElementTouchEvent);
         }
         catch (NullPointerException nullEx){
@@ -120,18 +137,17 @@ public class PluriLockTouchListener implements
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         try {
             Log.d(TAG, "onScroll: " + e1.toString() + e2.toString());
-
+            long currTimestamp = System.currentTimeMillis();
+            long duration = e2.getEventTime() - e1.getDownTime();
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
-
-            PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
-
-            long currTimestamp = new GregorianCalendar().getTimeInMillis();
-            long duration = timestamp - currTimestamp;
+            PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
+            int motionEventCode = e1.getActionMasked();
 
             PScrollEvent pScrollEvent =
-                    new PScrollEvent(screenOrientation, timestamp, scrollDirection,
-                            startCoord, endCoord, duration);
+                    new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
+                            startCoord, endCoord, duration, motionEventCode);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){
@@ -170,19 +186,19 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.d(TAG, "onFling: " + e1.toString() + e2.toString());
         try {
-            Log.d(TAG, "onFling: " + e1.toString() + e2.toString());
+            long currTimestamp = System.currentTimeMillis();
+            long duration = e2.getEventTime() - e1.getDownTime();
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
-
-            PScrollEvent.scrollDirection scrollDirection = getScrollDirection(startCoord, endCoord);
-
-            long currTimestamp = new GregorianCalendar().getTimeInMillis();
-            long duration = timestamp - currTimestamp;
+            PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
+            int motionEventCode = e2.getActionMasked();
 
             PScrollEvent pScrollEvent =
-                    new PScrollEvent(screenOrientation, timestamp, scrollDirection,
-                            startCoord, endCoord, duration);
+                    new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
+                            startCoord, endCoord, duration, motionEventCode);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){
@@ -191,35 +207,71 @@ public class PluriLockTouchListener implements
         return true;
     }
 
-    public PScrollEvent.scrollDirection getScrollDirection(PointF startCoord, PointF endCoord) {
+    public PScrollEvent.ScrollDirection getScrollDirection(PointF startCoord, PointF endCoord) {
         //Swipe left or right
         if (Math.abs(startCoord.x - endCoord.x) > Math.abs(startCoord.y - endCoord.y)) {
             if (startCoord.x > endCoord.x) { //scroll left
-                return PScrollEvent.scrollDirection.LEFT;
+                return PScrollEvent.ScrollDirection.LEFT;
             } else { //scroll right
-                return PScrollEvent.scrollDirection.RIGHT;
+                return PScrollEvent.ScrollDirection.RIGHT;
             }
         } else { //Scroll up or down
             if (startCoord.y < endCoord.y) { //scroll down
-                return PScrollEvent.scrollDirection.DOWN;
+                return PScrollEvent.ScrollDirection.DOWN;
             } else {
-                return PScrollEvent.scrollDirection.UP;
+                return PScrollEvent.ScrollDirection.UP;
             }
         }
     }
 
     /**
-     * Called when a touch event is dispatched to a view. This allows listeners to
-     * get a chance to respond before the target view.
+     * Responds to scaling events for a gesture in progress.
+     * Reported by pointer motion.
      *
-     * @param v     The view the touch event has been dispatched to.
-     * @param event The MotionEvent object containing full information about
-     *              the event.
-     * @return True if the listener has consumed the event, false otherwise.
+     * @param detector The detector reporting the event - use this to
+     *                 retrieve extended info about event state.
+     * @return Whether or not the detector should consider this event
+     * as handled. If an event was not handled, the detector
+     * will continue to accumulate movement until an event is
+     * handled. This can be useful if an application, for example,
+     * only wants to update scaling factors if the change is
+     * greater than 0.01.
      */
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onScale(ScaleGestureDetector detector) {
+        return false;
+    }
 
-        return true;
+    /**
+     * Responds to the beginning of a scaling gesture. Reported by
+     * new pointers going down.
+     *
+     * @param detector The detector reporting the event - use this to
+     *                 retrieve extended info about event state.
+     * @return Whether or not the detector should continue recognizing
+     * this gesture. For example, if a gesture is beginning
+     * with a focal point outside of a region where it makes
+     * sense, onScaleBegin() may return false to ignore the
+     * rest of the gesture.
+     */
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector detector) {
+        return false;
+    }
+
+    /**
+     * Responds to the end of a scale gesture. Reported by existing
+     * pointers going up.
+     * <p/>
+     * Once a scale has ended, {@link ScaleGestureDetector#getFocusX()}
+     * and {@link ScaleGestureDetector#getFocusY()} will return focal point
+     * of the pointers remaining on the screen.
+     *
+     * @param detector The detector reporting the event - use this to
+     *                 retrieve extended info about event state.
+     */
+    @Override
+    public void onScaleEnd(ScaleGestureDetector detector) {
+
     }
 }

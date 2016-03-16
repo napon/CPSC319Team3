@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.location.LocationManager;
 import android.provider.Settings;
+import android.view.MotionEvent;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,7 @@ import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
+import cpsc319.team3.com.biosense.models.PluriLockEvent;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
 import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
@@ -81,7 +83,7 @@ public class PluriLockEventManagerTests {
         // Add numActions - 1 number of PluriLockEvents.
         for (int i = 0; i < numActions - 1; i++) {
             p.addPluriLockEvent(new PElementTouchEvent(1, System.currentTimeMillis(),
-                    1, 1, new PointF(0, 0), new PointF(0,0), 1, 1));
+                    1, 1, new PointF(0, 0), new PointF(0,0), 1, 1, MotionEvent.ACTION_DOWN, 1));
         }
 
         // Verify that the network call hasn't been invoked.
@@ -89,7 +91,8 @@ public class PluriLockEventManagerTests {
 
         // Add one more PluriLockEvents.
         p.addPluriLockEvent(new PScrollEvent(1, System.currentTimeMillis(),
-                PScrollEvent.scrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1));
+                PScrollEvent.ScrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1,
+                MotionEvent.ACTION_SCROLL));
 
         // Verify the network call has been invoked 1 time.
         Mockito.verify(network, Mockito.times(1)).sendEvent(Mockito.any(PluriLockPackage.class));

@@ -17,50 +17,103 @@ public class PElementTouchEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "ELEMENT_TOUCH";
     private float pressure;
     private float fingerOrientation;
-    private PointF elementRelativeCoord;
+    private PointF precisionXY;
     private PointF screenCoord;
     private float touchArea;
+    private int pointerCount;
+
+    private int motionEventCode;
 
     public PElementTouchEvent(int screenOrientation, long timestamp, float pressure,
-                              float fingerOrientation, PointF elementRelativeCoord, PointF screenCoord,
-                              long duration, float touchArea) {
+                              float fingerOrientation, PointF precisionXY, PointF screenCoord,
+                              long duration, float touchArea, int motionCode, int pointerCount) {
         super(screenOrientation, timestamp, duration);
         Log.d(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
         this.fingerOrientation = fingerOrientation;
-        this.elementRelativeCoord = elementRelativeCoord;
+        this.precisionXY = precisionXY;
         this.screenCoord = screenCoord;
         this.touchArea = touchArea;
+        this.motionEventCode = motionCode;
+        this.pointerCount = pointerCount;
     }
 
+    /**
+     * Pressure applied to device screen
+     * @return value between 0-1 in most cases (it's possible to have values greater than 1)
+     */
     public float getPressure() {
         return pressure;
     }
 
+    /**
+     * Orientation of finger on device screen
+     * @return radian of finger orientation (not supported on for many phones; return 0)
+     */
     public float getFingerOrientation() {
         return fingerOrientation;
     }
 
-    public float getElementRelativeCoordX() {
-        return elementRelativeCoord.x;
+    /**
+     * Precision of reported X coord on screen
+     * @return value of precision of reported X coord
+     */
+    public float getPrecisionX() {
+        return precisionXY.x;
     }
 
-    public float getElementRelativeCoordY() {
-        return elementRelativeCoord.y;
+    /**
+     * Precision of reported Y coord on screen
+     * @return value of precision of reported Y coord
+     */
+    public float getPrecisionY() {
+        return precisionXY.y;
     }
 
+    /**
+     * X coord of first finger on screen
+     * @return value of X coord in pixels
+     */
     public float getScreenCoordX() {
         return screenCoord.x;
     }
 
+    /**
+     * Y coord of first finger on screen
+     * @return value of Y coord in pixels
+     */
     public float getScreenCoordY() {
         return screenCoord.y;
     }
 
+    /**
+     * Appox area of first finger on screen
+     * @return value of contact area normalized to 0-1
+     */
     public float getTouchArea() {
         return touchArea;
     }
 
+    /**
+     * Android generates a code for each MotionEvent
+     * @return the Android ActionMotionEvent code generated
+     */
+    public int getMotionEventCode() {
+        return motionEventCode;
+    }
+
+    /**
+     * Pointers are fingers on the screen
+     * @return number of pointers currently on device
+     */
+    public int getPointerCount() {
+        return pointerCount;
+    }
+
+    /**
+     * Generates JSON object of PElementTouchEvent
+     * @return JSON object PElementTouchEvent
+     */
     public JSONObject getJSON() {
         Log.d(TAG, "getJSON");
         JSONObject jsonObject = super.getJSON();
@@ -68,11 +121,13 @@ public class PElementTouchEvent extends PluriLockEvent {
             jsonObject.put("eventType", EVENT_TYPE);
             jsonObject.put("pressure", getPressure());
             jsonObject.put("fingerOrientation", getFingerOrientation());
-            jsonObject.put("elementRelX", getElementRelativeCoordX());
-            jsonObject.put("elementRelY", getElementRelativeCoordY());
+            jsonObject.put("elementRelX", getPrecisionX());
+            jsonObject.put("elementRelY", getPrecisionY());
             jsonObject.put("screenX", getScreenCoordX());
             jsonObject.put("screenY", getScreenCoordY());
             jsonObject.put("touchArea", getTouchArea());
+            jsonObject.put("motionEventCode", getMotionEventCode());
+            jsonObject.put("pointerCount", getPointerCount());
         } catch (JSONException e) {
             e.printStackTrace();
         }

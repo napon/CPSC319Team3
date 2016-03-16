@@ -33,6 +33,7 @@ public abstract class PluriLockEvent {
     private long timestamp;
     private long duration;
 
+
     public PluriLockEvent(int screenOrientation, long timestamp, long duration) {
         Log.d(TAG, "PluriLockEvent constructor");
         this.screenOrientation = screenOrientation;
@@ -40,18 +41,34 @@ public abstract class PluriLockEvent {
         this.duration = duration;
     }
 
+    /**
+     * Screen orientation
+     * @return landscape = 2, portait =1
+     */
     public int getScreenOrientation() {
         return screenOrientation;
     }
 
+    /**
+     * Time of MotionEvent
+     * @return time in millisecs
+     */
     public long getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Duration of the MotionEvent
+     * @return time in millisecs
+     */
     public long getDuration() {
         return duration;
     }
 
+    /**
+     * Generates JSON object of PluriLockEvent
+     * @return JSON object PluriLockEvent
+     */
     public JSONObject getJSON() {
         Log.d(TAG, "getJSON");
         JSONObject jsonObject = new JSONObject();
