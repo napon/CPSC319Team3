@@ -10,17 +10,21 @@ import org.json.JSONObject;
  */
 public class PScaleEvent extends PluriLockEvent{
     private static final String EVENT_TYPE = "SCALE";
-    private scaleDirection scaleDirection;
+    private ScaleDirection scaleDirection;
     private float spanX;
     private float spanY;
     private int motionEventCode;
 
-    public enum scaleDirection {
+    /**
+     * INWARDS = zooming in
+     * OUTWARDS = zooming out
+     */
+    public enum ScaleDirection {
         INWARDS, OUTWARDS
     }
 
     public PScaleEvent(int screenOrientation, long timestamp, long duration,
-                       scaleDirection scaleDirection,
+                       ScaleDirection scaleDirection,
                        float spanX, float spanY, int motionCode) {
         super(screenOrientation, timestamp, duration);
         this.scaleDirection = scaleDirection;
@@ -29,28 +33,48 @@ public class PScaleEvent extends PluriLockEvent{
         this.motionEventCode = motionCode;
     }
 
-    public PScaleEvent.scaleDirection getScaleDirection() {
+    /**
+     * Direction user is scaling
+     * @return enum of INWARDS or OUTWARDS
+     */
+    public ScaleDirection getScaleDirection() {
         return scaleDirection;
     }
 
+    /**
+     * Average distance fingers moved on X axis
+     * @return distance in pixels
+     */
     public float getSpanX() {
         return spanX;
     }
 
+    /**
+     * Average distance fingers moved on Y axis
+     * @return distance in pixel
+     */
     public float getSpanY() {
         return spanY;
     }
 
+    /**
+     * Android generates a code for each MotionEvent
+     * @return the Android ActionMotionEvent code generated
+     */
     public int getMotionEventCode() {
         return motionEventCode;
     }
 
+    /**
+     * Generates JSON object of PScaleEvent
+     * @return JSON object PScaleEvent
+     */
     @Override
     public JSONObject getJSON() {
         JSONObject jsonObject = super.getJSON();
         try {
             jsonObject.put("eventType", EVENT_TYPE);
-            jsonObject.put("scaleDirection", getScaleDirection());
+            jsonObject.put("ScaleDirection", getScaleDirection());
             jsonObject.put("spanX", getSpanX());
             jsonObject.put("spanY", getSpanY());
             jsonObject.put("motionEventCode", getMotionEventCode());

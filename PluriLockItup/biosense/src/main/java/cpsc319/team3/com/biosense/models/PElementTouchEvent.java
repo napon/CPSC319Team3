@@ -111,8 +111,8 @@ public class PElementTouchEvent extends PluriLockEvent {
     }
 
     /**
-     * Generates JSON object of PTouchEvent
-     * @return JSON object PTouchEvent
+     * Generates JSON object of PElementTouchEvent
+     * @return JSON object PElementTouchEvent
      */
     public JSONObject getJSON() {
         Log.d(TAG, "getJSON");
