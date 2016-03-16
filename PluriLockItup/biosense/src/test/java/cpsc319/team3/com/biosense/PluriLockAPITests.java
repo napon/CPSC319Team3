@@ -7,6 +7,8 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.provider.Settings;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,8 @@ import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowContextImpl;
 import org.robolectric.shadows.ShadowContextWrapper;
+
+import java.net.URI;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 
@@ -106,4 +110,66 @@ public class PluriLockAPITests {
     }
 //===============END OF BASIC BUILD TESTS=====================
 
+
+
+    @Test
+    public void emptyUserIdTest() throws Exception {
+        PluriLockAPI api = PluriLockAPI.createNewSession(testContext, "", baseConfig);
+    }
+
+    @Test
+    public void longUserIdTest() throws Exception {
+        // Strings can be up to Integer.MAX_VALUE, but this is practically impossible to test
+        int stringLength = 1000;
+
+        StringBuilder builder = new StringBuilder(stringLength);
+        for (int i = 0; i < stringLength; i++) {
+            builder.append(".");
+        }
+
+        String id = builder.toString();
+        PluriLockAPI api = PluriLockAPI.createNewSession(testContext, id, baseConfig);
+    }
+
+    @Test
+    public void allOptionsDefaultTest() throws Exception {
+        PluriLockConfig config = new PluriLockConfig();
+
+        PluriLockAPI api = PluriLockAPI.createNewSession(testContext, "", config);
+    }
+
+    @Test
+    public void allOptionsSetTest() throws Exception {
+        PluriLockConfig config = new PluriLockConfig();
+        config.setActionsPerUpload(0);
+        config.setAppVersion(0);
+        config.setDomain("");
+        config.setUrl(new URI(""));
+
+        PluriLockAPI api = PluriLockAPI.createNewSession(testContext, "", config);
+    }
+
+    @Test
+    public void nullInstanceTest() throws Exception {
+        PluriLockAPI api = PluriLockAPI.getInstance();
+        Assert.assertNull(api);
+    }
+
+    @Test
+    public void sameInstanceTest() throws Exception {
+        PluriLockAPI api = PluriLockAPI.createNewSession(testContext, "", baseConfig);
+        PluriLockAPI instance = PluriLockAPI.getInstance();
+
+        Assert.assertEquals(api, instance);
+    }
+
+    @Test
+    public void getListenersTest() throws Exception {
+        PluriLockAPI api = PluriLockAPI.createNewSession(testContext, "", baseConfig);
+        PluriLockKeyListener key = api.createKeyListener();
+        PluriLockTouchListener touch = api.createTouchListener();
+
+        Assert.assertNotNull(key);
+        Assert.assertNotNull(touch);
+    }
 }
