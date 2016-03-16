@@ -18,6 +18,9 @@ public class PScrollEvent extends PluriLockEvent {
     private PointF endCoord;
     private int motionEventCode;
 
+    /**
+     * Direction pointers are moving
+     */
     public enum ScrollDirection {
         UP, DOWN, LEFT, RIGHT
     }
@@ -36,22 +39,46 @@ public class PScrollEvent extends PluriLockEvent {
         return motionEventCode;
     }
 
+    /**
+     * Get direction pointers move
+     * @return enum of direction
+     */
     public ScrollDirection getScrollDirection() { return scrollDirection; }
 
+    /**
+     * Get starting X position
+     * @return X in pixels
+     */
     public float getStartCoordX() { return startCoord.x; }
 
+    /**
+     * Get starting Y position
+     * @return Y in pixels
+     */
     public float getStartCoordY() {
         return startCoord.y;
     }
 
+    /**
+     * Get ending X position
+     * @return X in pixels
+     */
     public float getEndCoordX() {
         return endCoord.x;
     }
 
+    /**
+     * Get ending Y position
+     * @return Y in pixels
+     */
     public float getEndCoordY() {
         return endCoord.y;
     }
 
+    /**
+     * Generates JSON object of PScrollEvent
+     * @return JSON object PScrollEvent
+     */
     @Override
     public JSONObject getJSON() {
         JSONObject jsonObject = super.getJSON();
