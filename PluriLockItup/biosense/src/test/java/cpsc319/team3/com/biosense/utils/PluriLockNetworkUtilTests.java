@@ -88,7 +88,7 @@ public class PluriLockNetworkUtilTests {
         NetworkInfo network = Mockito.mock(NetworkInfo.class);
         when(c.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(cm);
         when(cm.getActiveNetworkInfo()).thenReturn(network);
-        
+
         //network on
         when(network.isAvailable()).thenReturn(true);
         when(network.isConnectedOrConnecting()).thenReturn(true);

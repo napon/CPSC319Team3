@@ -163,6 +163,9 @@ public class PluriLockNetworkUtil {
     /**
      * Sends a PluriLockPackage to the server when there is internet connectivity
      * or stores it in the local database when there is no network connection.
+     * Sent event relies on a network connection to the PluriLock Servers.
+     * If the device is offline, the event is cached on the device. On next
+     * send event, if the network is connected, it checks all backlogged events and sends them.
      * @param pluriLockPackage
      */
     public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
