@@ -2,7 +2,6 @@ package cpsc319.team3.com.biosense;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 
@@ -41,6 +40,7 @@ public class PluriLockAPI {
         if(mySession != null){
             destroyAPISession();
         }
+
         mySession = new PluriLockAPI(context,userID,config);
         return mySession;
     }
