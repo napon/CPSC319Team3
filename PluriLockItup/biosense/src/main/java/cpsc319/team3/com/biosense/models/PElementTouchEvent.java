@@ -2,7 +2,6 @@ package cpsc319.team3.com.biosense.models;
 
 import android.graphics.PointF;
 import android.util.Log;
-import android.view.MotionEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,43 +38,82 @@ public class PElementTouchEvent extends PluriLockEvent {
         this.pointerCount = pointerCount;
     }
 
+    /**
+     * Pressure applied to device screen
+     * @return value between 0-1 in most cases (it's possible to have values greater than 1)
+     */
     public float getPressure() {
         return pressure;
     }
 
+    /**
+     * Orientation of finger on device screen
+     * @return radian of finger orientation (not supported on for many phones; return 0)
+     */
     public float getFingerOrientation() {
         return fingerOrientation;
     }
 
-    public float getElementRelativeCoordX() {
+    /**
+     * Precision of reported X coord on screen
+     * @return value of precision of reported X coord
+     */
+    public float getPrecisionX() {
         return precisionXY.x;
     }
 
-    public float getElementRelativeCoordY() {
+    /**
+     * Precision of reported Y coord on screen
+     * @return value of precision of reported Y coord
+     */
+    public float getPrecisionY() {
         return precisionXY.y;
     }
 
+    /**
+     * X coord of first finger on screen
+     * @return value of X coord in pixels
+     */
     public float getScreenCoordX() {
         return screenCoord.x;
     }
 
+    /**
+     * Y coord of first finger on screen
+     * @return value of Y coord in pixels
+     */
     public float getScreenCoordY() {
         return screenCoord.y;
     }
 
+    /**
+     * Appox area of first finger on screen
+     * @return value of contact area normalized to 0-1
+     */
     public float getTouchArea() {
         return touchArea;
     }
 
+    /**
+     * Android generates a code for each MotionEvent
+     * @return the Android ActionMotionEvent code generated
+     */
     public int getMotionEventCode() {
         return motionEventCode;
     }
 
+    /**
+     * Pointers are fingers on the screen
+     * @return number of pointers currently on device
+     */
     public int getPointerCount() {
         return pointerCount;
     }
 
-
+    /**
+     * Generates JSON object of PTouchEvent
+     * @return JSON object PTouchEvent
+     */
     public JSONObject getJSON() {
         Log.d(TAG, "getJSON");
         JSONObject jsonObject = super.getJSON();
@@ -83,8 +121,8 @@ public class PElementTouchEvent extends PluriLockEvent {
             jsonObject.put("eventType", EVENT_TYPE);
             jsonObject.put("pressure", getPressure());
             jsonObject.put("fingerOrientation", getFingerOrientation());
-            jsonObject.put("elementRelX", getElementRelativeCoordX());
-            jsonObject.put("elementRelY", getElementRelativeCoordY());
+            jsonObject.put("elementRelX", getPrecisionX());
+            jsonObject.put("elementRelY", getPrecisionY());
             jsonObject.put("screenX", getScreenCoordX());
             jsonObject.put("screenY", getScreenCoordY());
             jsonObject.put("touchArea", getTouchArea());
