@@ -124,7 +124,7 @@ public class PluriLockNetworkUtil {
     }
 
     void sendMessage(final String message) throws IOException, DeploymentException {
-        Log.d(this.getClass().getName(), "Client says: " + message);
+        Log.d("PluriLockNetworkUtil", "Client says: " + message);
         final AsyncTask<Void, Void, Void> sendMessageTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -139,18 +139,19 @@ public class PluriLockNetworkUtil {
     }
 
     private void acceptMessage(String message) {
-        Log.d(this.getClass().getName(), "Server says: " + message);
+        Log.d("PluriLockNetworkUtil", "Server says: " + message);
         try {
             PlurilockServerResponse response = PlurilockServerResponse.fromJsonString(message);
             Intent intent = new Intent("server-response");
             intent.putExtra("msg", response);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         } catch (JSONException e) {
-            Log.d(this.getClass().getName(), "Could not parse JSON message! " + message);
+            Log.d("PluriLockNetworkUtil", "Could not parse JSON message! " + message);
 
             // Broadcast the error
             Intent intent = new Intent("server-error");
             intent.putExtra("msg", "Could not parse response from server! " + message);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
     }
 

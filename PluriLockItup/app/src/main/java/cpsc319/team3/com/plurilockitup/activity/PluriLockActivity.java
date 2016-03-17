@@ -90,7 +90,9 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         String errorMessage = intent.getStringExtra("msg");
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                        Log.d("BroadcatReceiver",
+                                "Server-error broadcast: " + errorMessage);
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
                     }
                 },
                 new IntentFilter("server-error")
@@ -102,8 +104,8 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         try {
             config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
-            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-//            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
+//            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
+            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
             config.setAppVersion(1.0);
             config.setDomain("team3");
         } catch(Exception e) {}
