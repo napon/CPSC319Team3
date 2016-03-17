@@ -8,10 +8,13 @@ import java.net.URI;
  * See UML Diagram for more implementation details.
  */
 public class PluriLockConfig {
+
     /**
      * Number of PluriLockEvents to include in a data packet to the Server.
      */
     protected int actionsPerUpload = 10;
+
+    protected boolean ignoreLocation = false;
 
     protected String domain = "testDomain";
 
@@ -50,4 +53,10 @@ public class PluriLockConfig {
     public void setDomain(String domain) {
         this.domain = domain;
     }
+
+    public void setIgnoreLocation(boolean b) {
+        ignoreLocation = b;
+    }
+
+    public boolean ignoreLocation() { return ignoreLocation; }
 }

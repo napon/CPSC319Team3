@@ -50,13 +50,14 @@ public class PluriLockEventManagerTests {
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
     }
 
-    @Test (expected = LocationServiceUnavailableException.class)
-    public void testPluriLockEventManagerNoLocationPermission() throws LocationServiceUnavailableException {
+    @Test
+    public void testPluriLockEventManagerNoLocationPermissionIgnoreConfig() throws LocationServiceUnavailableException {
         Application application = (Application) ShadowApplication.getInstance().getApplicationContext();
         ShadowContextWrapper shadowApp = Shadows.shadowOf(application);
         shadowApp.setPackageName("com.cpsc319.team3");
         application.onCreate();
         PluriLockConfig config = new PluriLockConfig();
+        config.setIgnoreLocation(true);
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
     }
 
