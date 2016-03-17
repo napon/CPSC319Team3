@@ -102,6 +102,8 @@ public class PluriLockEventManager {
                 .longitude(this.locationUtil.getLongitude())
                 .screenWidth(PhoneDataManager.getScreenWidth(context))
                 .screenHeight(PhoneDataManager.getScreenHeight(context))
+                .cpuCores(PhoneDataManager.getNumberOfCPUCores())
+                .sdkVersion(PhoneDataManager.getSDKVersion())
                 .setEvents(pluriLockEvents.toArray(new PluriLockEvent[pluriLockEvents.size()]));
         try {
             networkUtil.sendEvent(eventPackage.buildPackage());
