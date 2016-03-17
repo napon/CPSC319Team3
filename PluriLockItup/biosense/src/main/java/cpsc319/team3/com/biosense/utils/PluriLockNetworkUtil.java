@@ -139,18 +139,18 @@ public class PluriLockNetworkUtil {
     }
 
     private void acceptMessage(String message) {
-        Log.d(TAG, "acceptMessage");
-        // TODO: Process this message, and package it into some sort of object
         Log.d(this.getClass().getName(), "Server says: " + message);
-        Intent intent = new Intent("server-response");
         try {
             PlurilockServerResponse response = PlurilockServerResponse.fromJsonString(message);
+            Intent intent = new Intent("server-response");
             intent.putExtra("msg", response);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         } catch (JSONException e) {
             Log.d(this.getClass().getName(), "Could not parse JSON message! " + message);
-            // TODO: Add broadcast for this?
-            e.printStackTrace();
+
+            // Broadcast the error
+            Intent intent = new Intent("server-error");
+            intent.putExtra("msg", "Could not parse response from server! " + message);
         }
     }
 

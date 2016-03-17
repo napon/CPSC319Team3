@@ -63,6 +63,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         Context context = getApplicationContext();
 
         LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Server Response receiver
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
@@ -80,6 +81,19 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                     }
                 },
                 new IntentFilter("server-response")
+        );
+
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Server error receiver
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String errorMessage = intent.getStringExtra("msg");
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new IntentFilter("server-error")
         );
 
 //        String id = "team3";
