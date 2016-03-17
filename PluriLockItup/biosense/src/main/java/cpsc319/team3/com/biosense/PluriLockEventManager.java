@@ -50,7 +50,7 @@ public class PluriLockEventManager {
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
         this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c);
-        this.locationUtil = new LocationUtil(c);
+        this.locationUtil = new LocationUtil(c, config);
     }
 
     /**
