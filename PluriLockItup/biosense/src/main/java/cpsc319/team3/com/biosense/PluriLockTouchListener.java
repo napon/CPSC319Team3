@@ -9,6 +9,7 @@ import android.view.ScaleGestureDetector;
 import java.util.GregorianCalendar;
 
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
+import cpsc319.team3.com.biosense.models.PScaleEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
 import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
@@ -239,7 +240,17 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        return false;
+        try {
+            long currTimestamp = System.currentTimeMillis();
+            long duration = detector.getTimeDelta();
+            float spanX = detector.getCurrentSpanX();
+            float spanY = detector.getCurrentSpanY();
+
+        } catch (NullPointerException e) {
+            Log.d("Scale error", e.getMessage());
+        }
+
+        return true;
     }
 
     /**
@@ -256,7 +267,19 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        return false;
+        try {
+            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation
+            long currTimestamp = System.currentTimeMillis();
+            long duration = detector.getTimeDelta();
+            float spanX = detector.getCurrentSpanX();
+            float spanY = detector.getCurrentSpanY();
+
+            PScaleEvent pScaleEvent = new PScaleEvent(screenOrientation, currTimestamp,
+                    duration, PScaleEvent.ScaleStatus.BEGIN, spanX, spanY);
+        } catch (NullPointerException e) {
+            Log.d("Scale begin error", e.getMessage());
+        }
+        return true;
     }
 
     /**
@@ -272,6 +295,14 @@ public class PluriLockTouchListener implements
      */
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
+        try {
+            long currTimestamp = System.currentTimeMillis();
+            long duration = detector.getTimeDelta();
+            float spanX = detector.getCurrentSpanX();
+            float spanY = detector.getCurrentSpanY();
 
+        } catch (NullPointerException e) {
+            Log.d("Scale end error", e.getMessage());
+        }
     }
 }
