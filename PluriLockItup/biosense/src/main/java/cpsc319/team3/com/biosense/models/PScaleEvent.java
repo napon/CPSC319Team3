@@ -10,35 +10,33 @@ import org.json.JSONObject;
  */
 public class PScaleEvent extends PluriLockEvent{
     private static final String EVENT_TYPE = "SCALE";
-    private ScaleDirection scaleDirection;
+    private ScaleStatus scaleStatus;
     private float spanX;
     private float spanY;
-    private int motionEventCode;
 
     /**
-     * INWARDS = zooming in
-     * OUTWARDS = zooming out
+     * BEGIN = zooming in
+     * END = zooming out
      */
-    public enum ScaleDirection {
-        INWARDS, OUTWARDS
+    public enum ScaleStatus {
+        BEGIN, END
     }
 
     public PScaleEvent(int screenOrientation, long timestamp, long duration,
-                       ScaleDirection scaleDirection,
-                       float spanX, float spanY, int motionCode) {
+                       ScaleStatus scaleStatus,
+                       float spanX, float spanY) {
         super(screenOrientation, timestamp, duration);
-        this.scaleDirection = scaleDirection;
+        this.scaleStatus = scaleStatus;
         this.spanX = spanX;
         this.spanY = spanY;
-        this.motionEventCode = motionCode;
     }
 
     /**
      * Direction user is scaling
-     * @return enum of INWARDS or OUTWARDS
+     * @return enum of BEGIN or END
      */
-    public ScaleDirection getScaleDirection() {
-        return scaleDirection;
+    public ScaleStatus getScaleStatus() {
+        return scaleStatus;
     }
 
     /**
@@ -58,14 +56,6 @@ public class PScaleEvent extends PluriLockEvent{
     }
 
     /**
-     * Android generates a code for each MotionEvent
-     * @return the Android ActionMotionEvent code generated
-     */
-    public int getMotionEventCode() {
-        return motionEventCode;
-    }
-
-    /**
      * Generates JSON object of PScaleEvent
      * @return JSON object PScaleEvent
      */
@@ -74,10 +64,9 @@ public class PScaleEvent extends PluriLockEvent{
         JSONObject jsonObject = super.getJSON();
         try {
             jsonObject.put("eventType", EVENT_TYPE);
-            jsonObject.put("ScaleDirection", getScaleDirection());
+            jsonObject.put("ScaleStatus", getScaleStatus());
             jsonObject.put("spanX", getSpanX());
             jsonObject.put("spanY", getSpanY());
-            jsonObject.put("motionEventCode", getMotionEventCode());
         } catch (JSONException e) {
             e.printStackTrace();
         }
