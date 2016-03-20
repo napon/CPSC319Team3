@@ -240,16 +240,7 @@ public class PluriLockTouchListener implements
      */
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        try {
-            long currTimestamp = System.currentTimeMillis();
-            long duration = detector.getTimeDelta();
-            float spanX = detector.getCurrentSpanX();
-            float spanY = detector.getCurrentSpanY();
-
-        } catch (NullPointerException e) {
-            Log.d("Scale error", e.getMessage());
-        }
-
+        Log.d(TAG, "onScale: " + detector.toString());
         return true;
     }
 
@@ -268,7 +259,9 @@ public class PluriLockTouchListener implements
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
         try {
-            int screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation
+            Log.d(TAG, "onScaleBegin: " + detector.toString());
+            int screenOrientation =
+                    eventTracker.getContext().getResources().getConfiguration().orientation;
             long currTimestamp = System.currentTimeMillis();
             long duration = detector.getTimeDelta();
             float spanX = detector.getCurrentSpanX();
@@ -296,11 +289,16 @@ public class PluriLockTouchListener implements
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
         try {
+            Log.d(TAG, "onScaleEnd: " + detector.toString());
+            int screenOrientation =
+                    eventTracker.getContext().getResources().getConfiguration().orientation;
             long currTimestamp = System.currentTimeMillis();
             long duration = detector.getTimeDelta();
             float spanX = detector.getCurrentSpanX();
             float spanY = detector.getCurrentSpanY();
 
+            PScaleEvent pScaleEvent = new PScaleEvent(screenOrientation, currTimestamp,
+                    duration, PScaleEvent.ScaleStatus.END, spanX, spanY);
         } catch (NullPointerException e) {
             Log.d("Scale end error", e.getMessage());
         }
