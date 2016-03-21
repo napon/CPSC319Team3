@@ -70,13 +70,14 @@ public class PluriLockNetworkUtil {
 
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        // Register listener to automatically send all events in cache the moment we reconnect
+        // TODO: This requires API level > 21
+/*        // Register listener to automatically send all events in cache the moment we reconnect
         cm.addDefaultNetworkActiveListener(new ConnectivityManager.OnNetworkActiveListener() {
             @Override
             public void onNetworkActive() {
                 sendCachedEvents();
             }
-        });
+        });*/
     }
 
     public void initiateConnection() {
