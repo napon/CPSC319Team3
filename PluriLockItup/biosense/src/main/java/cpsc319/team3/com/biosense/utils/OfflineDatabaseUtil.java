@@ -172,7 +172,7 @@ public class OfflineDatabaseUtil {
                 deleteCache(context, CACHE_DIR);
             }
             else{
-                Log.e(TAG, "File not found");
+                Log.d(TAG, "No cache file to load");
             }
         }
         catch (IOException e){

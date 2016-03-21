@@ -25,7 +25,6 @@ public class TransferActivity extends PluriLockActivity {
     String currAcctName;
 
     boolean auth = false;
-    PluriLockAPI plApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class TransferActivity extends PluriLockActivity {
         plapi = PluriLockAPI.getInstance();
         if(plapi != null) {
             EditText transferPrice = (EditText) findViewById(R.id.transferAmt);
-            transferPrice.addTextChangedListener(plApi.createKeyListener());
+            transferPrice.addTextChangedListener(plapi.createKeyListener());
         }
     }
 
