@@ -32,12 +32,14 @@ public class PluriLockPackage {
     private int screenWidth;
     private int screenHeight;
     private int sdkVersion;
+    private int cpuCores;
     private PluriLockEvent events[];
 
     private PluriLockPackage(PluriLockPackageBuilder b) {
         Log.d(TAG, "PluriLockPackage constructor");
         this.id = b.id;
         this.countryCode = b.countryCode;
+        this.cpuCores = b.cpuCores;
         this.deviceModel = b.deviceModel;
         this.deviceManufacturer = b.deviceManufacturer;
         this.userID = b.userID;
@@ -110,6 +112,8 @@ public class PluriLockPackage {
         return sdkVersion;
     }
 
+    public int getCpuCores() {return cpuCores;}
+
     public PluriLockEvent[] getEvents() {
         return events;
     }
@@ -133,6 +137,7 @@ public class PluriLockPackage {
         private int screenWidth;
         private int screenHeight;
         private int sdkVersion;
+        private int cpuCores;
         private PluriLockEvent events[];
 
         public PluriLockPackageBuilder() {
@@ -151,6 +156,7 @@ public class PluriLockPackage {
             this.screenWidth = 0;
             this.screenHeight = 0;
             this.sdkVersion = 0;
+            this.cpuCores = 0;
             this.events = new PluriLockEvent[0];
         }
 
@@ -161,6 +167,11 @@ public class PluriLockPackage {
 
         public PluriLockPackageBuilder model(String m) {
             deviceModel = m;
+            return this;
+        }
+
+        public PluriLockPackageBuilder cpuCores(int n) {
+            cpuCores = n;
             return this;
         }
 
@@ -261,6 +272,7 @@ public class PluriLockPackage {
             data.put("countryCode", getCountryCode());
             data.put("language", getLanguage());
             data.put("sdkVersion", getSdkVersion());
+            data.put("cpuCores", getCpuCores());
             data.put("timeZone", getTimeZone());
             data.put("appName", getAppName());
             JSONArray jsonArray = new JSONArray();
