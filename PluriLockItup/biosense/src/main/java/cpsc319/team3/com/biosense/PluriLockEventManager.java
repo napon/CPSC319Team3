@@ -94,7 +94,6 @@ public class PluriLockEventManager {
                 .language(PhoneDataManager.getDisplayLanguage())
                 .timeZone(PhoneDataManager.getTimeZone())
                 .appVersion(this.config.getAppVersion())
-                .appName(eventManager.context.getString(eventManager.context.getApplicationInfo().labelRes))
                 .latitude(this.locationUtil.getLatitude())
                 .longitude(this.locationUtil.getLongitude())
                 .screenWidth(PhoneDataManager.getScreenWidth(context))
