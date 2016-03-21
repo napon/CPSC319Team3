@@ -52,6 +52,8 @@ public class PluriLockNetworkUtil {
     private ClientManager client;
     private ClientEndpointConfig config;
 
+    private ConnectivityManager cm;
+
     public PluriLockNetworkUtil(URI endpointURI, Context context) {
         Log.d(TAG, "PluriLockNetworkUtil constructor");
 
@@ -62,7 +64,19 @@ public class PluriLockNetworkUtil {
 
         this.offlineDatabaseUtil = new OfflineDatabaseUtil(context);
 
-        initiateConnection();
+        if (preNetworkCheck()) {
+            initiateConnection();
+        }
+
+        cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Register listener to automatically send all events in cache the moment we reconnect
+        cm.addDefaultNetworkActiveListener(new ConnectivityManager.OnNetworkActiveListener() {
+            @Override
+            public void onNetworkActive() {
+                sendCachedEvents();
+            }
+        });
     }
 
     public void initiateConnection() {
@@ -103,7 +117,6 @@ public class PluriLockNetworkUtil {
     }
 
     public boolean preNetworkCheck() {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null || !activeNetwork.isAvailable()) {
             broadcastNetworkError("Network connectivity is not possible!");
@@ -120,14 +133,17 @@ public class PluriLockNetworkUtil {
     }
 
     private void broadcastNetworkError(String s) {
-        Log.d(TAG, s);
+        String msg = "Could connect to PluriLock Server! " + s;
+        Log.e(TAG, msg);
+
         // Broadcast the error
         Intent intent = new Intent("network-error");
-        intent.putExtra("msg", "Could connect to PluriLock Server! " + s);
+        intent.putExtra("msg", msg);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    void sendMessage(final String message) throws IOException, DeploymentException {
+    void sendJsonMessage(JSONObject event) {
+        final String message = event.toString();
         Log.d("PluriLockNetworkUtil", "Client says: " + message);
         final AsyncTask<Void, Void, Void> sendMessageTask = new AsyncTask<Void, Void, Void>() {
             @Override
@@ -138,8 +154,13 @@ public class PluriLockNetworkUtil {
             }
         };
 
-        Log.d(TAG, "Executing sendMessage AsyncTask...");
-        sendMessageTask.execute();
+        Log.d(TAG, "Executing sendJsonMessage AsyncTask...");
+        try {
+            sendMessageTask.execute();
+        } catch (Exception e) {
+            Log.e(TAG, "Something's wrong... saving the event to cache..." + e.toString());
+            cacheEvent(event);
+        }
     }
 
     private void acceptMessage(String message) {
@@ -174,29 +195,33 @@ public class PluriLockNetworkUtil {
      *
      * @param pluriLockPackage
      */
-    public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
+    public void sendEvent(PluriLockPackage pluriLockPackage)  {
+        JSONObject event = pluriLockPackage.getJSON();
         if (preNetworkCheck()) {
             Log.d(TAG, "sendEvent");
             //send any cached pending events
             sendCachedEvents();
             //send new event
-            sendMessage(pluriLockPackage.getJSON().toString());
+            sendJsonMessage(event);
         } else {
-            Log.e(TAG, "noEventSent - User offline");
-            if (offlineDatabaseUtil.save(pluriLockPackage.getJSON())) {
-                Log.d(TAG, "cache event");
-            } else {
-                Log.e(TAG, "cache not saved");
-            }
+            cacheEvent(event);
         }
     }
 
-    private void sendCachedEvents() throws IOException, DeploymentException {
+    private void cacheEvent(JSONObject event) {
+        Log.e(TAG, "noEventSent - User offline");
+        if (offlineDatabaseUtil.save(event)) {
+            Log.d(TAG, "Cached event!");
+        } else {
+            Log.e(TAG, "Cache not saved!");
+        }
+    }
+
+    private void sendCachedEvents() {
+        Log.d(TAG, "Sending cached events...");
         List<JSONObject> pendingEvents = offlineDatabaseUtil.loadPending();
         for (JSONObject event : pendingEvents) {
-            sendMessage(event.toString());
+            sendJsonMessage(event);
         }
     }
-
-
 }

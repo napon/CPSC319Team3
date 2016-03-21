@@ -100,14 +100,8 @@ public class PluriLockEventManager {
                 .screenWidth(PhoneDataManager.getScreenWidth(context))
                 .screenHeight(PhoneDataManager.getScreenHeight(context))
                 .setEvents(pluriLockEvents.toArray(new PluriLockEvent[pluriLockEvents.size()]));
-        try {
-            networkUtil.sendEvent(eventPackage.buildPackage());
-        } catch (IOException | DeploymentException e) {
-            // TODO: Store this package for sending again later
-            Log.w(this.getClass().getName(), e.getClass().getName(), e);
-        } finally {
-            pluriLockEvents.clear();
-        }
+        networkUtil.sendEvent(eventPackage.buildPackage());
+        pluriLockEvents.clear();
     }
 
     /**
