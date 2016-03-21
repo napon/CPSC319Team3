@@ -31,7 +31,6 @@ public class PluriLockEventManager {
 
     private Context context;
     private PluriLockNetworkUtil networkUtil;
-    private LocationUtil locationUtil;
     private List<PluriLockEvent> pluriLockEvents;
     private String userID;
     private PluriLockConfig config;
@@ -46,7 +45,6 @@ public class PluriLockEventManager {
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
         this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c);
-        this.locationUtil = new LocationUtil(c, config);
     }
 
     /**
@@ -94,8 +92,8 @@ public class PluriLockEventManager {
                 .language(PhoneDataManager.getDisplayLanguage())
                 .timeZone(PhoneDataManager.getTimeZone())
                 .appVersion(this.config.getAppVersion())
-                .latitude(this.locationUtil.getLatitude())
-                .longitude(this.locationUtil.getLongitude())
+                .latitude(LocationUtil.getInstance().getLatitude())
+                .longitude(LocationUtil.getInstance().getLongitude())
                 .screenWidth(PhoneDataManager.getScreenWidth(context))
                 .screenHeight(PhoneDataManager.getScreenHeight(context))
                 .cpuCores(PhoneDataManager.getNumberOfCPUCores())
