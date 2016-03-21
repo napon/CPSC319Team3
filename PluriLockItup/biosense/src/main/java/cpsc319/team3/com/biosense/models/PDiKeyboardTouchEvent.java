@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
+import android.view.KeyEvent;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,11 +12,18 @@ import org.json.JSONObject;
  */
 public class PDiKeyboardTouchEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "DIGRAPH";
-    private int fromKey;
-    private int toKey;
+    private String fromKey;
+    private String toKey;
 
     public PDiKeyboardTouchEvent(int screenOrientation, long timestamp,
                                  long duration, int fromKey, int toKey) {
+        super(screenOrientation, timestamp, duration);
+        this.fromKey = KeyEvent.keyCodeToString(fromKey);
+        this.toKey = KeyEvent.keyCodeToString(toKey);
+    }
+
+    public PDiKeyboardTouchEvent(int screenOrientation, long timestamp,
+                                 long duration, String fromKey, String toKey) {
         super(screenOrientation, timestamp, duration);
         this.fromKey = fromKey;
         this.toKey = toKey;
@@ -25,14 +34,14 @@ public class PDiKeyboardTouchEvent extends PluriLockEvent {
      * Get the first key pressed
      * @return Android keycode
      */
-    public int getFromKey() { return fromKey; }
+    public String getFromKey() { return fromKey; }
 
     /**
      * Android has an unique int for each key
      * Get the second key pressed
      * @return Android keycode
      */
-    public int getToKey() { return toKey; }
+    public String getToKey() { return toKey; }
 
     /**
      * Generates JSON object of PDiKeyboardTouchEvent

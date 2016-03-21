@@ -99,10 +99,10 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
             lastKey = pMonoKeyboardTouchEvent;
         } else {
             long diDuration = currTimestamp - lastKey.getTimestamp();
-            int fromKey = lastKey.getKeyPressed();
+            String fromKey = lastKey.getKeyPressed();
             PDiKeyboardTouchEvent pDiKeyboardTouchEvent =
                     new PDiKeyboardTouchEvent
-                            (screenOrientation, timestamp, diDuration, fromKey, keyCode);
+                            (screenOrientation, timestamp, diDuration, fromKey, KeyEvent.keyCodeToString(keyCode));
             eventTracker.notifyOfEvent(pDiKeyboardTouchEvent);
         }
         return true;
@@ -145,16 +145,19 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
      */
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        int keyEvent = -1;
+//        int keyEvent = -1;
+        String charEntered = "";
 
         if(before < count) { //new line entered
             if(s.subSequence(s.length()-1, s.length()).toString().equalsIgnoreCase("\n")){
                 Log.d("onTextChanged", "Char added: enter");
-                keyEvent = KeyEvent.KEYCODE_ENTER;
+//                keyEvent = KeyEvent.KEYCODE_ENTER;
+                charEntered = "enter";
             }
             else { //char entered
                 String addedChar = String.valueOf(s.charAt(count - 1));
-                keyEvent = KeyEvent.keyCodeFromString("KEYCODE_"+addedChar.toUpperCase());
+//                keyEvent = KeyEvent.keyCodeFromString("KEYCODE_"+addedChar.toUpperCase());
+                charEntered = String.valueOf(s.charAt(count - 1));
                 Log.d("onTextChanged", "Char added: " + addedChar);
             }
         }
@@ -164,14 +167,15 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
             }
             else { //delete key
                 Log.d("onTextChanged", "Char added: delete");
-                keyEvent = KeyEvent.KEYCODE_DEL;
+//                keyEvent = KeyEvent.KEYCODE_DEL;
+                charEntered = "del";
             }
         }
-        if(keyEvent != -1) {
+        if(!(charEntered.isEmpty() || charEntered.equals(""))) {
             screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
             this.timestamp = System.currentTimeMillis();
 
-            PMonoKeyboardTouchEvent monoTouchEvent = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, keyEvent);
+            PMonoKeyboardTouchEvent monoTouchEvent = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, charEntered);
             eventTracker.notifyOfEvent(monoTouchEvent);
         }
 
