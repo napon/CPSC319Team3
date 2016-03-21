@@ -66,6 +66,7 @@ public class PluriLockEventManagerTests {
             NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException, DeploymentException {
         Application application = createApplicationWithPermissions();
         PluriLockConfig config = new PluriLockConfig();
+        config.setIgnoreLocation(true);
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
                 new PluriLockNetworkUtil(new URI(""), application) {

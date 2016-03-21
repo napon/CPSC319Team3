@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import cpsc319.team3.com.plurilockitup.R;
@@ -25,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText passwordEditText;
     Button loginButton;
     Button registerButton;
+    Switch serverMode;
 
     String savedCardNum;
     String savedPassword;
@@ -46,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         //try to retrieve registered account
         savedCardNum = mLoginPref.getString(Utils.cardNum, null);
         savedPassword = mLoginPref.getString(Utils.password, null);
+
+        //Server toggle
+        serverMode = (Switch) findViewById(R.id.serverSwitch);
     }
 
     @Override
@@ -96,8 +101,11 @@ public class LoginActivity extends AppCompatActivity {
                     String purilockToken = getPlToken(savedCardNum.charAt(0));
                     //initiate customer
                     Customer.rebuild(purilockToken);
+                    //set server
+                    Intent mainActivity = new Intent(this, MainActivity.class);
+                    mainActivity.putExtra(Utils.server, serverMode.isChecked());
                     //go to main activity
-                    startActivity(new Intent(this, MainActivity.class));
+                    startActivity(mainActivity);
                     //remove from activity stack, prevent going back to screen
                     finish();
                 }
@@ -142,7 +150,9 @@ public class LoginActivity extends AppCompatActivity {
             editor.commit();
 
             //go to main activity
-            startActivity(new Intent(this, MainActivity.class));
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            mainActivity.putExtra(Utils.server, serverMode.isChecked());
+            startActivity(mainActivity);
             //remove from activity stack, prevent going back to screen
             finish();
         }

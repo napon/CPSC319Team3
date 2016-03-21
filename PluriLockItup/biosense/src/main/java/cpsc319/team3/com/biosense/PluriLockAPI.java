@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
+import cpsc319.team3.com.biosense.utils.LocationUtil;
 
 /**
  * A class through which the client interacts with our API.
@@ -28,7 +29,7 @@ public class PluriLockAPI {
 
     /**
      *
-     * @param context - appcliation context
+     * @param context - application context
      * @param userID - the Plurlock UserID of the app
      * @param config - the settings to use for this API session
      * @return - the new PluriLockAPI session.
@@ -39,7 +40,6 @@ public class PluriLockAPI {
         if(mySession != null){
             destroyAPISession();
         }
-
         mySession = new PluriLockAPI(context,userID,config);
         return mySession;
     }
@@ -68,9 +68,23 @@ public class PluriLockAPI {
 
     /**
      * Destroys the existing session (in case of logout, etc)
+     * Severs websocket connection
      */
     public static void destroyAPISession(){
         Log.d(TAG, "destroyAPISession");
+        if(getInstance() != null)
+            getInstance().nullEvent();
+        PluriLockEventManager.deleteInstance();
         mySession = null; //add any destruction methods here as well.
+        // Stop listening for location.
+        LocationUtil.stopListening();
+    }
+
+    /**
+     * Destroys the event objects
+     */
+    private void nullEvent(){
+        eventManager = null;
+        eventTracker = null;
     }
 }

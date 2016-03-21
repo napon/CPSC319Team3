@@ -3,8 +3,6 @@ package cpsc319.team3.com.biosense;
 import android.content.Context;
 import android.util.Log;
 
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +10,8 @@ import java.util.List;
 import javax.websocket.DeploymentException;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
-import cpsc319.team3.com.biosense.models.PluriLockPackage;
-import cpsc319.team3.com.biosense.models.PluriLockPackage.PluriLockPackageBuilder;
 import cpsc319.team3.com.biosense.models.PluriLockEvent;
-import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
+import cpsc319.team3.com.biosense.models.PluriLockPackage.PluriLockPackageBuilder;
 import cpsc319.team3.com.biosense.utils.LocationUtil;
 import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
@@ -35,7 +31,6 @@ public class PluriLockEventManager {
 
     private Context context;
     private PluriLockNetworkUtil networkUtil;
-    private LocationUtil locationUtil;
     private List<PluriLockEvent> pluriLockEvents;
     private String userID;
     private PluriLockConfig config;
@@ -49,7 +44,6 @@ public class PluriLockEventManager {
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
         this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c);
-        this.locationUtil = new LocationUtil(c, config);
     }
 
     /**
@@ -86,7 +80,11 @@ public class PluriLockEventManager {
     }
 
     private void pushAllEvents() {
+        boolean location = !config.ignoreLocation();
+        double lat = location? LocationUtil.getInstance().getLatitude() : 0;
+        double lon = location? LocationUtil.getInstance().getLongitude() : 0;
         PluriLockPackageBuilder eventPackage = new PluriLockPackageBuilder()
+                .ip(PluriLockNetworkUtil.getIPAddress(context))
                 .countryCode(PhoneDataManager.getCountry())
                 .model(PhoneDataManager.getHardwareModel())
                 .manufacturer(PhoneDataManager.getManufacturer())
@@ -95,8 +93,8 @@ public class PluriLockEventManager {
                 .language(PhoneDataManager.getDisplayLanguage())
                 .timeZone(PhoneDataManager.getTimeZone())
                 .appVersion(this.config.getAppVersion())
-                .latitude(this.locationUtil.getLatitude())
-                .longitude(this.locationUtil.getLongitude())
+                .latitude(lat)
+                .longitude(lon)
                 .screenWidth(PhoneDataManager.getScreenWidth(context))
                 .screenHeight(PhoneDataManager.getScreenHeight(context))
                 .cpuCores(PhoneDataManager.getNumberOfCPUCores())
