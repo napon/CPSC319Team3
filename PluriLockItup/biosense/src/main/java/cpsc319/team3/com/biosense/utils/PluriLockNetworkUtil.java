@@ -1,7 +1,9 @@
 package cpsc319.team3.com.biosense.utils;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -72,15 +74,22 @@ public class PluriLockNetworkUtil {
             initiateConnection();
         }
 
-        // TODO: This requires API level > 21
-/*        // Register listener to automatically send all events in cache the moment we reconnect
-        cm.addDefaultNetworkActiveListener(new ConnectivityManager.OnNetworkActiveListener() {
+        BroadcastReceiver connectionStatusReceiver = new BroadcastReceiver() {
             @Override
-            public void onNetworkActive() {
-                sendCachedEvents();
+            public void onReceive(Context context, Intent intent) {
+                boolean connected = intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false);
+                Log.d(TAG, "Connection status: " + connected);
+                if (connected) {
+                    // stuff
+                }
             }
-        });*/
+        };
+
+        IntentFilter connectionFilter = new IntentFilter();
+        connectionFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+        context.registerReceiver(connectionStatusReceiver, connectionFilter);
     }
+
 
     public void initiateConnection() {
         Log.d(TAG, "initiateConnection");
