@@ -91,7 +91,7 @@ public class PluriLockNetworkUtil {
                     Log.d(TAG, "Connecting to client in AsyncTask..");
                     client.connectToServer(endpoint, config, endpointURI);
                 } catch (Exception e) {
-                    // TODO: Handle this outside the async
+                    broadcastNetworkError(e.toString());
                 }
                 return null;
             }
@@ -102,25 +102,29 @@ public class PluriLockNetworkUtil {
         Log.d(TAG, "connecting..");
     }
 
-    public boolean preNetworkCheck(){
-        // TODO: Make sure this method is called somewhere
-        // TODO: Propagate an exceptions upwards for the client to handle if we're offline?
-
+    public boolean preNetworkCheck() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null || !activeNetwork.isAvailable()) {
-            System.out.println("Network connectivity is not possible.");
+            broadcastNetworkError("Network connectivity is not possible!");
             return false;
-        } else {
-            if (!activeNetwork.isConnectedOrConnecting()) {
-                System.out.println("You're not connected to the Internet.");
-                return false;
-            } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-                System.out.println("You're not connected to WIFI.");
-                return false;
-            }
+        } else if (!activeNetwork.isConnectedOrConnecting()) {
+            broadcastNetworkError("You're not connected to the Internet!");
+            return false;
+        } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
+            broadcastNetworkError("You're not connected to WIFI.");
+            return false;
         }
+
         return true;
+    }
+
+    private void broadcastNetworkError(String s) {
+        Log.d(TAG, s);
+        // Broadcast the error
+        Intent intent = new Intent("network-error");
+        intent.putExtra("msg", "Could connect to PluriLock Server! " + s);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     void sendMessage(final String message) throws IOException, DeploymentException {
@@ -167,27 +171,32 @@ public class PluriLockNetworkUtil {
      * Sent event relies on a network connection to the PluriLock Servers.
      * If the device is offline, the event is cached on the device. On next
      * send event, if the network is connected, it checks all backlogged events and sends them.
+     *
      * @param pluriLockPackage
      */
     public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
-        if(preNetworkCheck()) {
+        if (preNetworkCheck()) {
             Log.d(TAG, "sendEvent");
             //send any cached pending events
-            List<JSONObject> pendingEvents = offlineDatabaseUtil.loadPending();
-            for (JSONObject event : pendingEvents) {
-                sendMessage(event.toString());
-            }
+            sendCachedEvents();
             //send new event
             sendMessage(pluriLockPackage.getJSON().toString());
-        }
-        else{
+        } else {
             Log.e(TAG, "noEventSent - User offline");
-            if(offlineDatabaseUtil.save(pluriLockPackage.getJSON())){
+            if (offlineDatabaseUtil.save(pluriLockPackage.getJSON())) {
                 Log.d(TAG, "cache event");
-            }
-            else{
+            } else {
                 Log.e(TAG, "cache not saved");
             }
         }
     }
+
+    private void sendCachedEvents() throws IOException, DeploymentException {
+        List<JSONObject> pendingEvents = offlineDatabaseUtil.loadPending();
+        for (JSONObject event : pendingEvents) {
+            sendMessage(event.toString());
+        }
+    }
+
+
 }

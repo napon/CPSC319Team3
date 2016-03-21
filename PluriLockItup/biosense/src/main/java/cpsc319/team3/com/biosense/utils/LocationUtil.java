@@ -40,6 +40,7 @@ public class LocationUtil implements LocationListener {
 
         if ((provider1 != null && provider1.equals(Settings.Secure.LOCATION_MODE_OFF)) ||
                 (provider2 != null && provider2.equals(""))) {
+            Log.d("LocationUtil", "Location service is unavailable!");
             setDisabled();
             return;
         }
@@ -49,6 +50,7 @@ public class LocationUtil implements LocationListener {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             setEnabled();
         } catch (SecurityException e) {
+            Log.d("LocationUtil", e.getMessage());
             setDisabled();
         }
 

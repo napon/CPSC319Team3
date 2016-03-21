@@ -90,12 +90,27 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         String errorMessage = intent.getStringExtra("msg");
-                        Log.d("BroadcatReceiver",
+                        Log.d("BroadcastReceiver",
                                 "Server-error broadcast: " + errorMessage);
                         Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
                     }
                 },
                 new IntentFilter("server-error")
+        );
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Network Connection error receiver
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        // TODO: Logout the user if can't connect after X number of attempts?
+                        String errorMessage = intent.getStringExtra("msg");
+                        Log.d("BroadcastReceiver",
+                                "Network error broadcast: " + errorMessage);
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new IntentFilter("network-error")
         );
 
         LocalBroadcastManager.getInstance(context).registerReceiver(
