@@ -18,6 +18,7 @@ public class PluriLockPackage {
     private static final String TAG = "PluriLockPackage";
 
     private String id;
+    private String ip;
     private String countryCode;
     private String deviceModel;
     private String deviceManufacturer;
@@ -38,6 +39,7 @@ public class PluriLockPackage {
     private PluriLockPackage(PluriLockPackageBuilder b) {
         Log.d(TAG, "PluriLockPackage constructor");
         this.id = b.id;
+        this.ip = b.ip;
         this.countryCode = b.countryCode;
         this.cpuCores = b.cpuCores;
         this.deviceModel = b.deviceModel;
@@ -59,6 +61,8 @@ public class PluriLockPackage {
     public String getId() {
         return id;
     }
+
+    public String getIPAddress() {return ip;}
 
     public String getCountryCode() {
         return countryCode;
@@ -123,6 +127,7 @@ public class PluriLockPackage {
      */
     public static class PluriLockPackageBuilder {
         private String id;
+        private String ip;
         private String countryCode;
         private String deviceModel;
         private String deviceManufacturer;
@@ -142,6 +147,7 @@ public class PluriLockPackage {
 
         public PluriLockPackageBuilder() {
             this.id = UUID.randomUUID().toString();
+            this.ip = "0.0.0.0";
             this.countryCode = "";
             this.deviceModel = "";
             this.deviceManufacturer = "";
@@ -167,6 +173,11 @@ public class PluriLockPackage {
 
         public PluriLockPackageBuilder model(String m) {
             deviceModel = m;
+            return this;
+        }
+
+        public PluriLockPackageBuilder ip(String ipAddress) {
+            ip = ipAddress;
             return this;
         }
 
@@ -263,6 +274,7 @@ public class PluriLockPackage {
             jsonObject.put("data", data);
 
             data.put("id", getId());
+            data.put("ip", getIPAddress());
             data.put("model", getDeviceModel());
             data.put("manufacturer", getDeviceManufacturer());
             data.put("screenWidth", getScreenWidth());
