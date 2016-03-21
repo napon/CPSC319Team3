@@ -1,10 +1,14 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,12 +16,15 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationServices;
+
 import java.net.URI;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
+import cpsc319.team3.com.biosense.utils.LocationUtil;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 
 /**
@@ -61,7 +68,6 @@ public abstract class PluriLockActivity extends AppCompatActivity {
 
     private void setupPLApi() {
         Context context = getApplicationContext();
-
         LocalBroadcastManager.getInstance(context).registerReceiver(
                 new BroadcastReceiver() {
                     @Override
@@ -97,7 +103,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         try {
             this.plapi = PluriLockAPI.getInstance();
             if(this.plapi == null) {
-                this.plapi = PluriLockAPI.createNewSession(context, userId, config);
+                this.plapi = PluriLockAPI.createNewSession(this, userId, config);
             }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?
@@ -111,5 +117,4 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         PluriLockAPI.destroyAPISession();
         finish();
     }
-
 }
