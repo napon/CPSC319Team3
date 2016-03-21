@@ -80,5 +80,27 @@
             android:layout_marginTop="10dp"
             android:text="Register"
             android:onClick="register"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/registerButton"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mock"
+                android:layout_marginRight="10dp"/>
+            <Switch
+                android:id="@+id/serverSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PluriLock"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

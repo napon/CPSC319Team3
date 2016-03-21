@@ -19,6 +19,7 @@ import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 import cpsc319.team3.com.plurilockitup.model.Customer;
+import cpsc319.team3.com.plurilockitup.model.Utils;
 
 /**
  * Created by kelvinchan on 16-03-10.
@@ -30,10 +31,15 @@ public abstract class PluriLockActivity extends AppCompatActivity {
     Double MIN_CONF_LEVEL = 0.25;
     int ACTIONS_PER_UPLOAD = 1;
     protected boolean authorized = true;
+    private  boolean serverMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //get server to use
+        Intent intent = getIntent();
+        serverMode = intent.getBooleanExtra(Utils.server, false);
 
         //sets up the Plurilock API
         plapi = PluriLockAPI.getInstance();
@@ -88,8 +94,10 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         try {
             config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
 //            config.setUrl(URI.create("ws://echo.websocket.org/"));
-            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-//            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
+            if(serverMode)
+                config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
+            else
+                config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
             config.setAppVersion(1.0);
             config.setDomain("team3");
         } catch(Exception e) {}
@@ -107,8 +115,8 @@ public abstract class PluriLockActivity extends AppCompatActivity {
     protected void logout() {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
         PluriLockAPI.destroyAPISession();
+        startActivity(intent);
         finish();
     }
 

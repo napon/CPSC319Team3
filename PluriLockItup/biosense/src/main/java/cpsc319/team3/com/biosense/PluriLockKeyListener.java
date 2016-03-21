@@ -2,6 +2,7 @@ package cpsc319.team3.com.biosense;
 
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +17,7 @@ import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
  * PluriLockEventTracker is notified via method call when an keyboard event occurs
  *
  */
-public class PluriLockKeyListener implements android.text.method.KeyListener {
+public class PluriLockKeyListener implements android.text.method.KeyListener, TextWatcher{
 
     private static final String TAG = "PluriLockKeyListener";
 
@@ -131,5 +132,69 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
     @Override
     public void clearMetaKeyState(View view, Editable content, int states) {
 
+    }
+
+    /**
+     * Implements Textwatcher to add to EditText view
+     * Tracks last keystroke entered with a timestamp
+     * Adds event to Plurilock event as a Monokeytouch event
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        int keyEvent = -1;
+
+        if(before < count) { //new line entered
+            if(s.subSequence(s.length()-1, s.length()).toString().equalsIgnoreCase("\n")){
+                Log.d("onTextChanged", "Char added: enter");
+                keyEvent = KeyEvent.KEYCODE_ENTER;
+            }
+            else { //char entered
+                String addedChar = String.valueOf(s.charAt(count - 1));
+                keyEvent = KeyEvent.keyCodeFromString("KEYCODE_"+addedChar.toUpperCase());
+                Log.d("onTextChanged", "Char added: " + addedChar);
+            }
+        }
+        else{
+            if (before == count){
+                //ignore the double textwatch fire
+            }
+            else { //delete key
+                Log.d("onTextChanged", "Char added: delete");
+                keyEvent = KeyEvent.KEYCODE_DEL;
+            }
+        }
+        if(keyEvent != -1) {
+            screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
+            this.timestamp = System.currentTimeMillis();
+
+            PMonoKeyboardTouchEvent monoTouchEvent = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, keyEvent);
+            eventTracker.notifyOfEvent(monoTouchEvent);
+        }
+
+    }
+
+    /**
+     * Abstract method needed to be implemented by Textwatcher
+     * No additional actions required
+     * @param s
+     * @param start
+     * @param count
+     * @param after
+     */
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    /**
+     * Abstract method needed to be implemented by Textwatcher
+     * No additional actions required
+     * @param s
+     */
+    @Override
+    public void afterTextChanged(Editable s) {
     }
 }
