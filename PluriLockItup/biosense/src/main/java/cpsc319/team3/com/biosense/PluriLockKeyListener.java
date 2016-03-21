@@ -136,33 +136,43 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        Log.d("onTextChanged", "char: "+ s + " start: " + start + " before: " + before + " count: " + count);
-        //char entered
-        if(before < count) {
-            if(s.toString().equals("\n")){
-                Log.d("onTextChanged","Char added: " +"Char added: enter");
-            }
-            else {
-                Log.d("onTextChanged", "Char added: " + s.charAt(count - 1));
-            }
+        int keyEvent = -1;
 
+        if(before < count) { //new line entered
+            if(s.subSequence(s.length()-1, s.length()).toString().equalsIgnoreCase("\n")){
+                Log.d("onTextChanged", "Char added: enter");
+                keyEvent = KeyEvent.KEYCODE_ENTER;
+            }
+            else { //char entered
+                String addedChar = String.valueOf(s.charAt(count - 1));
+                keyEvent = KeyEvent.keyCodeFromString("KEYCODE_"+addedChar.toUpperCase());
+                Log.d("onTextChanged", "Char added: " + addedChar);
+            }
         }
         else{
-            Log.d("onTextChanged","Char added: delete");
+            if (before == count){
+                //ignore the double textwatch fire
+            }
+            else { //delete key
+                Log.d("onTextChanged", "Char added: delete");
+                keyEvent = KeyEvent.KEYCODE_DEL;
+            }
         }
-        long time = System.currentTimeMillis()/1000;
-        Log.d("onTextChanged","Time: " + time);
+        if(keyEvent != -1) {
+            screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
+            this.timestamp = System.currentTimeMillis();
+
+            PMonoKeyboardTouchEvent monoTouchEvent = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, keyEvent);
+            eventTracker.notifyOfEvent(monoTouchEvent);
+        }
+
     }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//        Log.d("beforeTextChanged", "char: "+ s + " start: " + start + " after: " + after + " count: " + count);
-//        before = s;
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-//        Log.d("afterTextChanged", "char: " + s.toString());
-        // TODO Auto-generated method stub
     }
 }
