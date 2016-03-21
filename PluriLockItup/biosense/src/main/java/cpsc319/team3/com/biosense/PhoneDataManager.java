@@ -3,7 +3,6 @@ package cpsc319.team3.com.biosense;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -61,7 +60,10 @@ public class PhoneDataManager {
     /**
      * @return app's name.
      */
-    public static String getAppName() { return "PLURILOCKITUP"; }
+    public static String getAppName(Context context) {
+        int appId = context.getApplicationInfo().labelRes;
+        return context.getString(appId);
+    }
 
     /**
      * @return number of CPU cores.

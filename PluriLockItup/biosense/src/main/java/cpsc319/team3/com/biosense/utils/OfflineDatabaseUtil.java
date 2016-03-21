@@ -34,7 +34,7 @@ public class OfflineDatabaseUtil {
     private String TAG = "Offline Cache";
 
     //The directory of the cache file on the phone
-    private static final String CACHE_DIR = "offlineCacheData";
+    public static final String CACHE_DIR = "offlineCacheData";
 
     /**
      * Constructor for Offline Database Util
