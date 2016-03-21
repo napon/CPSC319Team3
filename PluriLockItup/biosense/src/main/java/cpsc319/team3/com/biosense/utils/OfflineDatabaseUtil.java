@@ -31,6 +31,8 @@ public class OfflineDatabaseUtil {
     Context context;
     int cacheSize;
 
+    private String TAG = "Offline Cache";
+
     //The directory of the cache file on the phone
     private static final String CACHE_DIR = "offlineCacheData";
 
@@ -72,13 +74,13 @@ public class OfflineDatabaseUtil {
                     File file = context.getFileStreamPath(CACHE_DIR);
                     outputStream = new FileOutputStream(file, true);
                     writeData(outputStream, obj);
-                    Log.d("File save", "Append data");
+                    Log.d(TAG, "File save - Append data");
                 }
                 else {
                     // Creates file
                     outputStream = context.openFileOutput(CACHE_DIR, Context.MODE_PRIVATE);
                     writeData(outputStream, obj);
-                    Log.d("File save", "Save data");
+                    Log.d(TAG, "File save - Save data");
                 }
                 //closes stream when complete
                 outputStream.flush();
@@ -86,14 +88,14 @@ public class OfflineDatabaseUtil {
                 return true;
             }
             else{
-                Log.d("Cache not added", "Cache full");
+                Log.d(TAG, "Cache full - data not saved");
             }
         }
         catch (FileNotFoundException e){
-            Log.e("Cache file error", e.getMessage());
+            Log.e(TAG, "Cache save error: " + e.getMessage());
         }
         catch (IOException e){
-            Log.e("Stream write error", e.getMessage());
+            Log.e(TAG, "Stream write error " + e.getMessage());
         }
         return false;
     }
@@ -117,14 +119,14 @@ public class OfflineDatabaseUtil {
                     outputStream = new FileOutputStream(file, true);
                     for (JSONObject obj: objList) {
                         writeData(outputStream, obj);
-                        Log.d("File save", "Append data");
+                        Log.d(TAG, "File save - Append data");
                     }
                 }
                 else {
                     outputStream = context.openFileOutput(CACHE_DIR, Context.MODE_PRIVATE);
                     for(JSONObject obj: objList) {
                         writeData(outputStream, obj);
-                        Log.d("File save", "Save data");
+                        Log.d(TAG, "File save - Save data");
                     }
                 }
                 outputStream.flush();
@@ -132,14 +134,14 @@ public class OfflineDatabaseUtil {
                 return true;
             }
             else{
-                Log.d("Cache not added", "Cache full");
+                Log.d(TAG, "Cache not added - Cache full");
             }
         }
         catch (FileNotFoundException e){
-            Log.e("Cache file error", e.getMessage());
+            Log.e(TAG, "Cache file error" + e.getMessage());
         }
         catch (IOException e){
-            Log.e("Stream write error", e.getMessage());
+            Log.e(TAG, "Stream write error" +  e.getMessage());
         }
         return false;
     }
@@ -161,7 +163,7 @@ public class OfflineDatabaseUtil {
                 InputStreamReader reader = new InputStreamReader(stream);
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 while ((line = bufferedReader.readLine()) != null) {
-                    Log.d("Cache read", line);
+                    Log.d(TAG, "Cache read: " +  line);
                     //reject line if not json proper format
                     if((obj = makeJsonObj(line))!=null)
                         pendingList.add(obj);
@@ -170,11 +172,11 @@ public class OfflineDatabaseUtil {
                 deleteCache(context, CACHE_DIR);
             }
             else{
-                Log.e("No file", "File not found");
+                Log.e(TAG, "File not found");
             }
         }
         catch (IOException e){
-            Log.e("Stream error", e.getMessage());
+            Log.e(TAG, "Stream error" + e.getMessage());
         }
         return pendingList;
     }
@@ -186,7 +188,7 @@ public class OfflineDatabaseUtil {
         File file = context.getFileStreamPath(fileName);
         if(file != null) {
             file.delete();
-            Log.d("File deleted", fileName);
+            Log.d(OfflineDatabaseUtil.class.toString(), "File deleted " + fileName);
         }
         else
             Log.d("file not deleted", "No file to delete");
@@ -264,7 +266,7 @@ public class OfflineDatabaseUtil {
             obj = new JSONObject(jsonString);
         }
         catch (JSONException e) {
-            Log.e("JSON error", "Could not make json object from " + jsonString);
+            Log.e(TAG, "JSON error - Could not make json object from " + jsonString);
         }
         return obj;
     }

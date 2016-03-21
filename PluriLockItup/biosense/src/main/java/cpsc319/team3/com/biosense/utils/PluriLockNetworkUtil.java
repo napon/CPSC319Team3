@@ -10,9 +10,11 @@ import android.util.Log;
 
 import org.glassfish.tyrus.client.ClientManager;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
@@ -21,7 +23,6 @@ import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
 import javax.websocket.Session;
 
-import cpsc319.team3.com.biosense.PluriLockEventManager;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
 import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 
@@ -43,6 +44,7 @@ public class PluriLockNetworkUtil {
     private static final String TAG = "PluriLockNetworkUtil";
 
     private Session userSession;
+    private OfflineDatabaseUtil offlineDatabaseUtil;
 
     private URI endpointURI;
     private Context context;
@@ -57,6 +59,9 @@ public class PluriLockNetworkUtil {
         this.context = context;
         this.config = ClientEndpointConfig.Builder.create().build();
         this.client = ClientManager.createClient();
+
+        this.offlineDatabaseUtil = new OfflineDatabaseUtil(context);
+
         initiateConnection();
     }
 
@@ -103,11 +108,11 @@ public class PluriLockNetworkUtil {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (!activeNetwork.isAvailable()) {
+        if (activeNetwork == null || !activeNetwork.isAvailable()) {
             System.out.println("Network connectivity is not possible.");
             return false;
         } else {
-            if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
+            if (!activeNetwork.isConnectedOrConnecting()) {
                 System.out.println("You're not connected to the Internet.");
                 return false;
             } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
@@ -158,10 +163,30 @@ public class PluriLockNetworkUtil {
     /**
      * Sends a PluriLockPackage to the server when there is internet connectivity
      * or stores it in the local database when there is no network connection.
+     * Sent event relies on a network connection to the PluriLock Servers.
+     * If the device is offline, the event is cached on the device. On next
+     * send event, if the network is connected, it checks all backlogged events and sends them.
      * @param pluriLockPackage
      */
     public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
-        Log.d(TAG, "sendEvent");
-        sendMessage(pluriLockPackage.getJSON().toString());
+        if(preNetworkCheck()) {
+            Log.d(TAG, "sendEvent");
+            //send any cached pending events
+            List<JSONObject> pendingEvents = offlineDatabaseUtil.loadPending();
+            for (JSONObject event : pendingEvents) {
+                sendMessage(event.toString());
+            }
+            //send new event
+            sendMessage(pluriLockPackage.getJSON().toString());
+        }
+        else{
+            Log.e(TAG, "noEventSent - User offline");
+            if(offlineDatabaseUtil.save(pluriLockPackage.getJSON())){
+                Log.d(TAG, "cache event");
+            }
+            else{
+                Log.e(TAG, "cache not saved");
+            }
+        }
     }
 }
