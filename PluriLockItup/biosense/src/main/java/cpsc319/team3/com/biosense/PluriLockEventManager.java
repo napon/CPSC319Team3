@@ -87,6 +87,7 @@ public class PluriLockEventManager {
         double lat = location? LocationUtil.getInstance().getLatitude() : 0;
         double lon = location? LocationUtil.getInstance().getLongitude() : 0;
         PluriLockPackageBuilder eventPackage = new PluriLockPackageBuilder()
+                .ip(PluriLockNetworkUtil.getIPAddress(context))
                 .countryCode(PhoneDataManager.getCountry())
                 .model(PhoneDataManager.getHardwareModel())
                 .manufacturer(PhoneDataManager.getManufacturer())
