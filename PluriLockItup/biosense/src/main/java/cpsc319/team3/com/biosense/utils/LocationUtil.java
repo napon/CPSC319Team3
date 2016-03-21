@@ -46,6 +46,12 @@ public class LocationUtil implements LocationListener,
         hasLocationPermission(c);
     }
 
+    protected static synchronized void testStartListening(Activity c) {
+        if (locationUtil == null) {
+            locationUtil = new LocationUtil(c);
+        }
+    }
+
     public static synchronized void stopListening() {
         if (lm != null) {
             try {
