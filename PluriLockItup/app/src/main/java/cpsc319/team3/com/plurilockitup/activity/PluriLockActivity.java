@@ -1,22 +1,16 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Toast;
-
-import com.google.android.gms.location.LocationServices;
 
 import java.net.URI;
 
@@ -67,6 +61,8 @@ public abstract class PluriLockActivity extends AppCompatActivity {
     }
 
     private void setupPLApi() {
+        // Start listening for location.
+        LocationUtil.startListening(this);
         Context context = getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(
                 new BroadcastReceiver() {
