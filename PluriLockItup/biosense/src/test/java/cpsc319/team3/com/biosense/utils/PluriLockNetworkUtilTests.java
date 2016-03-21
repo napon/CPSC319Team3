@@ -99,7 +99,7 @@ public class PluriLockNetworkUtilTests {
         injected.setAccessible(true);
         injected.set(networkUtil, userSession);
         assertEquals(0, ((testSession) userSession).getEndpoint().getNumTimesSendTextIsCalled());
-        networkUtil.sendEvent(testPackage);
+        networkUtil.sendJsonMessage(testPackage.getJSON());
         assertEquals(1, ((testSession) userSession).getEndpoint().getNumTimesSendTextIsCalled());
     }
 

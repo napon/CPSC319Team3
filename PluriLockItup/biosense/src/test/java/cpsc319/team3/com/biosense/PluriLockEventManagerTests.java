@@ -68,9 +68,9 @@ public class PluriLockEventManagerTests {
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class)) {
+                new PluriLockNetworkUtil(new URI(""), application) {
                     @Override
-                    public void sendEvent(PluriLockPackage pluriLockPackage) throws IOException, DeploymentException {
+                    public void sendEvent(PluriLockPackage pluriLockPackage) {
                         //Do nothing
                     }
                 }
@@ -106,7 +106,7 @@ public class PluriLockEventManagerTests {
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class))
+                new PluriLockNetworkUtil(new URI(""), application)
         );
         Field injected = PluriLockEventManager.class.getDeclaredField("networkUtil");
         injected.setAccessible(true);

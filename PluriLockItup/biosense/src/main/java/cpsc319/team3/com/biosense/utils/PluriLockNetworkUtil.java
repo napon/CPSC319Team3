@@ -64,11 +64,11 @@ public class PluriLockNetworkUtil {
 
         this.offlineDatabaseUtil = new OfflineDatabaseUtil(context);
 
+        cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
         if (preNetworkCheck()) {
             initiateConnection();
         }
-
-        cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // TODO: This requires API level > 21
 /*        // Register listener to automatically send all events in cache the moment we reconnect
@@ -126,6 +126,7 @@ public class PluriLockNetworkUtil {
             broadcastNetworkError("You're not connected to the Internet!");
             return false;
         } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
+            int x = activeNetwork.getType();
             broadcastNetworkError("You're not connected to WIFI.");
             return false;
         }
