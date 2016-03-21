@@ -70,9 +70,21 @@ public class PluriLockAPI {
 
     /**
      * Destroys the existing session (in case of logout, etc)
+     * Severs websocket connection
      */
     public static void destroyAPISession(){
         Log.d(TAG, "destroyAPISession");
+        if(getInstance() != null)
+            getInstance().nullEvent();
+        PluriLockEventManager.deleteInstance();
         mySession = null; //add any destruction methods here as well.
+    }
+
+    /**
+     * Destroys the event objects
+     */
+    private void nullEvent(){
+        eventManager = null;
+        eventTracker = null;
     }
 }
