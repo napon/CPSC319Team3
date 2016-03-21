@@ -98,25 +98,32 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                 new IntentFilter("server-error")
         );
 
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Server error receiver
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String errorMessage = intent.getStringExtra("msg");
+                        Log.d("BroadcatReceiver", "Location-disabled broadcast: " + errorMessage);
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new IntentFilter("location-disabled")
+        );
+
 //        String id = "team3";
         String userId = Customer.getInstance().getuId();
         PluriLockConfig config = new PluriLockConfig();
-        try {
-            config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
-//            config.setUrl(URI.create("ws://echo.websocket.org/"));
-//            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
-            config.setAppVersion(1.0);
-            config.setDomain("team3");
-        } catch(Exception e) {}
+        config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
+//        config.setUrl(URI.create("ws://echo.websocket.org/"));
+//        config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
+        config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
+        config.setAppVersion(1.0);
+        config.setDomain("team3");
 
-        try {
-            this.plapi = PluriLockAPI.getInstance();
-            if(this.plapi == null) {
-                this.plapi = PluriLockAPI.createNewSession(context, userId, config);
-            }
-        } catch (LocationServiceUnavailableException e) {
-            // TODO: Display an error message to user telling them to enable location service?
+        this.plapi = PluriLockAPI.getInstance();
+        if(this.plapi == null) {
+            this.plapi = PluriLockAPI.createNewSession(context, userId, config);
         }
     }
 

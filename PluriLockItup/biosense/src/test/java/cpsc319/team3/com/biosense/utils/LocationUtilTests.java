@@ -30,8 +30,10 @@ public class LocationUtilTests {
 
     @Test
     public void testDefaultLocation() {
-        assertEquals(0.0, LocationUtil.getLatitude(), DELTA);
-        assertEquals(0.0, LocationUtil.getLongitude(), DELTA);
+        Application application = createApplicationWithPermission();
+        locationUtil = new LocationUtil(application, new PluriLockConfig());
+        assertEquals(0.0, locationUtil.getLatitude(), DELTA);
+        assertEquals(0.0, locationUtil.getLongitude(), DELTA);
     }
 
     @Test
@@ -61,8 +63,8 @@ public class LocationUtilTests {
         location.setTime(System.currentTimeMillis());
         locationUtil.onLocationChanged(location);
 
-        assertEquals(15.1, LocationUtil.getLatitude(), DELTA);
-        assertEquals(14.2, LocationUtil.getLongitude(), DELTA);
+        assertEquals(15.1, locationUtil.getLatitude(), DELTA);
+        assertEquals(14.2, locationUtil.getLongitude(), DELTA);
     }
 
     @Test
@@ -76,16 +78,16 @@ public class LocationUtilTests {
         location.setTime(System.currentTimeMillis());
         locationUtil.onLocationChanged(location);
 
-        assertEquals(15.1, LocationUtil.getLatitude(), DELTA);
-        assertEquals(14.2, LocationUtil.getLongitude(), DELTA);
+        assertEquals(15.1, locationUtil.getLatitude(), DELTA);
+        assertEquals(14.2, locationUtil.getLongitude(), DELTA);
 
         location.setLatitude(24.6);
         location.setLongitude(26.8);
         location.setTime(System.currentTimeMillis());
         locationUtil.onLocationChanged(location);
 
-        assertEquals(24.6, LocationUtil.getLatitude(), DELTA);
-        assertEquals(26.8, LocationUtil.getLongitude(), DELTA);
+        assertEquals(24.6, locationUtil.getLatitude(), DELTA);
+        assertEquals(26.8, locationUtil.getLongitude(), DELTA);
     }
 
     private Application createApplicationWithPermission() {

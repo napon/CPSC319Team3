@@ -42,8 +42,7 @@ public class PluriLockEventManager {
 
     private static PluriLockEventManager eventManager;
 
-    protected PluriLockEventManager(Context c, String id, PluriLockConfig config)
-            throws LocationServiceUnavailableException {
+    protected PluriLockEventManager(Context c, String id, PluriLockConfig config) {
         Log.d(TAG, "PluriLockEventManager constructor");
         this.context = c;
         this.userID = id;
@@ -59,9 +58,7 @@ public class PluriLockEventManager {
      * @param id User ID
      * @return
      */
-    public static synchronized PluriLockEventManager getInstance(
-            Context c, String id, PluriLockConfig config)
-            throws LocationServiceUnavailableException {
+    public static synchronized PluriLockEventManager getInstance(Context c, String id, PluriLockConfig config) {
         Log.d(TAG, "getInstance");
         if (eventManager == null) {
             eventManager = new PluriLockEventManager(c, id, config);
