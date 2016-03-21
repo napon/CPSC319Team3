@@ -83,6 +83,9 @@ public class PluriLockEventManager {
     }
 
     private void pushAllEvents() {
+        boolean location = !config.ignoreLocation();
+        double lat = location? LocationUtil.getInstance().getLatitude() : 0;
+        double lon = location? LocationUtil.getInstance().getLongitude() : 0;
         PluriLockPackageBuilder eventPackage = new PluriLockPackageBuilder()
                 .countryCode(PhoneDataManager.getCountry())
                 .model(PhoneDataManager.getHardwareModel())
@@ -92,8 +95,8 @@ public class PluriLockEventManager {
                 .language(PhoneDataManager.getDisplayLanguage())
                 .timeZone(PhoneDataManager.getTimeZone())
                 .appVersion(this.config.getAppVersion())
-                .latitude(LocationUtil.getInstance().getLatitude())
-                .longitude(LocationUtil.getInstance().getLongitude())
+                .latitude(lat)
+                .longitude(lon)
                 .screenWidth(PhoneDataManager.getScreenWidth(context))
                 .screenHeight(PhoneDataManager.getScreenHeight(context))
                 .cpuCores(PhoneDataManager.getNumberOfCPUCores())
