@@ -105,13 +105,12 @@ public class PluriLockNetworkUtilTests {
 
     @Test
     public void testPreNetworkCheck() throws Exception {
-        Context c = Mockito.mock(Context.class);
-        Field injected = PluriLockNetworkUtil.class.getDeclaredField("context");
-        injected.setAccessible(true);
-        injected.set(networkUtil, c);
         ConnectivityManager cm = Mockito.mock(ConnectivityManager.class);
+        Field injected = PluriLockNetworkUtil.class.getDeclaredField("cm");
+        injected.setAccessible(true);
+        injected.set(networkUtil, cm);
+
         NetworkInfo network = Mockito.mock(NetworkInfo.class);
-        when(c.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(cm);
         when(cm.getActiveNetworkInfo()).thenReturn(network);
 
         assertFalse(networkUtil.preNetworkCheck());
