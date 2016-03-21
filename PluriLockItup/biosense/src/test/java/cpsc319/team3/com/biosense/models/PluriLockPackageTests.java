@@ -35,6 +35,7 @@ public class PluriLockPackageTests {
                 .userID("napon")
                 .latitude(20.0)
                 .longitude(40.0)
+                .ip("0.0.0.0")
                 .model("Nexus 6")
                 .timeZone("PST")
                 .appName("PLURILOCKITUP")
@@ -67,6 +68,7 @@ public class PluriLockPackageTests {
             assertEquals("CA", data.getString("countryCode"));
             assertEquals("PST", data.getString("timeZone"));
             assertEquals("PLURILOCKITUP", data.getString("appName"));
+            assertEquals("0.0.0.0", data.getString("ip"));
             assertEquals(20.0, data.getDouble("latitude"), DELTA);
             assertEquals(40.0, data.getDouble("longitude"), DELTA);
             assertEquals(600, data.getInt("screenHeight"));
