@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.plurilockitup.R;
 
 public class FeedbackActivity extends PluriLockActivity {
@@ -18,6 +19,7 @@ public class FeedbackActivity extends PluriLockActivity {
 
         //get xml views
         feedback_message = (EditText) findViewById(R.id.feedback_message);
+        feedback_message.addTextChangedListener(PluriLockAPI.getInstance().createKeyListener());
     }
 
     public void sendFeedback(View view){

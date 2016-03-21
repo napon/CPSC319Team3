@@ -2,6 +2,7 @@ package cpsc319.team3.com.biosense;
 
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +17,7 @@ import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
  * PluriLockEventTracker is notified via method call when an keyboard event occurs
  *
  */
-public class PluriLockKeyListener implements android.text.method.KeyListener {
+public class PluriLockKeyListener implements android.text.method.KeyListener, TextWatcher{
 
     private static final String TAG = "PluriLockKeyListener";
 
@@ -131,5 +132,37 @@ public class PluriLockKeyListener implements android.text.method.KeyListener {
     @Override
     public void clearMetaKeyState(View view, Editable content, int states) {
 
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        Log.d("onTextChanged", "char: "+ s + " start: " + start + " before: " + before + " count: " + count);
+        //char entered
+        if(before < count) {
+            if(s.toString().equals("\n")){
+                Log.d("onTextChanged","Char added: " +"Char added: enter");
+            }
+            else {
+                Log.d("onTextChanged", "Char added: " + s.charAt(count - 1));
+            }
+
+        }
+        else{
+            Log.d("onTextChanged","Char added: delete");
+        }
+        long time = System.currentTimeMillis()/1000;
+        Log.d("onTextChanged","Time: " + time);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//        Log.d("beforeTextChanged", "char: "+ s + " start: " + start + " after: " + after + " count: " + count);
+//        before = s;
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+//        Log.d("afterTextChanged", "char: " + s.toString());
+        // TODO Auto-generated method stub
     }
 }
