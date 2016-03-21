@@ -269,6 +269,7 @@ public class PluriLockTouchListener implements
 
             PScaleEvent pScaleEvent = new PScaleEvent(screenOrientation, currTimestamp,
                     duration, PScaleEvent.ScaleStatus.BEGIN, spanX, spanY);
+            eventTracker.notifyOfEvent(pScaleEvent);
         } catch (NullPointerException e) {
             Log.d("Scale begin error", e.getMessage());
         }
@@ -299,6 +300,7 @@ public class PluriLockTouchListener implements
 
             PScaleEvent pScaleEvent = new PScaleEvent(screenOrientation, currTimestamp,
                     duration, PScaleEvent.ScaleStatus.END, spanX, spanY);
+            eventTracker.notifyOfEvent(pScaleEvent);
         } catch (NullPointerException e) {
             Log.d("Scale end error", e.getMessage());
         }
