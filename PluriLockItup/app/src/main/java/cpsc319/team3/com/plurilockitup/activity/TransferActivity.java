@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.plurilockitup.R;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 
@@ -24,6 +25,7 @@ public class TransferActivity extends PluriLockActivity {
     String currAcctName;
 
     boolean auth = false;
+    PluriLockAPI plApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,13 @@ public class TransferActivity extends PluriLockActivity {
 
         //Put account names into drop down
         addAccountsToSpinner();
+
+        //Plurilock Textwatcher on price EditText
+        plapi = PluriLockAPI.getInstance();
+        if(plapi != null) {
+            EditText transferPrice = (EditText) findViewById(R.id.transferAmt);
+            transferPrice.addTextChangedListener(plApi.createKeyListener());
+        }
     }
 
     /**

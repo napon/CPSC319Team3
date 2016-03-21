@@ -134,6 +134,15 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
 
     }
 
+    /**
+     * Implements Textwatcher to add to EditText view
+     * Tracks last keystroke entered with a timestamp
+     * Adds event to Plurilock event as a Monokeytouch event
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         int keyEvent = -1;
@@ -168,10 +177,23 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
 
     }
 
+    /**
+     * Abstract method needed to be implemented by Textwatcher
+     * No additional actions required
+     * @param s
+     * @param start
+     * @param count
+     * @param after
+     */
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
     }
 
+    /**
+     * Abstract method needed to be implemented by Textwatcher
+     * No additional actions required
+     * @param s
+     */
     @Override
     public void afterTextChanged(Editable s) {
     }
