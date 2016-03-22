@@ -10,9 +10,23 @@ import org.junit.Test;
 public class PlurilockServerResponseTest {
 
     @Test
-    public void parseTest() throws Exception {
+    public void parseTestMockServer() throws Exception {
         String msg = "{confidenceLevel: 0.1234}";
-        PlurilockServerResponse response = PlurilockServerResponse.fromJsonString(msg);
+        PlurilockServerResponse response = PlurilockServerResponse.parse(msg);
         Assert.assertEquals(0.1234, response.getConfidenceLevel());
+    }
+
+    @Test
+    public void parseTestPluriLockReceiveAck() throws Exception {
+        String msg = "Worker:27493$Ack";
+        PlurilockServerResponse response = PlurilockServerResponse.parse(msg);
+        Assert.assertEquals(1.0, response.getConfidenceLevel());
+    }
+
+    @Test
+    public void parseTestPluriLockReceiveLock() throws Exception {
+        String msg = "Worker:27493$lock";
+        PlurilockServerResponse response = PlurilockServerResponse.parse(msg);
+        Assert.assertEquals(0.0, response.getConfidenceLevel());
     }
 }
