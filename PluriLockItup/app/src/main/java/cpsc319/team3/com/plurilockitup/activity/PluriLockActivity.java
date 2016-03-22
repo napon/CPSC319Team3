@@ -18,6 +18,7 @@ import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
+import cpsc319.team3.com.biosense.utils.LocationUtil;
 import cpsc319.team3.com.plurilockitup.model.Customer;
 import cpsc319.team3.com.plurilockitup.model.Utils;
 
@@ -66,8 +67,9 @@ public abstract class PluriLockActivity extends AppCompatActivity {
     }
 
     private void setupPLApi() {
+        // Start listening for location.
+        LocationUtil.startListening(this);
         Context context = getApplicationContext();
-
         LocalBroadcastManager.getInstance(context).registerReceiver(
                 new BroadcastReceiver() {
                     @Override
@@ -105,7 +107,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         try {
             this.plapi = PluriLockAPI.getInstance();
             if(this.plapi == null) {
-                this.plapi = PluriLockAPI.createNewSession(context, userId, config);
+                this.plapi = PluriLockAPI.createNewSession(this, userId, config);
             }
         } catch (LocationServiceUnavailableException e) {
             // TODO: Display an error message to user telling them to enable location service?
@@ -119,5 +121,4 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
 }

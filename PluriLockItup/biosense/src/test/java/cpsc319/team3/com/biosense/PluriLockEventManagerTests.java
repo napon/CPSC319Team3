@@ -67,6 +67,7 @@ public class PluriLockEventManagerTests {
         shadowApp.setPackageName("com.cpsc319.team3");
         ShadowContextImpl shadowContext = (ShadowContextImpl) Shadows.shadowOf(application.getBaseContext());
         PluriLockConfig config = new PluriLockConfig();
+        config.setIgnoreLocation(true);
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
                 new PluriLockNetworkUtil(new URI(""), Mockito.mock(Context.class)) {

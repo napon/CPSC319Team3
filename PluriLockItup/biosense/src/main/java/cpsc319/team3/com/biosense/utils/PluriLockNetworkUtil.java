@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import org.glassfish.tyrus.client.ClientManager;
@@ -188,5 +190,15 @@ public class PluriLockNetworkUtil {
                 Log.e(TAG, "cache not saved");
             }
         }
+    }
+
+    /**
+     * Returns the current IP Address of the device.
+     * @param c Context object.
+     * @return IP Address string of the device.
+     */
+    public static String getIPAddress(Context c) {
+        WifiManager wm = (WifiManager) c.getSystemService(c.WIFI_SERVICE);
+        return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 }
