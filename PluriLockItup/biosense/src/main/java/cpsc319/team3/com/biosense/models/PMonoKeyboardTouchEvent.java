@@ -24,7 +24,7 @@ public class PMonoKeyboardTouchEvent extends PluriLockEvent {
     public PMonoKeyboardTouchEvent(int screenOrientation, long timestamp,
                                    long duration, String keyPressed) {
         super(screenOrientation, timestamp, duration);
-        this.keyPressed = keyPressed;
+        this.keyPressed = "KEYCODE_" + keyPressed.toUpperCase();
     }
 
     /**
