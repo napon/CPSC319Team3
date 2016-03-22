@@ -14,9 +14,23 @@ public class PlurilockServerResponse implements Parcelable{
 
     private final double confidenceLevel;
 
-    public static PlurilockServerResponse fromJsonString(String response) throws JSONException {
-        JSONObject json = new JSONObject(new JSONTokener(response));
-        return new PlurilockServerResponse(json.getDouble("confidenceLevel"));
+    public static PlurilockServerResponse parse(String response) throws JSONException {
+        PlurilockServerResponse result;
+        // PluriLock Server.
+        if (response.matches("Worker:\\d*\\$\\w*")) {
+            if (response.toLowerCase().contains("ack")) {
+                // result is ack
+                result = new PlurilockServerResponse(1.0);
+            } else {
+                // result is lock
+                result = new PlurilockServerResponse(0.0);
+            }
+        } else {
+            // Mock Server.
+            JSONObject json = new JSONObject(new JSONTokener(response));
+            result = new PlurilockServerResponse(json.getDouble("confidenceLevel"));
+        }
+        return result;
     }
 
     public PlurilockServerResponse(double confidenceLevel) {
