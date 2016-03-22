@@ -77,10 +77,12 @@ public class PluriLockAPI {
      */
     public static void destroyAPISession(){
         Log.d(TAG, "destroyAPISession");
-        if(getInstance() != null)
+        if(getInstance() != null) {
             getInstance().nullEvent();
+            OfflineDatabaseUtil.deleteCache(getInstance().context, OfflineDatabaseUtil.CACHE_DIR);
+        }
         PluriLockEventManager.deleteInstance();
-        OfflineDatabaseUtil.deleteCache(getInstance().context, OfflineDatabaseUtil.CACHE_DIR);
+
         mySession = null; //add any destruction methods here as well.
     }
 

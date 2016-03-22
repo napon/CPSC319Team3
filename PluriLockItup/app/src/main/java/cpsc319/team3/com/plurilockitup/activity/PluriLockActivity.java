@@ -48,7 +48,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         }
         if(plapi != null) {
             //PLA gesture detector for touch event
-            gestD = new GestureDetector(plapi.createTouchListener());
+            gestD = new GestureDetector(this, plapi.createTouchListener());
         }
     }
 

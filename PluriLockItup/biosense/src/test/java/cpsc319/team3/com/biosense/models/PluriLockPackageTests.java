@@ -80,7 +80,7 @@ public class PluriLockPackageTests {
     @Test
     public void testGetJSONWithKeyboardTouchEvent() {
         // Create and add a KeyboardTouchEvent to the PluriLockPackage.
-        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(1, time, 30, (int) 'a');
+        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(1, time, 30, "a");
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -93,7 +93,7 @@ public class PluriLockPackageTests {
             // Test each field from KeyboardTouchEvent is properly defined.
             assertEquals("MONOGRAPH", eventObject.getString("eventType"));
             assertEquals(30, eventObject.getLong("duration"));
-            assertEquals((int) 'a', eventObject.getInt("key"));
+            assertEquals( "a", eventObject.getString("key"));
             assertEquals(1, eventObject.getInt("orientation"));
             assertEquals(time, eventObject.getLong("timestamp"));
         } catch (JSONException e) {
@@ -104,7 +104,7 @@ public class PluriLockPackageTests {
     @Test
     public void testGetJSONWithDiKeyboardTouchEvent() {
         // Create and add a KeyboardTouchEvent to the PluriLockPackage.
-        PDiKeyboardTouchEvent keyboard = new PDiKeyboardTouchEvent(2, time, 200, (int) 'a', (int) 'b');
+        PDiKeyboardTouchEvent keyboard = new PDiKeyboardTouchEvent(2, time, 200, "a","b");
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -117,8 +117,8 @@ public class PluriLockPackageTests {
             // Test each field from KeyboardTouchEvent is properly defined.
             assertEquals("DIGRAPH", eventObject.getString("eventType"));
             assertEquals(200, eventObject.getLong("duration"));
-            assertEquals((int) 'a', eventObject.getInt("fromKey"));
-            assertEquals((int) 'b', eventObject.getInt("toKey"));
+            assertEquals( "a", eventObject.getString("fromKey"));
+            assertEquals( "b", eventObject.getString("toKey"));
             assertEquals(2, eventObject.getInt("orientation"));
             assertEquals(time, eventObject.getLong("timestamp"));
         } catch (JSONException e) {
