@@ -178,8 +178,10 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
                 lastKey = (PMonoKeyboardTouchEvent) touchEvent;
             }
             else {
-                touchEvent = new PDiKeyboardTouchEvent(screenOrientation, timestamp, 0, lastKey.getKeyPressed(), charEntered);
+                touchEvent = new PDiKeyboardTouchEvent(screenOrientation, timestamp, (this.timestamp - lastKey.getTimestamp()), lastKey.getKeyPressed(), charEntered);
+
                 lastKey = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, charEntered);
+                eventTracker.notifyOfEvent(lastKey);
             }
             lastKeytime = timestamp;
 
