@@ -29,4 +29,11 @@ public class PlurilockServerResponseTest {
         PlurilockServerResponse response = PlurilockServerResponse.parse(msg);
         Assert.assertEquals(0.0, response.getConfidenceLevel());
     }
+
+    @Test
+    public void parseTestPluriLockReceiveHello() throws Exception {
+        String msg = "Hello from worker: 27493";
+        PlurilockServerResponse response = PlurilockServerResponse.parse(msg);
+        Assert.assertEquals(1.0, response.getConfidenceLevel());
+    }
 }

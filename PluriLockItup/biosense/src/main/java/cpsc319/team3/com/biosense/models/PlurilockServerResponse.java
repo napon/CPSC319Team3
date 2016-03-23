@@ -19,12 +19,15 @@ public class PlurilockServerResponse implements Parcelable{
         // PluriLock Server.
         if (response.matches("Worker:\\d*\\$\\w*")) {
             if (response.toLowerCase().contains("ack")) {
-                // result is ack
+                // result is ack.
                 result = new PlurilockServerResponse(1.0);
             } else {
-                // result is lock
+                // result is lock.
                 result = new PlurilockServerResponse(0.0);
             }
+        } else if (response.toLowerCase().contains("hello")) {
+            // hello should be granted access.
+            result = new PlurilockServerResponse(1.0);
         } else {
             // Mock Server.
             JSONObject json = new JSONObject(new JSONTokener(response));
