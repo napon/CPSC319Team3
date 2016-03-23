@@ -5,6 +5,8 @@ import android.util.Log;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.utils.LocationUtil;
+import cpsc319.team3.com.biosense.utils.OfflineDatabaseUtil;
+
 
 /**
  * A class through which the client interacts with our API.
@@ -17,6 +19,7 @@ public class PluriLockAPI {
     private PluriLockEventManager eventManager;
     private PluriLockEventTracker eventTracker;
     private static PluriLockAPI mySession;
+    private Context context;
 
     /**
      *ﾖ
@@ -57,6 +60,7 @@ public class PluriLockAPI {
         Log.d(TAG, "PluriLockAPI constructor");
         this.eventManager = PluriLockEventManager.getInstance(context, userID, config);
         this.eventTracker = new PluriLockEventTracker(context, eventManager);
+        this.context = context;
     }
 
     public PluriLockKeyListener createKeyListener() {
@@ -74,9 +78,12 @@ public class PluriLockAPI {
      */
     public static void destroyAPISession(){
         Log.d(TAG, "destroyAPISession");
-        if(getInstance() != null)
+        if(getInstance() != null) {
             getInstance().nullEvent();
+            OfflineDatabaseUtil.deleteCache(getInstance().context, OfflineDatabaseUtil.CACHE_DIR);
+        }
         PluriLockEventManager.deleteInstance();
+
         mySession = null; //add any destruction methods here as well.
         // Stop listening for location.
         LocationUtil.stopListening();

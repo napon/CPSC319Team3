@@ -1,6 +1,7 @@
 package cpsc319.team3.com.biosense;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.Log;
@@ -61,7 +62,19 @@ public class PhoneDataManager {
     /**
      * @return app's name.
      */
-    public static String getAppName() { return "PLURILOCKITUP"; }
+    public static String getAppName(Context context) {
+        Resources res = context.getResources();
+        if(res != null)
+            try{
+                return res.getString(R.string.app_name);
+            }
+            catch (Resources.NotFoundException e){
+                Log.e("Data Manager", "App name not found. " + e.getMessage());
+                return "";
+            }
+        return "";
+
+    }
 
     /**
      * @return number of CPU cores.

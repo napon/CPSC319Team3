@@ -1,5 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
+import android.view.KeyEvent;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,12 +13,18 @@ import org.json.JSONObject;
  */
 public class PMonoKeyboardTouchEvent extends PluriLockEvent {
     private static final String EVENT_TYPE = "MONOGRAPH";
-    private int keyPressed;
+    private String keyPressed;
 
     public PMonoKeyboardTouchEvent(int screenOrientation, long timestamp,
                                    long duration, int keyPressed) {
         super(screenOrientation, timestamp, duration);
-        this.keyPressed = keyPressed;
+        this.keyPressed = KeyEvent.keyCodeToString(keyPressed);
+    }
+
+    public PMonoKeyboardTouchEvent(int screenOrientation, long timestamp,
+                                   long duration, String keyPressed) {
+        super(screenOrientation, timestamp, duration);
+        this.keyPressed = "KEYCODE_" + keyPressed.toUpperCase();
     }
 
     /**
@@ -24,7 +32,7 @@ public class PMonoKeyboardTouchEvent extends PluriLockEvent {
      * Get the key pressed
      * @return Android keycode
      */
-    public int getKeyPressed() {
+    public String getKeyPressed() {
         return keyPressed;
     }
 

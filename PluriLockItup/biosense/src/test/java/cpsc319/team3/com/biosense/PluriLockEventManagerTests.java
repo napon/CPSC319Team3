@@ -24,14 +24,12 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
 import javax.websocket.DeploymentException;
 
 import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
-import cpsc319.team3.com.biosense.models.PluriLockEvent;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
 import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
@@ -65,6 +63,9 @@ public class PluriLockEventManagerTests {
     public void testAddPluriLockEventWithNetworkCall() throws LocationServiceUnavailableException,
             NoSuchFieldException, IllegalAccessException, URISyntaxException, IOException, DeploymentException {
         Application application = createApplicationWithPermissions();
+        ShadowContextWrapper shadowApp = Shadows.shadowOf(application);
+        shadowApp.setPackageName("com.cpsc319.team3");
+        ShadowContextImpl shadowContext = (ShadowContextImpl) Shadows.shadowOf(application.getBaseContext());
         PluriLockConfig config = new PluriLockConfig();
         config.setIgnoreLocation(true);
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
@@ -92,9 +93,10 @@ public class PluriLockEventManagerTests {
         Mockito.verify(network, Mockito.never()).sendEvent(Mockito.any(PluriLockPackage.class));
 
         // Add one more PluriLockEvents.
-        p.addPluriLockEvent(new PScrollEvent(1, System.currentTimeMillis(),
+        PScrollEvent sEvent =new PScrollEvent(1, System.currentTimeMillis(),
                 PScrollEvent.ScrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1,
-                MotionEvent.ACTION_SCROLL));
+                MotionEvent.ACTION_SCROLL);
+        p.addPluriLockEvent(sEvent);
 
         // Verify the network call has been invoked 1 time.
         Mockito.verify(network, Mockito.times(1)).sendEvent(Mockito.any(PluriLockPackage.class));
