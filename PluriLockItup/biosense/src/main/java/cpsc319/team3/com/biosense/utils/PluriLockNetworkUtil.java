@@ -56,6 +56,7 @@ public class PluriLockNetworkUtil {
     private ClientManager client;
     private ClientEndpointConfig config;
 
+
     private ConnectivityManager cm;
 
     public PluriLockNetworkUtil(URI endpointURI, Context context) {
@@ -77,22 +78,25 @@ public class PluriLockNetworkUtil {
         BroadcastReceiver connectionStatusReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                boolean connected = intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false);
-                Log.d(TAG, "Connection status: " + connected);
-                if (connected) {
-                    // stuff
+                if (preNetworkCheck()) {
+                    Log.d(TAG, "Network connection reestablished, attempting reconnection to server...");
+                    initiateConnection();
+                    sendCachedEvents();
+                } else {
+                    Log.d(TAG, "Connection lost!!");
+                    closeConnection();
                 }
             }
         };
 
-        IntentFilter connectionFilter = new IntentFilter();
-        connectionFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+        IntentFilter connectionFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         context.registerReceiver(connectionStatusReceiver, connectionFilter);
     }
 
 
+
     public void initiateConnection() {
-        Log.d(TAG, "initiateConnection");
+        Log.d(TAG, "Initiating new connection session to server...");
         final MessageHandler.Whole<String> messageHandler = new MessageHandler.Whole<String>() {
             @Override
             public void onMessage(String message) {
@@ -137,7 +141,6 @@ public class PluriLockNetworkUtil {
             broadcastNetworkError("You're not connected to the Internet!");
             return false;
         } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-            int x = activeNetwork.getType();
             broadcastNetworkError("You're not connected to WIFI.");
             return false;
         }
@@ -193,10 +196,16 @@ public class PluriLockNetworkUtil {
         }
     }
 
-    public void closeConnection() throws IOException {
-        Log.d(TAG, "closeConnection");
-        userSession.close();
-        userSession = null;
+    public void closeConnection() {
+        Log.d(TAG, "Closing server connection session...");
+        try {
+            if (userSession != null) {
+                userSession.close();
+                userSession = null;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Unexpected error when closing connection", e);
+        }
     }
 
     /**
@@ -231,8 +240,9 @@ public class PluriLockNetworkUtil {
     }
 
     private void sendCachedEvents() {
-        Log.d(TAG, "Sending cached events...");
+        Log.d(TAG, "Looking for cached events...");
         List<JSONObject> pendingEvents = offlineDatabaseUtil.loadPending();
+        Log.i(TAG, "Found " + pendingEvents.size() + " cached events, attempting to resend...");
         for (JSONObject event : pendingEvents) {
             sendJsonMessage(event);
         }
