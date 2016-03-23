@@ -25,8 +25,8 @@ public class PDiKeyboardTouchEvent extends PluriLockEvent {
     public PDiKeyboardTouchEvent(int screenOrientation, long timestamp,
                                  long duration, String fromKey, String toKey) {
         super(screenOrientation, timestamp, duration);
-        this.fromKey = "KEYCODE_" + fromKey.toUpperCase();
-        this.toKey = "KEYCODE_" + toKey.toUpperCase();
+        this.fromKey = (fromKey.startsWith("KEYCODE")) ?  fromKey : "KEYCODE_" + fromKey.toUpperCase();
+        this.toKey = (toKey.startsWith("KEYCODE")) ? toKey : "KEYCODE_" + toKey.toUpperCase();
     }
 
     /**
