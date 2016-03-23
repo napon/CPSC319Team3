@@ -21,7 +21,6 @@ import java.net.URI;
 import java.util.List;
 
 import javax.websocket.ClientEndpointConfig;
-import javax.websocket.DeploymentException;
 import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
@@ -71,14 +70,14 @@ public class PluriLockNetworkUtil {
 
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (preNetworkCheck()) {
+        if (networkCheck()) {
             initiateConnection();
         }
 
         BroadcastReceiver connectionStatusReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (preNetworkCheck()) {
+                if (networkCheck()) {
                     Log.d(TAG, "Network connection reestablished, attempting reconnection to server...");
                     initiateConnection();
                     sendCachedEvents();
@@ -132,7 +131,7 @@ public class PluriLockNetworkUtil {
         Log.d(TAG, "connecting..");
     }
 
-    public boolean preNetworkCheck() {
+    public boolean networkCheck() {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null || !activeNetwork.isAvailable()) {
             broadcastNetworkError("Network connectivity is not possible!");
@@ -219,7 +218,7 @@ public class PluriLockNetworkUtil {
      */
     public void sendEvent(PluriLockPackage pluriLockPackage)  {
         JSONObject event = pluriLockPackage.getJSON();
-        if (preNetworkCheck()) {
+        if (networkCheck()) {
             Log.d(TAG, "sendEvent");
             //send any cached pending events
             sendCachedEvents();

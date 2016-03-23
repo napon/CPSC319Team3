@@ -113,13 +113,13 @@ public class PluriLockNetworkUtilTests {
         NetworkInfo network = Mockito.mock(NetworkInfo.class);
         when(cm.getActiveNetworkInfo()).thenReturn(network);
 
-        assertFalse(networkUtil.preNetworkCheck());
+        assertFalse(networkUtil.networkCheck());
 
         when(network.isAvailable()).thenReturn(true);
         when(network.isConnectedOrConnecting()).thenReturn(true);
         when(network.getType()).thenReturn(ConnectivityManager.TYPE_WIFI);
 
-        assertTrue(networkUtil.preNetworkCheck());
+        assertTrue(networkUtil.networkCheck());
     }
 
     @Test
