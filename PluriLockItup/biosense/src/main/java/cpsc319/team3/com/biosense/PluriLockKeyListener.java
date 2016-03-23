@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
+import java.util.concurrent.TimeUnit;
+
 import cpsc319.team3.com.biosense.models.PDiKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
+import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
 /**
  * Created by Karen on 16-02-23.
@@ -27,6 +30,8 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
     private PluriLockEventTracker eventTracker;
 
     private PMonoKeyboardTouchEvent lastKey = null;
+    private long lastKeytime = 0;
+    private long DIGRAPH_TIME_THRESHOLD = 1;
 
     public PluriLockKeyListener(PluriLockEventTracker eventTracker) {
         this.eventTracker = eventTracker;
@@ -160,15 +165,26 @@ public class PluriLockKeyListener implements android.text.method.KeyListener, Te
                 //ignore the double textwatch fire
             } else { //delete key
                 Log.d("onTextChanged", "Char added: delete");
-                charEntered = "backspace";
+                charEntered = "del";
             }
         }
         if (!(charEntered.isEmpty() || charEntered.equals(""))) {
             screenOrientation = eventTracker.getContext().getResources().getConfiguration().orientation;
-            this.timestamp = System.currentTimeMillis();
+            this.timestamp = System.nanoTime();
+            PluriLockEvent touchEvent;
+            long timeDiff = TimeUnit.SECONDS.convert(timestamp - lastKeytime, TimeUnit.NANOSECONDS);
+            if(lastKey == null || timeDiff > DIGRAPH_TIME_THRESHOLD){
+                touchEvent = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, charEntered);
+                lastKey = (PMonoKeyboardTouchEvent) touchEvent;
+            }
+            else {
+                touchEvent = new PDiKeyboardTouchEvent(screenOrientation, timestamp, 0, lastKey.getKeyPressed(), charEntered);
+                lastKey = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, charEntered);
+            }
+            lastKeytime = timestamp;
 
-            PMonoKeyboardTouchEvent monoTouchEvent = new PMonoKeyboardTouchEvent(screenOrientation, timestamp, 0, charEntered);
-            eventTracker.notifyOfEvent(monoTouchEvent);
+
+            eventTracker.notifyOfEvent(touchEvent);
         }
     }
 
