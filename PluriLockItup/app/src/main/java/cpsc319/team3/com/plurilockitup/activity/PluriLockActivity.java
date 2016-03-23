@@ -71,6 +71,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
         LocationUtil.startListening(this);
         Context context = getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Server Response receiver
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
@@ -90,27 +91,64 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                 new IntentFilter("server-response")
         );
 
-//        String id = "team3";
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Server error receiver
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String errorMessage = intent.getStringExtra("msg");
+                        Log.d("BroadcastReceiver",
+                                "Server-error broadcast: " + errorMessage);
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new IntentFilter("server-error")
+        );
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Network Connection error receiver
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        // TODO: Logout the user if can't connect after X number of attempts?
+                        String errorMessage = intent.getStringExtra("msg");
+                        Log.d("BroadcastReceiver",
+                                "Network error broadcast: " + errorMessage);
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new IntentFilter("network-error")
+        );
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+                // Server error receiver
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String errorMessage = intent.getStringExtra("msg");
+                        Log.d("BroadcatReceiver", "Location-disabled broadcast: " + errorMessage);
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new IntentFilter("location-disabled")
+        );
+
         String userId = Customer.getInstance().getuId();
         PluriLockConfig config = new PluriLockConfig();
-        try {
-            config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
-//            config.setUrl(URI.create("ws://echo.websocket.org/"));
-            if(serverMode)
-                config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
-            else
-                config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
-            config.setAppVersion(1.0);
-            config.setDomain("team3");
-        } catch(Exception e) {}
+        config.setActionsPerUpload(ACTIONS_PER_UPLOAD);
 
-        try {
-            this.plapi = PluriLockAPI.getInstance();
-            if(this.plapi == null) {
-                this.plapi = PluriLockAPI.createNewSession(this, userId, config);
-            }
-        } catch (LocationServiceUnavailableException e) {
-            // TODO: Display an error message to user telling them to enable location service?
+        if(serverMode)
+            config.setUrl(URI.create("ws://btdemo.plurilock.com:8095/")); // Plurilock server.
+        else
+            config.setUrl(URI.create("ws://129.121.9.44:8001/")); // Mock server.
+
+        config.setAppVersion(1.0);
+        config.setDomain("team3");
+
+        this.plapi = PluriLockAPI.getInstance();
+        if(this.plapi == null) {
+            this.plapi = PluriLockAPI.createNewSession(context, userId, config);
         }
     }
 

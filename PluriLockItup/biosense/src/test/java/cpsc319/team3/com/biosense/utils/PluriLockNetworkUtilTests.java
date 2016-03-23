@@ -99,28 +99,27 @@ public class PluriLockNetworkUtilTests {
         injected.setAccessible(true);
         injected.set(networkUtil, userSession);
         assertEquals(0, ((testSession) userSession).getEndpoint().getNumTimesSendTextIsCalled());
-        networkUtil.sendEvent(testPackage);
+        networkUtil.sendJsonMessage(testPackage.getJSON());
         assertEquals(1, ((testSession) userSession).getEndpoint().getNumTimesSendTextIsCalled());
     }
 
     @Test
     public void testPreNetworkCheck() throws Exception {
-        Context c = Mockito.mock(Context.class);
-        Field injected = PluriLockNetworkUtil.class.getDeclaredField("context");
-        injected.setAccessible(true);
-        injected.set(networkUtil, c);
         ConnectivityManager cm = Mockito.mock(ConnectivityManager.class);
+        Field injected = PluriLockNetworkUtil.class.getDeclaredField("cm");
+        injected.setAccessible(true);
+        injected.set(networkUtil, cm);
+
         NetworkInfo network = Mockito.mock(NetworkInfo.class);
-        when(c.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(cm);
         when(cm.getActiveNetworkInfo()).thenReturn(network);
 
-        assertFalse(networkUtil.preNetworkCheck());
+        assertFalse(networkUtil.networkCheck());
 
         when(network.isAvailable()).thenReturn(true);
         when(network.isConnectedOrConnecting()).thenReturn(true);
         when(network.getType()).thenReturn(ConnectivityManager.TYPE_WIFI);
 
-        assertTrue(networkUtil.preNetworkCheck());
+        assertTrue(networkUtil.networkCheck());
     }
 
     @Test
