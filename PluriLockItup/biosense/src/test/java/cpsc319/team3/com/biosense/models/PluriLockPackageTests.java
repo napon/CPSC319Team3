@@ -148,8 +148,8 @@ public class PluriLockPackageTests {
             assertEquals(0, eventObject.getInt("orientation"));
             assertEquals(3, eventObject.getInt("pressure"));
             assertEquals(200, eventObject.getLong("duration"));
-            assertEquals(1.0, eventObject.getDouble("elementRelX"), DELTA);
-            assertEquals(2.0, eventObject.getDouble("elementRelY"), DELTA);
+            assertEquals(1.0, eventObject.getDouble("precisionX"), DELTA);
+            assertEquals(2.0, eventObject.getDouble("precisionY"), DELTA);
             assertEquals(3.0, eventObject.getDouble("screenX"), DELTA);
             assertEquals(4.0, eventObject.getDouble("screenY"), DELTA);
             assertEquals(4.2, eventObject.getDouble("fingerOrientation"), DELTA);

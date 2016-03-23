@@ -121,8 +121,8 @@ public class PElementTouchEvent extends PluriLockEvent {
             jsonObject.put("eventType", EVENT_TYPE);
             jsonObject.put("pressure", getPressure());
             jsonObject.put("fingerOrientation", getFingerOrientation());
-            jsonObject.put("elementRelX", getPrecisionX());
-            jsonObject.put("elementRelY", getPrecisionY());
+            jsonObject.put("precisionX", getPrecisionX());
+            jsonObject.put("precisionY", getPrecisionY());
             jsonObject.put("screenX", getScreenCoordX());
             jsonObject.put("screenY", getScreenCoordY());
             jsonObject.put("touchArea", getTouchArea());
