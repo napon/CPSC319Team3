@@ -20,6 +20,7 @@ public class FeedbackActivity extends PluriLockActivity {
         //get xml views
         feedback_message = (EditText) findViewById(R.id.feedback_message);
         feedback_message.addTextChangedListener(PluriLockAPI.getInstance().createKeyListener());
+
     }
 
     public void sendFeedback(View view){

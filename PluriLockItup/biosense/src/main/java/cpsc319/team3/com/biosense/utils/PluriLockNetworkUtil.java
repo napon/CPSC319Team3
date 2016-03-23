@@ -182,7 +182,7 @@ public class PluriLockNetworkUtil {
     private void acceptMessage(String message) {
         Log.d("PluriLockNetworkUtil", "Server says: " + message);
         try {
-            PlurilockServerResponse response = PlurilockServerResponse.fromJsonString(message);
+            PlurilockServerResponse response = PlurilockServerResponse.parse(message);
             Intent intent = new Intent("server-response");
             intent.putExtra("msg", response);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);

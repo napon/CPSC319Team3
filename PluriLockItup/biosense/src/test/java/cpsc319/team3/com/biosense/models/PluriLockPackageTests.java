@@ -1,6 +1,7 @@
 package cpsc319.team3.com.biosense.models;
 
 import android.graphics.PointF;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import org.json.JSONException;
@@ -80,9 +81,54 @@ public class PluriLockPackageTests {
     }
 
     @Test
-    public void testGetJSONWithKeyboardTouchEvent() {
+    public void testGetJSONWithVirtualKeyboardTouchEvent() {
         // Create and add a KeyboardTouchEvent to the PluriLockPackage.
-        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(1, time, 30, (int) 'a');
+        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(1, time, 30, "a");
+        PMonoKeyboardTouchEvent keyboard2 = new PMonoKeyboardTouchEvent(1, time, 30, KeyEvent.KEYCODE_A);
+        PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
+        PluriLockPackage p2 = b.setEvents(new PluriLockEvent[]{keyboard2}).buildPackage();
+        JSONObject jsonObject = p.getJSON();
+        JSONObject jsonObject2 = p2.getJSON();
+        try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
+            // There should only be one object in the events set.
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
+
+            // Test each field from KeyboardTouchEvent is properly defined.
+            assertEquals("MONOGRAPH", eventObject.getString("eventType"));
+            assertEquals(30, eventObject.getLong("duration"));
+            assertEquals( "KEYCODE_A", eventObject.getString("key"));
+            assertEquals(1, eventObject.getInt("orientation"));
+            assertEquals(time, eventObject.getLong("timestamp"));
+        } catch (JSONException e) {
+            fail(e.getMessage());
+        }
+
+        try {
+            JSONObject data2 = jsonObject2.getJSONObject("data");
+
+            // There should only be one object in the events set.
+            assertEquals(1, data2.getJSONArray("events").length());
+            JSONObject eventObject = data2.getJSONArray("events").getJSONObject(0);
+
+            // Test each field from KeyboardTouchEvent is properly defined.
+            assertEquals("MONOGRAPH", eventObject.getString("eventType"));
+            assertEquals(30, eventObject.getLong("duration"));
+            assertEquals( "KEYCODE_A", eventObject.getString("key"));
+            assertEquals(1, eventObject.getInt("orientation"));
+            assertEquals(time, eventObject.getLong("timestamp"));
+        }
+        catch (JSONException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetJSONWithPhysicalKeyboardTouchEvent() {
+        // Create and add a KeyboardTouchEvent to the PluriLockPackage.
+        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(1, time, 30, KeyEvent.KEYCODE_A);
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -95,18 +141,19 @@ public class PluriLockPackageTests {
             // Test each field from KeyboardTouchEvent is properly defined.
             assertEquals("MONOGRAPH", eventObject.getString("eventType"));
             assertEquals(30, eventObject.getLong("duration"));
-            assertEquals((int) 'a', eventObject.getInt("key"));
+            assertEquals( "KEYCODE_A", eventObject.getString("key"));
             assertEquals(1, eventObject.getInt("orientation"));
             assertEquals(time, eventObject.getLong("timestamp"));
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             fail(e.getMessage());
         }
     }
 
     @Test
-    public void testGetJSONWithDiKeyboardTouchEvent() {
+    public void testGetJSONWithDiVirtualKeyboardTouchEvent() {
         // Create and add a KeyboardTouchEvent to the PluriLockPackage.
-        PDiKeyboardTouchEvent keyboard = new PDiKeyboardTouchEvent(2, time, 200, (int) 'a', (int) 'b');
+        PDiKeyboardTouchEvent keyboard = new PDiKeyboardTouchEvent(2, time, 200, "a","b");
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
@@ -119,8 +166,33 @@ public class PluriLockPackageTests {
             // Test each field from KeyboardTouchEvent is properly defined.
             assertEquals("DIGRAPH", eventObject.getString("eventType"));
             assertEquals(200, eventObject.getLong("duration"));
-            assertEquals((int) 'a', eventObject.getInt("fromKey"));
-            assertEquals((int) 'b', eventObject.getInt("toKey"));
+            assertEquals( "KEYCODE_A", eventObject.getString("fromKey"));
+            assertEquals( "KEYCODE_B", eventObject.getString("toKey"));
+            assertEquals(2, eventObject.getInt("orientation"));
+            assertEquals(time, eventObject.getLong("timestamp"));
+        } catch (JSONException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetJSONWithDiPhysicalKeyboardTouchEvent() {
+        // Create and add a KeyboardTouchEvent to the PluriLockPackage.
+        PDiKeyboardTouchEvent keyboard = new PDiKeyboardTouchEvent(2, time, 200, KeyEvent.KEYCODE_A,KeyEvent.KEYCODE_B);
+        PluriLockPackage p = b.setEvents(new PluriLockEvent[]{keyboard}).buildPackage();
+        JSONObject jsonObject = p.getJSON();
+        try {
+            JSONObject data = jsonObject.getJSONObject("data");
+
+            // There should only be one object in the events set.
+            assertEquals(1, data.getJSONArray("events").length());
+            JSONObject eventObject = data.getJSONArray("events").getJSONObject(0);
+
+            // Test each field from KeyboardTouchEvent is properly defined.
+            assertEquals("DIGRAPH", eventObject.getString("eventType"));
+            assertEquals(200, eventObject.getLong("duration"));
+            assertEquals( "KEYCODE_A", eventObject.getString("fromKey"));
+            assertEquals( "KEYCODE_B", eventObject.getString("toKey"));
             assertEquals(2, eventObject.getInt("orientation"));
             assertEquals(time, eventObject.getLong("timestamp"));
         } catch (JSONException e) {
@@ -148,8 +220,8 @@ public class PluriLockPackageTests {
             assertEquals(0, eventObject.getInt("orientation"));
             assertEquals(3, eventObject.getInt("pressure"));
             assertEquals(200, eventObject.getLong("duration"));
-            assertEquals(1.0, eventObject.getDouble("elementRelX"), DELTA);
-            assertEquals(2.0, eventObject.getDouble("elementRelY"), DELTA);
+            assertEquals(1.0, eventObject.getDouble("precisionX"), DELTA);
+            assertEquals(2.0, eventObject.getDouble("precisionY"), DELTA);
             assertEquals(3.0, eventObject.getDouble("screenX"), DELTA);
             assertEquals(4.0, eventObject.getDouble("screenY"), DELTA);
             assertEquals(4.2, eventObject.getDouble("fingerOrientation"), DELTA);
@@ -224,7 +296,7 @@ public class PluriLockPackageTests {
                 new PointF(9.5f, 8.3f), new PointF(7.6f, 4.5f), 1, MotionEvent.ACTION_SCROLL);
         PElementTouchEvent touch = new PElementTouchEvent(0, time, 3.0f, 4.2f,
                 new PointF(1.0f, 2.0f), new PointF(3.0f, 4.0f), 1, 1.0f, MotionEvent.ACTION_UP, 1);
-        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(0, time, 30, (int) 'a');
+        PMonoKeyboardTouchEvent keyboard = new PMonoKeyboardTouchEvent(0, time, 30, "a");
         PluriLockPackage p = b.setEvents(new PluriLockEvent[]{scroll, touch, keyboard}).buildPackage();
         JSONObject jsonObject = p.getJSON();
         try {
