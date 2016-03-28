@@ -99,6 +99,7 @@ public class PluriLockEventManager {
                 .screenHeight(PhoneDataManager.getScreenHeight(context))
                 .cpuCores(PhoneDataManager.getNumberOfCPUCores())
                 .appName(PhoneDataManager.getAppName(context))
+                .dateTime(PhoneDataManager.getDateTime())
                 .sdkVersion(PhoneDataManager.getSDKVersion())
                 .setEvents(pluriLockEvents.toArray(new PluriLockEvent[pluriLockEvents.size()]));
         networkUtil.sendEvent(eventPackage.buildPackage());

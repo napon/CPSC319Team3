@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class PluriLockPackage {
     private String language;
     private String timeZone;
     private String appName;
+    private String dateTime;
     private double appVersion;
     private double latitude;
     private double longitude;
@@ -55,6 +57,7 @@ public class PluriLockPackage {
         this.screenHeight = b.screenHeight;
         this.sdkVersion = b.sdkVersion;
         this.appName = b.appName;
+        this.dateTime = b.dateTime;
         this.events = b.events;
     }
 
@@ -92,6 +95,8 @@ public class PluriLockPackage {
 
     public String getAppName() {return appName; }
 
+    public String getDateTime() {return dateTime;}
+
     public double getAppVersion() {
         return appVersion;
     }
@@ -118,6 +123,7 @@ public class PluriLockPackage {
 
     public int getCpuCores() {return cpuCores;}
 
+
     public PluriLockEvent[] getEvents() {
         return events;
     }
@@ -136,6 +142,7 @@ public class PluriLockPackage {
         private String language;
         private String timeZone;
         private String appName;
+        private String dateTime;
         private double appVersion;
         private double latitude;
         private double longitude;
@@ -156,6 +163,7 @@ public class PluriLockPackage {
             this.language = "";
             this.timeZone = "";
             this.appName = "";
+            this.dateTime = "";
             this.appVersion = 1.0;
             this.latitude = 0.0;
             this.longitude = 0.0;
@@ -213,6 +221,11 @@ public class PluriLockPackage {
 
         public PluriLockPackageBuilder appName(String an) {
             appName = an;
+            return this;
+        }
+
+        public PluriLockPackageBuilder dateTime(String dt) {
+            dateTime = dt;
             return this;
         }
 
