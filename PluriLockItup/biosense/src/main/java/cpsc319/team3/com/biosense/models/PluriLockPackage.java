@@ -299,6 +299,7 @@ public class PluriLockPackage {
             data.put("sdkVersion", getSdkVersion());
             data.put("cpuCores", getCpuCores());
             data.put("timeZone", getTimeZone());
+            data.put("dateTime", getDateTime());
             data.put("appName", getAppName());
             JSONArray jsonArray = new JSONArray();
             for (PluriLockEvent pEvent : getEvents()) {
