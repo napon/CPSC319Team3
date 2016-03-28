@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -74,6 +76,15 @@ public class PhoneDataManager {
             }
         return "";
 
+    }
+
+    /**
+     * @return current time and date
+     */
+    public static String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date currDateTime = new Date();
+        return dateFormat.format(currDateTime);
     }
 
     /**
