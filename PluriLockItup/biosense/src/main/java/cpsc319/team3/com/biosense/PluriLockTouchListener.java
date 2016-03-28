@@ -6,12 +6,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-import java.util.GregorianCalendar;
-
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PScaleEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
-import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
 /**
  * Created by Karen on 16-02-23.
@@ -53,13 +50,12 @@ public class PluriLockTouchListener implements
             float pressure = e.getPressure();
             float fingerOrientation = e.getOrientation();
             float touchArea = e.getSize();
-            int pointerCount = e.getPointerCount();
             int motionEventCode = e.getActionMasked();
 
             PElementTouchEvent pElementTouchEvent =
                     new PElementTouchEvent(screenOrientation, currTimestamp,
                             pressure, fingerOrientation, precisionXY, screenCord, duration,
-                            touchArea, motionEventCode, pointerCount);
+                            touchArea, motionEventCode);
             eventTracker.notifyOfEvent(pElementTouchEvent);
         }
         catch (NullPointerException nullEx) {
@@ -107,7 +103,7 @@ public class PluriLockTouchListener implements
             PElementTouchEvent pElementTouchEvent =
                     new PElementTouchEvent(screenOrientation, currTimestamp,
                             pressure, fingerOrientation, precisionXY, screenCord, duration,
-                            touchArea, MotionEvent.ACTION_UP, pointerCount);
+                            touchArea, MotionEvent.ACTION_UP);
             eventTracker.notifyOfEvent(pElementTouchEvent);
         }
         catch (NullPointerException nullEx){
@@ -144,11 +140,12 @@ public class PluriLockTouchListener implements
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
             PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
+            int pointerCount = e2.getPointerCount();
             int motionEventCode = e1.getActionMasked();
 
             PScrollEvent pScrollEvent =
                     new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
-                            startCoord, endCoord, duration, motionEventCode);
+                            startCoord, endCoord, duration, motionEventCode, pointerCount);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){
@@ -195,11 +192,12 @@ public class PluriLockTouchListener implements
             PointF startCoord = new PointF(e1.getX(), e1.getY());
             PointF endCoord = new PointF(e2.getX(), e2.getY());
             PScrollEvent.ScrollDirection ScrollDirection = getScrollDirection(startCoord, endCoord);
+            int pointerCount = e2.getPointerCount();
             int motionEventCode = e2.getActionMasked();
 
             PScrollEvent pScrollEvent =
                     new PScrollEvent(screenOrientation, currTimestamp, ScrollDirection,
-                            startCoord, endCoord, duration, motionEventCode);
+                            startCoord, endCoord, duration, motionEventCode, pointerCount);
             eventTracker.notifyOfEvent(pScrollEvent);
         }
         catch (NullPointerException e){

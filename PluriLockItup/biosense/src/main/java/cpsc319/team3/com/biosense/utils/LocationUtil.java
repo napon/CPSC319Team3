@@ -69,7 +69,6 @@ public class LocationUtil implements LocationListener,
     public void onLocationChanged(Location location) {
         lat = location.getLatitude();
         lon = location.getLongitude();
-        Log.d("LocationUtil", "Found location.");
     }
 
     @Override

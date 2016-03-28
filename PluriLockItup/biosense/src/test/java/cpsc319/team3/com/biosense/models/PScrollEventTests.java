@@ -11,7 +11,7 @@ public class PScrollEventTests {
     @Test
     public void sampleTest() throws Exception {
         PScrollEvent p = new PScrollEvent(1, 1, PScrollEvent.ScrollDirection.UP,
-                new PointF(1, 1), new PointF(1,1), 1, MotionEvent.ACTION_SCROLL);
+                new PointF(1, 1), new PointF(1,1), 1, MotionEvent.ACTION_SCROLL, 1);
         assertTrue(p.getClass() == PScrollEvent.class);
     }
 }
