@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.widget.Toast;
 
 import java.net.URI;
@@ -28,6 +29,7 @@ import cpsc319.team3.com.plurilockitup.model.Utils;
 public abstract class PluriLockActivity extends AppCompatActivity {
     PluriLockAPI plapi;
     GestureDetector gestD;
+    ScaleGestureDetector scaleD;
 
     Double MIN_CONF_LEVEL = 0.25;
     int ACTIONS_PER_UPLOAD = 1;
@@ -48,8 +50,9 @@ public abstract class PluriLockActivity extends AppCompatActivity {
             setupPLApi();
         }
         if(plapi != null) {
-            //PLA gesture detector for touch event
+            //PLA gesture detector for mouse event and scale event.
             gestD = new GestureDetector(this, plapi.createTouchListener());
+            scaleD = new ScaleGestureDetector(this, plapi.createTouchListener());
         }
     }
 
@@ -61,6 +64,7 @@ public abstract class PluriLockActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent ev){
         if(gestD != null){
             gestD.onTouchEvent(ev);
+            scaleD.onTouchEvent(ev);
             return super.dispatchTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
