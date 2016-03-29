@@ -17,7 +17,6 @@ import java.net.URI;
 
 import cpsc319.team3.com.biosense.PluriLockAPI;
 import cpsc319.team3.com.biosense.PluriLockConfig;
-import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PlurilockServerResponse;
 import cpsc319.team3.com.biosense.utils.LocationUtil;
 import cpsc319.team3.com.plurilockitup.model.Customer;
@@ -84,10 +83,12 @@ public abstract class PluriLockActivity extends AppCompatActivity {
                         if(response.getConfidenceLevel() < MIN_CONF_LEVEL) {
                             Log.d("BroadcastReceiver",
                                     "Confidence level failed: " + Double.toString(response.getConfidenceLevel()));
+                            if(authorized) {
+                                Toast.makeText(context,
+                                        "Unauthorized user detected. You have been PluriLockedOut!",
+                                        Toast.LENGTH_LONG).show();
+                            }
                             authorized = false;
-                            Toast.makeText(context,
-                                    "Unauthorized user detected. You have been PluriLockedOut!",
-                                    Toast.LENGTH_LONG).show();
                             logout();
                         }
                     }
