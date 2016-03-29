@@ -1,12 +1,14 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -63,6 +65,15 @@ public class TransferActivity extends PluriLockActivity {
         backToMain.putExtra("Customer", customer);
         setResult(RESULT_OK, backToMain);
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     /*
