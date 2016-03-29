@@ -8,6 +8,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
+import cpsc319.team3.com.biosense.PluriLockConfig;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
@@ -21,22 +24,12 @@ public class OfflineDatabaseUtilTests {
     @Test
     public void constructorDefaultTest() throws Exception {
         Context context = Mockito.mock(Context.class);
-        OfflineDatabaseUtil offline = new OfflineDatabaseUtil(context);
-        int oneMB = 1000000;
-        int cacheSize = offline.getCacheSize();
+        PluriLockConfig config = new PluriLockConfig();
 
-        assertTrue(offline.getClass() == OfflineDatabaseUtil.class);
-        assertTrue(cacheSize == oneMB);
-    }
+        OfflineDatabaseUtil offline = new OfflineDatabaseUtil(context, config);
 
-    @Test
-    public void constructorCacheTest() throws Exception{
-        int cacheSize = 100;
-        Context context = Mockito.mock(Context.class);
-        OfflineDatabaseUtil offline = new OfflineDatabaseUtil(context, cacheSize);
-
-        assertTrue(offline.getClass() == OfflineDatabaseUtil.class);
-        assertTrue(offline.getCacheSize() == cacheSize);
+        assertEquals(OfflineDatabaseUtil.class, offline.getClass());
+        assertEquals(config.getCacheSize(), offline.getCacheSize());
     }
 
     //Can not mock text without physically saving file...

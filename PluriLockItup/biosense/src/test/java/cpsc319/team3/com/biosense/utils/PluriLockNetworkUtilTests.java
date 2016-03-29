@@ -64,7 +64,7 @@ public class PluriLockNetworkUtilTests {
         context = app.getApplicationContext();
 
         userSession = new testSession();
-        networkUtil = new PluriLockNetworkUtil(uri, context);
+        networkUtil = new PluriLockNetworkUtil(uri, context, Mockito.mock(OfflineDatabaseUtil.class));
         testPackage = new PluriLockPackage.PluriLockPackageBuilder().buildPackage();
     }
 

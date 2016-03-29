@@ -13,6 +13,7 @@ import cpsc319.team3.com.biosense.exception.LocationServiceUnavailableException;
 import cpsc319.team3.com.biosense.models.PluriLockEvent;
 import cpsc319.team3.com.biosense.models.PluriLockPackage.PluriLockPackageBuilder;
 import cpsc319.team3.com.biosense.utils.LocationUtil;
+import cpsc319.team3.com.biosense.utils.OfflineDatabaseUtil;
 import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
 /**
@@ -30,10 +31,11 @@ public class PluriLockEventManager {
     private static final String TAG = "PluriLockEventManager";
 
     private Context context;
-    private PluriLockNetworkUtil networkUtil;
-    private List<PluriLockEvent> pluriLockEvents;
     private String userID;
     private PluriLockConfig config;
+    private List<PluriLockEvent> pluriLockEvents;
+    private OfflineDatabaseUtil offlineDatabaseUtil;
+    private PluriLockNetworkUtil networkUtil;
 
     private static PluriLockEventManager eventManager;
 
@@ -43,7 +45,8 @@ public class PluriLockEventManager {
         this.userID = id;
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
-        this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c);
+        this.offlineDatabaseUtil = new OfflineDatabaseUtil(c, config);
+        this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c, offlineDatabaseUtil);
     }
 
     /**

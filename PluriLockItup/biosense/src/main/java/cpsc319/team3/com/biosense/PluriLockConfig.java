@@ -18,6 +18,9 @@ public class PluriLockConfig {
 
     protected String domain = "testDomain";
 
+    protected int cacheSize = 1000000; //1MB
+
+
     public double getAppVersion() {
         return appVersion;
     }
@@ -59,4 +62,13 @@ public class PluriLockConfig {
     }
 
     public boolean ignoreLocation() { return ignoreLocation; }
+
+
+    public int getCacheSize() {
+        return cacheSize;
+    }
+
+    public void setCacheSize(int cacheSize) {
+        this.cacheSize = cacheSize;
+    }
 }

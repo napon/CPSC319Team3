@@ -18,6 +18,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpsc319.team3.com.biosense.PluriLockConfig;
+
 /**
  * This class stores PluriLockEvents when the device is offline.
  * It is an abstraction of the local Android database.
@@ -35,26 +37,15 @@ public class OfflineDatabaseUtil {
 
     //The directory of the cache file on the phone
     public static final String CACHE_DIR = "offlineCacheData";
-
+    
     /**
      * Constructor for Offline Database Util
-     * @param context Context of the application
-     * @param cacheSize value (in bytes) of the max cache size
      */
-    public OfflineDatabaseUtil(Context context, int cacheSize){
+    public OfflineDatabaseUtil(Context context, PluriLockConfig config) {
         this.context = context;
-        this.cacheSize = cacheSize;
+        this.cacheSize = config.getCacheSize();
     }
 
-    /**
-     * Constructor for Offline Database Util with default cache size
-     * Default size is 1MB as recommended by Android
-     * @param context Context of the application
-     */
-    public OfflineDatabaseUtil(Context context){
-        this.context = context;
-        this.cacheSize = 1000000; //1MB
-    }
 
     /**
      * Saves json object to internal app cache file.

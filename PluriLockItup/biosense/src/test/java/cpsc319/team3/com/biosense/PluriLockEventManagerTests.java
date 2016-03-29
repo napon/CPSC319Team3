@@ -31,6 +31,7 @@ import cpsc319.team3.com.biosense.models.PElementTouchEvent;
 import cpsc319.team3.com.biosense.models.PMonoKeyboardTouchEvent;
 import cpsc319.team3.com.biosense.models.PScrollEvent;
 import cpsc319.team3.com.biosense.models.PluriLockPackage;
+import cpsc319.team3.com.biosense.utils.OfflineDatabaseUtil;
 import cpsc319.team3.com.biosense.utils.PluriLockNetworkUtil;
 
 @RunWith(RobolectricTestRunner.class)
@@ -70,7 +71,7 @@ public class PluriLockEventManagerTests {
         config.setIgnoreLocation(true);
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(new URI(""), application) {
+                new PluriLockNetworkUtil(new URI(""), application, Mockito.mock(OfflineDatabaseUtil.class)) {
                     @Override
                     public void sendEvent(PluriLockPackage pluriLockPackage) {
                         //Do nothing
@@ -109,7 +110,7 @@ public class PluriLockEventManagerTests {
         PluriLockConfig config = new PluriLockConfig();
         PluriLockEventManager p = PluriLockEventManager.getInstance(application, "user-foo", config);
         PluriLockNetworkUtil network = Mockito.spy(
-                new PluriLockNetworkUtil(new URI(""), application)
+                new PluriLockNetworkUtil(new URI(""), application, Mockito.mock(OfflineDatabaseUtil.class))
         );
         Field injected = PluriLockEventManager.class.getDeclaredField("networkUtil");
         injected.setAccessible(true);

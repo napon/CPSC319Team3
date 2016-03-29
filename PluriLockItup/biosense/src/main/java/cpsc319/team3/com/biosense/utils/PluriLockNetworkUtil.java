@@ -58,7 +58,7 @@ public class PluriLockNetworkUtil {
 
     private ConnectivityManager cm;
 
-    public PluriLockNetworkUtil(URI endpointURI, Context context) {
+    public PluriLockNetworkUtil(URI endpointURI, Context context, OfflineDatabaseUtil offlineDatabaseUtil) {
         Log.d(TAG, "PluriLockNetworkUtil constructor");
 
         this.endpointURI = endpointURI;
@@ -66,7 +66,7 @@ public class PluriLockNetworkUtil {
         this.config = ClientEndpointConfig.Builder.create().build();
         this.client = ClientManager.createClient();
 
-        this.offlineDatabaseUtil = new OfflineDatabaseUtil(context);
+        this.offlineDatabaseUtil = offlineDatabaseUtil;
 
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
