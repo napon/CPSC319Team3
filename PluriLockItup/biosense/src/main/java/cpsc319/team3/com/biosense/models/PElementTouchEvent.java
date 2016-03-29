@@ -20,13 +20,12 @@ public class PElementTouchEvent extends PluriLockEvent {
     private PointF precisionXY;
     private PointF screenCoord;
     private float touchArea;
-    private int pointerCount;
 
     private int motionEventCode;
 
     public PElementTouchEvent(int screenOrientation, long timestamp, float pressure,
                               float fingerOrientation, PointF precisionXY, PointF screenCoord,
-                              long duration, float touchArea, int motionCode, int pointerCount) {
+                              long duration, float touchArea, int motionCode) {
         super(screenOrientation, timestamp, duration);
         Log.d(TAG, "PElementTouchEvent constructor");
         this.pressure = pressure;
@@ -35,7 +34,6 @@ public class PElementTouchEvent extends PluriLockEvent {
         this.screenCoord = screenCoord;
         this.touchArea = touchArea;
         this.motionEventCode = motionCode;
-        this.pointerCount = pointerCount;
     }
 
     /**
@@ -103,14 +101,6 @@ public class PElementTouchEvent extends PluriLockEvent {
     }
 
     /**
-     * Pointers are fingers on the screen
-     * @return number of pointers currently on device
-     */
-    public int getPointerCount() {
-        return pointerCount;
-    }
-
-    /**
      * Generates JSON object of PElementTouchEvent
      * @return JSON object PElementTouchEvent
      */
@@ -127,7 +117,6 @@ public class PElementTouchEvent extends PluriLockEvent {
             jsonObject.put("screenY", getScreenCoordY());
             jsonObject.put("touchArea", getTouchArea());
             jsonObject.put("motionEventCode", getMotionEventCode());
-            jsonObject.put("pointerCount", getPointerCount());
         } catch (JSONException e) {
             e.printStackTrace();
         }

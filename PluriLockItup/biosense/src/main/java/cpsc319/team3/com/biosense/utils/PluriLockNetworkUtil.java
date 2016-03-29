@@ -148,7 +148,7 @@ public class PluriLockNetworkUtil {
     }
 
     private void broadcastNetworkError(String s) {
-        String msg = "Could connect to PluriLock Server! " + s;
+        String msg = "Couldn't connect to PluriLock Server! " + s;
         Log.e(TAG, msg);
 
         // Broadcast the error

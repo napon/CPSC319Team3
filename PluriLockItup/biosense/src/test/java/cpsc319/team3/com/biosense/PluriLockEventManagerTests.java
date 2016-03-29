@@ -86,7 +86,7 @@ public class PluriLockEventManagerTests {
         // Add numActions - 1 number of PluriLockEvents.
         for (int i = 0; i < numActions - 1; i++) {
             p.addPluriLockEvent(new PElementTouchEvent(1, System.currentTimeMillis(),
-                    1, 1, new PointF(0, 0), new PointF(0,0), 1, 1, MotionEvent.ACTION_DOWN, 1));
+                    1, 1, new PointF(0, 0), new PointF(0,0), 1, 1, MotionEvent.ACTION_DOWN));
         }
 
         // Verify that the network call hasn't been invoked.
@@ -95,7 +95,7 @@ public class PluriLockEventManagerTests {
         // Add one more PluriLockEvents.
         PScrollEvent sEvent =new PScrollEvent(1, System.currentTimeMillis(),
                 PScrollEvent.ScrollDirection.UP, new PointF(1, 1), new PointF(1, 1), 1,
-                MotionEvent.ACTION_SCROLL);
+                MotionEvent.ACTION_SCROLL, 2);
         p.addPluriLockEvent(sEvent);
 
         // Verify the network call has been invoked 1 time.

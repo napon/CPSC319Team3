@@ -17,6 +17,7 @@ public class PScrollEvent extends PluriLockEvent {
     private PointF startCoord;
     private PointF endCoord;
     private int motionEventCode;
+    private int pointerCount;
 
     /**
      * Direction pointers are moving
@@ -27,12 +28,13 @@ public class PScrollEvent extends PluriLockEvent {
 
     public PScrollEvent(int screenOrientation, long timestamp,
                         ScrollDirection scrollDirection, PointF startCoord, PointF endCoord,
-                        long duration, int motionCode) {
+                        long duration, int motionCode, int pointerCount) {
         super(screenOrientation, timestamp, duration);
         this.scrollDirection = scrollDirection;
         this.startCoord = startCoord;
         this.endCoord = endCoord;
         this.motionEventCode = motionCode;
+        this.pointerCount = pointerCount;
     }
 
     public int getMotionEventCode() {
@@ -76,6 +78,12 @@ public class PScrollEvent extends PluriLockEvent {
     }
 
     /**
+     * Get number of fingers
+     * @return int number of fingers on screen
+     */
+    public int getPointerCount() { return pointerCount; }
+
+    /**
      * Generates JSON object of PScrollEvent
      * @return JSON object PScrollEvent
      */
@@ -90,6 +98,7 @@ public class PScrollEvent extends PluriLockEvent {
             jsonObject.put("endX", getEndCoordX());
             jsonObject.put("endY", getEndCoordY());
             jsonObject.put("motionEventCode", getMotionEventCode());
+            jsonObject.put("pointerCount", getPointerCount());
         } catch (JSONException e) {
             e.printStackTrace();
         }

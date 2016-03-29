@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
 import cpsc319.team3.com.biosense.models.PElementTouchEvent;
-import cpsc319.team3.com.biosense.models.PluriLockEvent;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -81,7 +80,7 @@ public class PluriLockTouchListenerTests {
 
         PElementTouchEvent pElementTouchEvent =
                 new PElementTouchEvent(Configuration.ORIENTATION_LANDSCAPE, 1,
-                        1, 1, new PointF(1,1), new PointF(1,1), 0, 1, MotionEvent.ACTION_DOWN, 1);
+                        1, 1, new PointF(1,1), new PointF(1,1), 0, 1, MotionEvent.ACTION_DOWN);
 //        verify(eventTrackerMock, times(1)).notifyOfEvent(pElementTouchEvent);
     }
 
