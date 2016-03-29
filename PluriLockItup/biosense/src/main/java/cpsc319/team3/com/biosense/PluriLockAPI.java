@@ -35,8 +35,7 @@ public class PluriLockAPI {
      * @param context - application context
      * @param userID - the Plurlock UserID of the app
      * @param config - the settings to use for this API session
-     * @return - the new PluriLockAPI session.
-     * @throws LocationServiceUnavailableException
+     * @return - the new PluriLockAPI session
      */
     public static PluriLockAPI createNewSession(Context context, String userID, PluriLockConfig config) {
         Log.d(TAG, "createNewSession");
@@ -52,7 +51,6 @@ public class PluriLockAPI {
      * @param context - appcliation context
      * @param userID - the Plurlock UserID of the app
      * @param config - the settings to use for this API session
-     * @throws LocationServiceUnavailableException
      */
     private PluriLockAPI(Context context, String userID, PluriLockConfig config) {
         Log.d(TAG, "PluriLockAPI constructor");
