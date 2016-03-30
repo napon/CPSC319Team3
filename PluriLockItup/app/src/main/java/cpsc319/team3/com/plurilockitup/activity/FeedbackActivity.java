@@ -1,7 +1,10 @@
 package cpsc319.team3.com.plurilockitup.activity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,5 +38,14 @@ public class FeedbackActivity extends PluriLockActivity {
         Toast.makeText(this, "Thank you for your feedback", Toast.LENGTH_LONG).show();
         feedback_message.setText("");
         finish();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }
