@@ -59,10 +59,18 @@ public class PluriLockAPI {
         this.context = context;
     }
 
+    /**
+     *
+     * @return a new PluriLockKeyListener
+     */
     public PluriLockKeyListener createKeyListener() {
         return new PluriLockKeyListener(eventTracker);
     }
 
+    /**
+     *
+     * @return a new PluriLockTouchListener
+     */
     public PluriLockTouchListener createTouchListener() {
         return new PluriLockTouchListener(eventTracker);
     }
