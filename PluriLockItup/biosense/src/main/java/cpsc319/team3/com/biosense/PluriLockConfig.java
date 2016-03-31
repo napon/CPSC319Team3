@@ -75,7 +75,7 @@ public class PluriLockConfig {
 
     /**
      *
-     * @return domain
+     * @return domain component of the URL
      */
     public String getDomain() {
         return domain;
@@ -83,7 +83,7 @@ public class PluriLockConfig {
 
     /**
      *
-     * @param domain of the app
+     * @param domain component of the URL
      */
     public void setDomain(String domain) {
         this.domain = domain;
