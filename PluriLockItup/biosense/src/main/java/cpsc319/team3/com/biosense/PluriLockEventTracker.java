@@ -25,6 +25,10 @@ public class PluriLockEventTracker {
         return eventManager;
     }
 
+    /**
+     *
+     * @return the current Context
+     */
     public Context getContext() {
         return context;
     }
@@ -35,6 +39,11 @@ public class PluriLockEventTracker {
         this.eventManager = eventManager;
     }
 
+    /**
+     * Adds a PluriLock event object to the event manager
+     *
+     * @param pEvent to be added
+     */
     void notifyOfEvent(PluriLockEvent pEvent) {
         Log.d(TAG, "notifyOfEvent");
         eventManager.addPluriLockEvent(pEvent);

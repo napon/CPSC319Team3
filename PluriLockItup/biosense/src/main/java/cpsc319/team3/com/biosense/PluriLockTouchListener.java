@@ -206,7 +206,14 @@ public class PluriLockTouchListener implements
         return true;
     }
 
-    public PScrollEvent.ScrollDirection getScrollDirection(PointF startCoord, PointF endCoord) {
+    /**
+     * Gets the main direction of a scroll MotionEvent
+     *
+     * @param startCoord (X, Y) in pixels of starting point
+     * @param endCoord (X, Y) in pixels of ending point
+     * @return main direction of scroll
+     */
+    private PScrollEvent.ScrollDirection getScrollDirection(PointF startCoord, PointF endCoord) {
         //Swipe left or right
         if (Math.abs(startCoord.x - endCoord.x) > Math.abs(startCoord.y - endCoord.y)) {
             if (startCoord.x > endCoord.x) { //scroll left
@@ -246,6 +253,8 @@ public class PluriLockTouchListener implements
      * Responds to the beginning of a scaling gesture. Reported by
      * new pointers going down.
      *
+     * Sends a ScaleEvent to eventTracker
+     *
      * @param detector The detector reporting the event - use this to
      *                 retrieve extended info about event state.
      * @return Whether or not the detector should continue recognizing
@@ -281,6 +290,8 @@ public class PluriLockTouchListener implements
      * Once a scale has ended, {@link ScaleGestureDetector#getFocusX()}
      * and {@link ScaleGestureDetector#getFocusY()} will return focal point
      * of the pointers remaining on the screen.
+     *
+     * Sends a ScaleEvent to eventTracker
      *
      * @param detector The detector reporting the event - use this to
      *                 retrieve extended info about event state.

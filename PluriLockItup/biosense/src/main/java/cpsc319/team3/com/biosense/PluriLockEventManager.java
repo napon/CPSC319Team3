@@ -82,6 +82,9 @@ public class PluriLockEventManager {
         assert(pluriLockEvents.size() < config.getActionsPerUpload());
     }
 
+    /**
+     * Packages all PluriLock events with package data and sends it to network util
+     */
     private void pushAllEvents() {
         boolean location = !config.ignoreLocation();
         double lat = location? LocationUtil.getInstance().getLatitude() : 0;
