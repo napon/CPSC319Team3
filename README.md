@@ -40,20 +40,23 @@ view.setOnTouchListener(new View.OnTouchListener() {
         return gestD.onTouchEvent(event);
     }
 });
+```
 
+#### PluriLock EditText KeyHandler
+```java
+EditText view = (EditText) findViewById(R.id.edittext_view);
+view.addTextChangedListener(PluriLockAPI.getInstance().createKeyListener());
 ```
 
 #### PluriLock Receive Response
 ```java
 LocalBroadcastManager.getInstance(context).registerReceiver(
+    // Server Response receiver
     new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String pluriLockResponse = intent.getStringExtra("plResponse");
-
-            JSONObject plConfidenceObj = new JSONObject(pluriLockResponse);
-            Double confLevel = confidenceObj.getDouble("plConfidence");
-            if(confLevel < MIN_CONF_LEVEL) {
+            PlurilockServerResponse response = intent.getParcelableExtra("msg");
+            if(response.getConfidenceLevel() < MIN_CONF_LEVEL) {
                 //DO UN-AUTHORIZED USER ACTION
             }
         }
