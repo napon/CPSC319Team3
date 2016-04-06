@@ -139,9 +139,6 @@ public class PluriLockNetworkUtil {
         } else if (!activeNetwork.isConnectedOrConnecting()) {
             broadcastNetworkError("You're not connected to the Internet!");
             return false;
-        } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-            broadcastNetworkError("You're not connected to WIFI.");
-            return false;
         }
 
         return true;
