@@ -55,6 +55,7 @@ public class PluriLockNetworkUtil {
     private ClientManager client;
     private ClientEndpointConfig config;
 
+    private boolean cellularConnectionEnabled = false;
 
     private ConnectivityManager cm;
 
@@ -90,6 +91,12 @@ public class PluriLockNetworkUtil {
 
         IntentFilter connectionFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         context.registerReceiver(connectionStatusReceiver, connectionFilter);
+    }
+
+    public PluriLockNetworkUtil(URI endpointURI, Context context, OfflineDatabaseUtil offlineDatabaseUtil,
+                                boolean cellularConnectionEnabled) {
+        this(endpointURI, context, offlineDatabaseUtil);
+        this.cellularConnectionEnabled = cellularConnectionEnabled;
     }
 
 
@@ -139,12 +146,18 @@ public class PluriLockNetworkUtil {
         } else if (!activeNetwork.isConnectedOrConnecting()) {
             broadcastNetworkError("You're not connected to the Internet!");
             return false;
-        } else if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-            broadcastNetworkError("You're not connected to WIFI.");
+        }
+
+        int connectionType = activeNetwork.getType();
+        if (connectionType == ConnectivityManager.TYPE_WIFI ||
+                (cellularConnectionEnabled && connectionType == ConnectivityManager.TYPE_MOBILE)) {
+            return true;
+        } else {
+            broadcastNetworkError("You are connected using an unrecognized connection type:" +
+                    activeNetwork.getTypeName());
             return false;
         }
 
-        return true;
     }
 
     private void broadcastNetworkError(String s) {

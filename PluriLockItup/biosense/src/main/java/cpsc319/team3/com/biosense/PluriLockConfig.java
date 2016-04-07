@@ -21,6 +21,8 @@ public class PluriLockConfig {
     protected int cacheSize = 1000000; //1MB
 
 
+    protected boolean enableCellData = false;
+
     /**
      * 
      * @return Current version of Biosense app
@@ -117,5 +119,14 @@ public class PluriLockConfig {
      */
     public void setCacheSize(int cacheSize) {
         this.cacheSize = cacheSize;
+    }
+
+
+    public boolean isEnableCellData() {
+        return enableCellData;
+    }
+
+    public void setEnableCellData(boolean enableCellData) {
+        this.enableCellData = enableCellData;
     }
 }

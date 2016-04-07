@@ -46,7 +46,7 @@ public class PluriLockEventManager {
         this.config = config;
         this.pluriLockEvents = new ArrayList<>();
         this.offlineDatabaseUtil = new OfflineDatabaseUtil(c, config);
-        this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c, offlineDatabaseUtil);
+        this.networkUtil = new PluriLockNetworkUtil(config.getUrl(), c, offlineDatabaseUtil, config.isEnableCellData());
     }
 
     /**
