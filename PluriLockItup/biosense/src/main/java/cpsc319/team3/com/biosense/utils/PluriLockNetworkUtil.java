@@ -177,7 +177,9 @@ public class PluriLockNetworkUtil {
             @Override
             protected Void doInBackground(Void... params) {
                 Log.d(TAG, "Sending message in AsyncTask...");
-                userSession.getAsyncRemote().sendText(message);
+               if( userSession != null){
+                    userSession.getAsyncRemote().sendText(message);
+                }
                 return null;
             }
         };
