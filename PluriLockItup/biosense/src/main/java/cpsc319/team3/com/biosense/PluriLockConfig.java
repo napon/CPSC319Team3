@@ -57,7 +57,7 @@ public class PluriLockConfig {
         this.url = url;
     }
 
-    protected URI url;
+    protected URI url = URI.create("ws://btdemo.plurilock.com:8095/");
 
     /**
      *
